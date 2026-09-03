@@ -1,0 +1,61 @@
+{
+  "schema_version": "vrx-record-result/v1",
+  "campaign_id": "example-only",
+  "challenge": "VRX 2019",
+  "task": "station_keeping",
+  "claim_status": "unaccepted",
+  "metric": "RMS pose error",
+  "direction": "lower_is_better",
+  "aggregate": {
+    "method": "mean",
+    "value": 0.3,
+    "n": 6
+  },
+  "runs": [
+    {"run_id": "run-0", "seed": 2001, "score": 0.2, "artifacts": ["run-log.txt"]},
+    {"run_id": "run-1", "seed": 2002, "score": 0.3, "artifacts": ["run-log.txt"]},
+    {"run_id": "run-2", "seed": 2003, "score": 0.25, "artifacts": ["run-log.txt"]},
+    {"run_id": "run-3", "seed": 2004, "score": 0.4, "artifacts": ["run-log.txt"]},
+    {"run_id": "run-4", "seed": 2005, "score": 0.35, "artifacts": ["run-log.txt"]},
+    {"run_id": "run-5", "seed": 2006, "score": 0.3, "artifacts": ["run-log.txt"]}
+  ],
+  "provenance": {
+    "repository_url": "https://github.com/RetiefLouw/vrx-record-lab",
+    "candidate_commit": "a6cc8badb090de1615b61548cc10851d6eb362df",
+    "benchmark_commit": "a6cc8badb090de1615b61548cc10851d6eb362df",
+    "scorer_commit": "a6cc8badb090de1615b61548cc10851d6eb362df",
+    "clean_clone_commit": "a6cc8badb090de1615b61548cc10851d6eb362df",
+    "controller_commit": "1111111111111111111111111111111111111111",
+    "container_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "config_sha256": "761fc7451c9b6b6c4edb4ee482c74a9e136dcb3e7fd507a94a56c19a4fae7a03"
+  },
+  "protocol": {
+    "protocol_id": "vrx-2019-station-keeping",
+    "protocol_revision": "reconstruction-in-progress",
+    "comparability": "not_comparable",
+    "evidence": [
+      {
+        "url": "https://github.com/osrf/vrx/wiki/vrx_2019-results",
+        "claim": "The official page reports UF station keeping as 0.11.",
+        "status": "verified"
+      },
+      {
+        "url": "https://github.com/osrf/vrx/wiki/files/VRX2019_Task_Descriptions_v1.4.pdf",
+        "claim": "Station keeping is scored as the mean RMS pose error over scored runs.",
+        "status": "verified"
+      }
+    ]
+  },
+  "seed_set": {
+    "name": "independent_verification",
+    "seeds": [2001, 2002, 2003, 2004, 2005, 2006]
+  },
+  "artifacts": [
+    {
+      "path": "run-log.txt",
+      "sha256": "716a7907df6f76c79f775404120a5fc422f81e9be56be21a56ea50fbbe3befd3",
+      "size_bytes": 30
+    }
+  ],
+  "notes": "Illustrative fixture only. It is deliberately not a record claim."
+}

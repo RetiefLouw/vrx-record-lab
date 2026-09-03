@@ -1,0 +1,53 @@
+name: Independent verification
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out full history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run unit tests
+        run: python -m unittest discover -s tests -v
+
+      - name: Check seed-set separation
+        run: python -m verification.verify seeds --config verification/seed_sets.json
+
+      - name: Check benchmark and scorer trees
+        run: python -m verification.verify benchmark-tree --repo . --baseline-ref origin/main --target-ref HEAD
+
+      - name: Validate result schema and artifacts
+        run: >-
+          python -m verification.verify results
+          --input verification/examples/result.json
+          --schema verification/result.schema.json
+          --root verification/examples/artifacts
+          --seed-config verification/seed_sets.json
+          --manifest verification/examples/artifacts/SHA256SUMS.json
+
+      - name: Verify a clean clone on branch pushes
+        if: github.event_name == 'push'
+        env:
+          REPOSITORY_URL: https://github.com/${{ github.repository }}.git
+          BRANCH_NAME: ${{ github.ref_name }}
+          COMMIT_SHA: ${{ github.sha }}
+        run: >-
+          python -m verification.verify clean-clone
+          --repo "$REPOSITORY_URL"
+          --ref "$BRANCH_NAME"
+          --commit "$COMMIT_SHA"
+          --run-command "python -m unittest discover -s tests"
