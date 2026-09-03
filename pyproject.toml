@@ -1,0 +1,12 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vrx-record-lab"
+version = "0.1.0"
+description = "Reproducible experiment and result harness for the VRX station-keeping campaign"
+requires-python = ">=3.9"
+
+[tool.setuptools.packages.find]
+where = ["src"]

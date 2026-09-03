@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/RetiefLouw/vrx-record-lab/blob/main/schemas/result.schema.json",
+  "title": "VRX Record Lab canonical result",
+  "type": "object",
+  "required": ["schema_version", "result_id", "experiment_id", "created_at", "status", "benchmark", "controller", "container", "task", "trials", "aggregate", "artifacts", "checksums_file", "provenance", "verification"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "result_id": {"type": "string", "minLength": 1},
+    "experiment_id": {"type": "string", "minLength": 1},
+    "created_at": {"type": "string", "format": "date-time"},
+    "status": {"enum": ["completed", "failed", "not_run"]},
+    "benchmark": {"$ref": "#/$defs/benchmark"},
+    "controller": {"$ref": "#/$defs/controller"},
+    "container": {"$ref": "#/$defs/container"},
+    "task": {"$ref": "#/$defs/task"},
+    "trials": {"type": "array", "items": {"$ref": "#/$defs/trial"}},
+    "aggregate": {"$ref": "#/$defs/aggregate"},
+    "artifacts": {"type": "array", "items": {"$ref": "#/$defs/artifact"}},
+    "checksums_file": {"type": "string", "minLength": 1},
+    "provenance": {
+      "type": "object",
+      "required": ["manifest_file", "manifest_sha256", "seed_provenance"],
+      "properties": {
+        "manifest_file": {"type": "string", "minLength": 1},
+        "manifest_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "seed_provenance": {"type": "string"}
+      },
+      "additionalProperties": true
+    },
+    "verification": {"$ref": "#/$defs/verification"}
+  },
+  "$defs": {
+    "benchmark": {
+      "type": "object",
+      "required": ["name", "revision", "protocol_revision", "score_direction", "scorer"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "revision": {"type": ["string", "null"]},
+        "protocol_revision": {"type": ["string", "null"]},
+        "score_direction": {"enum": ["minimize", "maximize"]},
+        "scorer": {
+          "type": "object",
+          "required": ["name", "revision"],
+          "properties": {"name": {"type": "string", "minLength": 1}, "revision": {"type": ["string", "null"]}},
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "controller": {
+      "type": "object",
+      "required": ["name", "source", "revision", "parameters"],
+      "properties": {"name": {"type": "string", "minLength": 1}, "source": {"type": "string", "minLength": 1}, "revision": {"type": ["string", "null"]}, "parameters": {"type": "object"}},
+      "additionalProperties": true
+    },
+    "container": {
+      "type": "object",
+      "required": ["image", "digest"],
+      "properties": {"image": {"type": "string", "minLength": 1}, "digest": {"type": ["string", "null"]}},
+      "additionalProperties": true
+    },
+    "task": {
+      "type": "object",
+      "required": ["name", "parameters"],
+      "properties": {"name": {"type": "string", "minLength": 1}, "parameters": {"type": "object"}},
+      "additionalProperties": true
+    },
+    "trial": {
+      "type": "object",
+      "required": ["trial_id", "seed", "status", "completed", "score", "score_components", "wall_clock_s", "real_time_factor", "environment", "metrics", "artifacts"],
+      "properties": {
+        "trial_id": {"type": "string", "minLength": 1},
+        "seed": {"type": "integer"},
+        "status": {"enum": ["completed", "failed", "timeout", "invalid"]},
+        "completed": {"type": "boolean"},
+        "score": {"type": ["number", "null"]},
+        "score_components": {"type": "object"},
+        "wall_clock_s": {"type": "number", "minimum": 0},
+        "real_time_factor": {"type": ["number", "null"]},
+        "environment": {"type": "object"},
+        "metrics": {"type": "object"},
+        "artifacts": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": true
+    },
+    "aggregate": {
+      "type": "object",
+      "required": ["count", "mean", "median", "stddev", "confidence_interval_95", "worst_case", "score_direction"],
+      "properties": {
+        "count": {"type": "integer", "minimum": 0},
+        "mean": {"type": ["number", "null"]},
+        "median": {"type": ["number", "null"]},
+        "stddev": {"type": ["number", "null"]},
+        "confidence_interval_95": {
+          "type": "object",
+          "required": ["low", "high", "method"],
+          "properties": {"low": {"type": ["number", "null"]}, "high": {"type": ["number", "null"]}, "method": {"type": "string", "minLength": 1}},
+          "additionalProperties": true
+        },
+        "worst_case": {"type": ["number", "null"]},
+        "score_direction": {"enum": ["minimize", "maximize"]}
+      },
+      "additionalProperties": true
+    },
+    "artifact": {
+      "type": "object",
+      "required": ["path", "sha256", "kind"],
+      "properties": {"path": {"type": "string", "minLength": 1}, "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}, "kind": {"type": "string", "minLength": 1}},
+      "additionalProperties": true
+    },
+    "verification": {
+      "type": "object",
+      "required": ["verified", "claim_eligible", "checks"],
+      "properties": {"verified": {"type": "boolean"}, "claim_eligible": {"type": "boolean"}, "checks": {"type": "array"}},
+      "additionalProperties": true
+    }
+  }
+}

@@ -17,6 +17,24 @@ result has passed a clean independent rerun.
 - Claim policy: independently reproduced task-level record unless recognized
   by the benchmark maintainers
 
+## Baseline harness
+
+The dependency-light experiment/result harness is available through
+`scripts/run_trial`, `scripts/run_suite`, and `scripts/verify_result`. The
+canonical result format is documented in
+[`docs/result-format.md`](docs/result-format.md) and defined by
+[`schemas/result.schema.json`](schemas/result.schema.json). The checked-in
+upstream manifest is intentionally not runnable yet: its historical simulator,
+scorer, revisions, and official seeds remain unavailable, so the harness will
+refuse to fabricate a score. Fixture-driven tests exercise the full execution,
+statistics, checksum, and verification path.
+
+Run the tests with:
+
+```sh
+PYTHONPATH=src python3 -m unittest discover -s tests -v
+```
+
 ## Sources
 
 - [Official VRX 2019 results](https://github.com/osrf/vrx/wiki/vrx_2019-results)

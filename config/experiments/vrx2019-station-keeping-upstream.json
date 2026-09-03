@@ -1,0 +1,40 @@
+{
+  "$schema": "../../schemas/experiment.schema.json",
+  "schema_version": "1.0.0",
+  "experiment_id": "vrx2019-station-keeping-upstream",
+  "benchmark": {
+    "name": "vrx-2019-station-keeping",
+    "revision": null,
+    "protocol_revision": null,
+    "score_direction": "minimize",
+    "scorer": {
+      "name": "vrx-2019-station-keeping-scorer",
+      "revision": null
+    }
+  },
+  "controller": {
+    "name": "upstream-reference-wrapper",
+    "source": "external/upstream VRX station-keeping controller (not vendored)",
+    "revision": null,
+    "command": [],
+    "parameters": {}
+  },
+  "container": {
+    "image": "vrx-record-lab/historical:unresolved",
+    "digest": null
+  },
+  "task": {
+    "name": "station_keeping",
+    "parameters": {}
+  },
+  "trials": {
+    "seeds": [0],
+    "seed_provenance": "Development placeholder only; official VRX 2019 seed selection is unavailable until protocol archaeology is complete.",
+    "environment": {}
+  },
+  "execution": {
+    "command": [],
+    "timeout_s": 900,
+    "cwd": null
+  }
+}
