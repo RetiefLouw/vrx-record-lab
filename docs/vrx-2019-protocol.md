@@ -1,6 +1,8 @@
 # VRX 2019 station-keeping protocol
 
-Status: reconstruction in progress.
+Status: reconstruction in progress. The current evidence and closest
+reimplementation design are recorded in the
+[UF 2019 station-keeping reproduction dossier](uf-2019-station-keeping-reproduction.md).
 
 The official results report a station-keeping value of `0.11` for the
 University of Florida entry. Before treating that number as a directly
