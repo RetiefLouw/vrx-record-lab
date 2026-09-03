@@ -1,13 +1,12 @@
 """Minimal linear vehicle model exposed for PID and future LQR/MPC laws."""
 
-from __future__ import annotations
-
 from dataclasses import dataclass
+from typing import List, Optional, Tuple, Union
 
 import numpy as np
 
 
-def _matrix3(value: np.ndarray | list[list[float]], name: str) -> np.ndarray:
+def _matrix3(value: Union[np.ndarray, List[List[float]]], name: str) -> np.ndarray:
     matrix = np.asarray(value, dtype=float)
     if matrix.shape != (3, 3):
         raise ValueError(f"{name} must have shape (3, 3), got {matrix.shape}")
@@ -46,7 +45,7 @@ class PlanarVehicleModel:
     def inverse_mass(self) -> np.ndarray:
         return np.linalg.inv(self.mass)
 
-    def acceleration(self, velocity: np.ndarray, wrench: np.ndarray, disturbance: np.ndarray | None = None) -> np.ndarray:
+    def acceleration(self, velocity: np.ndarray, wrench: np.ndarray, disturbance: Optional[np.ndarray] = None) -> np.ndarray:
         """Compute body acceleration from the declared linear model."""
 
         nu = np.asarray(velocity, dtype=float)
@@ -60,7 +59,7 @@ class PlanarVehicleModel:
             raise ValueError("velocity, wrench, and disturbance must be finite")
         return self.inverse_mass @ (tau + d - self.damping @ nu)
 
-    def linearize(self, reference_yaw: float = 0.0) -> tuple[np.ndarray, np.ndarray]:
+    def linearize(self, reference_yaw: float = 0.0) -> Tuple[np.ndarray, np.ndarray]:
         """Return continuous-time ``(A, B)`` for a stationary reference pose."""
 
         if not np.isfinite(reference_yaw):
@@ -76,7 +75,7 @@ class PlanarVehicleModel:
         b[3:, :] = self.inverse_mass
         return a, b
 
-    def discretize(self, dt: float, reference_yaw: float = 0.0) -> tuple[np.ndarray, np.ndarray]:
+    def discretize(self, dt: float, reference_yaw: float = 0.0) -> Tuple[np.ndarray, np.ndarray]:
         """Return a deterministic forward-Euler discrete linearization.
 
         Euler is intentionally explicit here because this package has no

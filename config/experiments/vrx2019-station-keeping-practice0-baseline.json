@@ -1,0 +1,60 @@
+{
+  "$schema": "../../schemas/experiment.schema.json",
+  "schema_version": "1.0.0",
+  "experiment_id": "vrx2019-station-keeping-practice0-baseline",
+  "benchmark": {
+    "name": "vrx-2019-station-keeping",
+    "revision": "a62df11109ee95c206111c37a37c60d39bc7b705",
+    "protocol_revision": "public-vrx-2019-task-info-mean-pose-error-a62df111",
+    "score_direction": "minimize",
+    "scorer": {
+      "name": "vrx-2019-station-keeping-scorer",
+      "revision": "a62df11109ee95c206111c37a37c60d39bc7b705"
+    }
+  },
+  "controller": {
+    "name": "conservative-pid-stock-t-thrusters",
+    "source": "src/vrx_controller + ros/vrx_controller_ros",
+    "revision": "baseline-2026-09-03",
+    "command": ["../../scripts/run_vrx_trial"],
+    "parameters": {
+      "layout": "T",
+      "localization_topic": "/wamv/robot_localization/odometry/filtered",
+      "goal_topic": "/vrx/station_keeping/goal",
+      "control_hz": 10.0,
+      "world_frame": "ENU",
+      "datum_latitude_deg": 21.30996,
+      "datum_longitude_deg": -157.8901,
+      "wamv_locked": false,
+      "thruster_mapping": "stock_mappingType_1_glf"
+    }
+  },
+  "container": {
+    "image": "vrx-record-lab:2019-amd64",
+    "digest": "sha256:672ba457b349cc8f1a7d7239708958e475912c6f13c1c88b5fa40ef522c74c12"
+  },
+  "task": {
+    "name": "station_keeping",
+    "parameters": {
+      "world": "/opt/vrx_ws/src/vrx/vrx_gazebo/worlds/2019_practice/stationkeeping0.world",
+      "initial_state_duration_s": 10.0,
+      "ready_state_duration_s": 10.0,
+      "running_state_duration_s": 300.0,
+      "wall_timeout_s": 600.0
+    }
+  },
+  "trials": {
+    "seeds": [10],
+    "seed_provenance": "The pinned public VRX 2019 practice world stationkeeping0.world explicitly sets random_seed=10; no runtime seed override is applied.",
+    "environment": {
+      "world": "/opt/vrx_ws/src/vrx/vrx_gazebo/worlds/2019_practice/stationkeeping0.world",
+      "wind_seed": "world-defined:10",
+      "waves": "world-defined"
+    }
+  },
+  "execution": {
+    "command": ["../../scripts/run_vrx_trial"],
+    "timeout_s": 700.0,
+    "cwd": null
+  }
+}

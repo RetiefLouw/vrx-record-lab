@@ -1,13 +1,12 @@
 """Per-thruster saturation, slew-rate, and dead-zone handling."""
 
-from __future__ import annotations
-
 from dataclasses import dataclass
+from typing import List, Optional, Union
 
 import numpy as np
 
 
-def _vector(value: np.ndarray | list[float], size: int, name: str) -> np.ndarray:
+def _vector(value: Union[np.ndarray, List[float]], size: int, name: str) -> np.ndarray:
     result = np.asarray(value, dtype=float)
     if result.shape != (size,):
         raise ValueError(f"{name} must have shape ({size},), got {result.shape}")
@@ -70,7 +69,7 @@ class ActuatorLimiter:
         self.limits = limits
         self.previous_command = np.zeros(len(limits.force_min), dtype=float)
 
-    def reset(self, command: np.ndarray | None = None) -> None:
+    def reset(self, command: Optional[np.ndarray] = None) -> None:
         if command is None:
             self.previous_command.fill(0.0)
             return

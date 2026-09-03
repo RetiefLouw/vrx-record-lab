@@ -88,6 +88,19 @@ The UF port follows the external trajectory-to-body-wrench boundary and has no
 ROS, Gazebo, VRX, or scorer dependency. Its source, attribution, and deliberate
 deviations are documented in [`docs/uf-mrac-port.md`](docs/uf-mrac-port.md).
 
+The ROS bridge in `ros/vrx_controller_ros` consumes the real
+`robot_localization` odometry and latched geographic goal, converts WGS84 to
+local ENU, and publishes the stock `std_msgs/Float32` T-layout thruster topics.
+A bounded practice-world trial is available with:
+
+```bash
+scripts/run_suite config/experiments/vrx2019-station-keeping-practice0-baseline.json \
+  --output-dir /absolute/path/to/trial-output
+```
+
+Its artifact contract and runtime limitations are documented in
+[`docs/ros-controller.md`](docs/ros-controller.md).
+
 Run the deterministic unit tests with:
 
 ```bash

@@ -1,15 +1,14 @@
 """Small state objects shared by controller components."""
 
-from __future__ import annotations
-
 from dataclasses import dataclass
+from typing import List, Optional, Tuple, Union
 
 import numpy as np
 
 from .angles import angle_error
 
 
-def _finite_vector(value: np.ndarray | list[float] | tuple[float, ...], size: int, name: str) -> np.ndarray:
+def _finite_vector(value: Union[np.ndarray, List[float], Tuple[float, ...]], size: int, name: str) -> np.ndarray:
     array = np.asarray(value, dtype=float)
     if array.shape != (size,):
         raise ValueError(f"{name} must have shape ({size},), got {array.shape}")
@@ -49,7 +48,7 @@ class StationKeepingState:
 
     pose: Pose2D
     velocity: BodyVelocity
-    target_velocity: BodyVelocity | None = None
+    target_velocity: Optional[BodyVelocity] = None
 
     def target_velocity_array(self) -> np.ndarray:
         if self.target_velocity is None:

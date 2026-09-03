@@ -1,6 +1,6 @@
 """A deterministic low-pass disturbance observer for the planar model."""
 
-from __future__ import annotations
+from typing import Optional
 
 import numpy as np
 
@@ -22,7 +22,7 @@ class DisturbanceObserver:
         self.model = model
         self.bandwidth_hz = float(bandwidth_hz)
         self.estimate = np.zeros(3, dtype=float)
-        self._previous_velocity: np.ndarray | None = None
+        self._previous_velocity: Optional[np.ndarray] = None
 
     def reset(self) -> None:
         self.estimate.fill(0.0)

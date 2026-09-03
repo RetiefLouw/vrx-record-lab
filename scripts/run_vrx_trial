@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT_DIR="$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)"
+ENV_FILE="${ROOT_DIR}/config/vrx-2019.env"
+set -a
+source "${ENV_FILE}"
+set +a
+
+host_artifact_dir="${VRX_TRIAL_ARTIFACT_DIR:?VRX_TRIAL_ARTIFACT_DIR is required}"
+host_output="${VRX_TRIAL_OUTPUT:?VRX_TRIAL_OUTPUT is required}"
+mkdir -p "${host_artifact_dir}"
+
+world="$(python3 -c 'import json,os; print(json.loads(os.environ.get("VRX_TASK_ENVIRONMENT_JSON", "{}")).get("world", ""))')"
+if [[ -z "${world}" ]]; then
+  world="${VRX_SOURCE_DIR}/vrx_gazebo/worlds/stationkeeping_task.world"
+fi
+timeout_s="$(python3 -c 'import json,os; print(json.loads(os.environ.get("VRX_TASK_PARAMETERS_JSON", "{}")).get("wall_timeout_s", 600))')"
+
+docker run --rm --platform linux/amd64 --init --shm-size=1gb \
+  --env ROS_MASTER_URI=http://127.0.0.1:11311 \
+  --env ROS_HOSTNAME=localhost \
+  --env VRX_TRIAL_ID="${VRX_TRIAL_ID}" \
+  --env VRX_TRIAL_SEED="${VRX_TRIAL_SEED}" \
+  --env VRX_TRIAL_ARTIFACT_DIR=/var/log/vrx \
+  --env VRX_TRIAL_OUTPUT=/var/log/vrx/adapter-output.json \
+  --env VRX_WORLD="${world}" \
+  --env VRX_TRIAL_TIMEOUT_S="${timeout_s}" \
+  --env VRX_VERBOSE="${VRX_VERBOSE}" \
+  --env VRX_NAMESPACE="${VRX_NAMESPACE}" \
+  --volume "${host_artifact_dir}:/var/log/vrx" \
+  "${VRX_IMAGE_NAME}" /usr/local/bin/vrx-run-trial
+
+if [[ ! -s "${host_artifact_dir}/adapter-output.json" ]]; then
+  echo "Container completed without adapter-output.json" >&2
+  exit 1
+fi
+cp "${host_artifact_dir}/adapter-output.json" "${host_output}"

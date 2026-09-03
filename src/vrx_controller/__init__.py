@@ -11,6 +11,8 @@ from .config import ControllerConfig
 from .model import PlanarVehicleModel
 from .observer import DisturbanceObserver
 from .pid import PIDController, PIDGains
+from .geo import quaternion_to_yaw, wgs84_to_local_enu
+from .stock_thruster import command_to_force, force_to_command
 from .state import BodyVelocity, Pose2D, StationKeepingState, pose_error
 from .station_keeping import ControlLaw, ControllerOutput, StationKeepingController
 from .uf_mrac import UFMRACController, UFMRACOutput, UFMRACParameters, UFMRACReference
@@ -25,10 +27,13 @@ __all__ = [
     "ControlLaw",
     "ControllerOutput",
     "DisturbanceObserver",
+    "command_to_force",
+    "force_to_command",
     "PIDController",
     "PIDGains",
     "PlanarVehicleModel",
     "Pose2D",
+    "quaternion_to_yaw",
     "StationKeepingController",
     "StationKeepingState",
     "ThrusterAllocator",
@@ -39,4 +44,5 @@ __all__ = [
     "angle_error",
     "pose_error",
     "wrap_angle",
+    "wgs84_to_local_enu",
 ]

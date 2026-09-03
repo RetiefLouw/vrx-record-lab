@@ -1,13 +1,12 @@
 """Constrained generalized-wrench to thruster-force allocation."""
 
-from __future__ import annotations
-
 from dataclasses import dataclass
+from typing import List, Optional, Tuple, Union
 
 import numpy as np
 
 
-def _array(value: np.ndarray | list[float], shape: tuple[int, ...], name: str) -> np.ndarray:
+def _array(value: Union[np.ndarray, List[float]], shape: Tuple[int, ...], name: str) -> np.ndarray:
     result = np.asarray(value, dtype=float)
     if result.shape != shape:
         raise ValueError(f"{name} must have shape {shape}, got {result.shape}")
@@ -47,9 +46,9 @@ class ThrusterAllocator:
         effectiveness: np.ndarray,
         force_min: np.ndarray,
         force_max: np.ndarray,
-        wrench_weights: np.ndarray | None = None,
+        wrench_weights: Optional[np.ndarray] = None,
         regularization: float = 1e-8,
-        rate_limit: np.ndarray | None = None,
+        rate_limit: Optional[np.ndarray] = None,
     ) -> None:
         matrix = np.asarray(effectiveness, dtype=float)
         if matrix.ndim != 2 or matrix.shape[0] != 3 or matrix.shape[1] == 0:
@@ -83,7 +82,7 @@ class ThrusterAllocator:
     def thruster_count(self) -> int:
         return self.effectiveness.shape[1]
 
-    def bounds(self, dt: float, previous_forces: np.ndarray | None) -> tuple[np.ndarray, np.ndarray]:
+    def bounds(self, dt: float, previous_forces: Optional[np.ndarray]) -> Tuple[np.ndarray, np.ndarray]:
         """Return static plus optional per-cycle slew-rate bounds."""
 
         low = self.force_min.copy()
@@ -104,7 +103,7 @@ class ThrusterAllocator:
         self,
         requested_wrench: np.ndarray,
         dt: float,
-        previous_forces: np.ndarray | None = None,
+        previous_forces: Optional[np.ndarray] = None,
     ) -> AllocationResult:
         """Allocate a wrench subject to force and optional slew-rate bounds."""
 
@@ -133,7 +132,7 @@ class ThrusterAllocator:
 
     def _active_set(self, hessian: np.ndarray, rhs: np.ndarray, low: np.ndarray, high: np.ndarray) -> np.ndarray:
         n = len(low)
-        best: np.ndarray | None = None
+        best: Optional[np.ndarray] = None
         best_objective = np.inf
         # 0 = free, 1 = lower, 2 = upper.  Lexicographic product order makes
         # degenerate solutions reproducible.

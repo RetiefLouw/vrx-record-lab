@@ -1,9 +1,13 @@
 """Composition of the reusable station-keeping controller components."""
 
-from __future__ import annotations
-
 from dataclasses import dataclass
-from typing import Protocol
+from typing import Optional
+
+try:
+    from typing import Protocol
+except ImportError:  # Python 3.6, used by the pinned ROS Melodic image.
+    class Protocol(object):
+        pass
 
 import numpy as np
 
@@ -51,7 +55,7 @@ class StationKeepingController:
     allocator, and actuator interfaces.
     """
 
-    def __init__(self, config: ControllerConfig, control_law: ControlLaw | None = None) -> None:
+    def __init__(self, config: ControllerConfig, control_law: Optional[ControlLaw] = None) -> None:
         self.config = config
         self.pid = PIDController(config.pid)
         self.control_law: ControlLaw = self.pid if control_law is None else control_law

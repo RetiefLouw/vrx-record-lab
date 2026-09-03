@@ -11,6 +11,12 @@ case "${1:-run}" in
   uf-mrac-practice)
     exec /usr/local/bin/vrx-run-uf-mrac-practice
     ;;
+  scored-trial)
+    exec /usr/local/bin/vrx-run-trial
+    ;;
+  phase2-trial)
+    exec /usr/local/bin/vrx-run-phase2-stationkeeping
+    ;;
   bash)
     shift
     exec /bin/bash "$@"

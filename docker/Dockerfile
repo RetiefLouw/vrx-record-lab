@@ -74,6 +74,13 @@ RUN apt-get update \
  && rm -f /tmp/gazebo.key \
  && rm -rf /var/lib/apt/lists/*
 
+RUN python3 -m pip install --no-cache-dir \
+      "catkin_pkg==0.5.2" \
+      "dataclasses==0.8" \
+      "defusedxml==0.7.1" \
+      "empy==3.3.4" \
+      "rospkg==1.5.0"
+
 RUN groupadd --gid "${VRX_GID}" "${VRX_USER}" \
  && useradd --uid "${VRX_UID}" --gid "${VRX_GID}" --create-home --shell /bin/bash "${VRX_USER}"
 
@@ -88,15 +95,25 @@ RUN source /opt/ros/melodic/setup.bash \
  && cd "${VRX_WORKSPACE}" \
  && catkin_make -DCMAKE_BUILD_TYPE=Release
 
+COPY ros/vrx_controller_ros "${VRX_WORKSPACE}/src/vrx_controller_ros"
+COPY src/vrx_controller /opt/vrx_controller/src/vrx_controller
+RUN chmod 0755 "${VRX_WORKSPACE}/src/vrx_controller_ros/scripts/"*.py \
+ && source /opt/ros/melodic/setup.bash \
+ && cd "${VRX_WORKSPACE}" \
+ && catkin_make -DCMAKE_BUILD_TYPE=Release
+
 COPY docker/entrypoint.sh /usr/local/bin/vrx-entrypoint
 COPY docker/run-stationkeeping.sh /usr/local/bin/vrx-run-stationkeeping
 COPY docker/uf_mrac_practice.py /usr/local/bin/uf-mrac-practice.py
 COPY docker/run-uf-mrac-practice.sh /usr/local/bin/vrx-run-uf-mrac-practice
 COPY docker/run-phase2-stationkeeping.sh /usr/local/bin/vrx-run-phase2-stationkeeping
 COPY docker/collect_task_info.py /usr/local/bin/vrx-collect-task-info
+COPY docker/run-trial.sh /usr/local/bin/vrx-run-trial
+ENV PYTHONPATH=/opt/vrx_controller/src
 RUN chmod 0755 /usr/local/bin/vrx-entrypoint /usr/local/bin/vrx-run-stationkeeping \
       /usr/local/bin/uf-mrac-practice.py /usr/local/bin/vrx-run-uf-mrac-practice \
       /usr/local/bin/vrx-run-phase2-stationkeeping /usr/local/bin/vrx-collect-task-info \
+      /usr/local/bin/vrx-run-trial \
  && python -m py_compile /usr/local/bin/uf-mrac-practice.py \
  && chown -R "${VRX_USER}:${VRX_USER}" /home/"${VRX_USER}" "${VRX_WORKSPACE}"
 
