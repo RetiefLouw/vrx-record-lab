@@ -90,7 +90,11 @@ RUN source /opt/ros/melodic/setup.bash \
 
 COPY docker/entrypoint.sh /usr/local/bin/vrx-entrypoint
 COPY docker/run-stationkeeping.sh /usr/local/bin/vrx-run-stationkeeping
+COPY docker/uf_mrac_practice.py /usr/local/bin/uf-mrac-practice.py
+COPY docker/run-uf-mrac-practice.sh /usr/local/bin/vrx-run-uf-mrac-practice
 RUN chmod 0755 /usr/local/bin/vrx-entrypoint /usr/local/bin/vrx-run-stationkeeping \
+      /usr/local/bin/uf-mrac-practice.py /usr/local/bin/vrx-run-uf-mrac-practice \
+ && python -m py_compile /usr/local/bin/uf-mrac-practice.py \
  && chown -R "${VRX_USER}:${VRX_USER}" /home/"${VRX_USER}" "${VRX_WORKSPACE}"
 
 LABEL org.opencontainers.image.source="https://github.com/RetiefLouw/vrx-record-lab" \

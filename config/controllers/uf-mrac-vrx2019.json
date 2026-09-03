@@ -1,0 +1,38 @@
+{
+  "name": "uf-mrac-public-source-port",
+  "label": "Closest public-source UF MRAC port (not exact reproduction)",
+  "source": {
+    "repository": "https://github.com/uf-mil/mil",
+    "commit": "7c312eeac2dbaa888adfce5f04ad9a9d85999646",
+    "path": "NaviGator/gnc/navigator_controller/nodes/mrac_controller.py"
+  },
+  "implementation": "vrx_controller.UFMRACController",
+  "exact_reproduction": false,
+  "reference_path": "external /trajectory/cmd-style trajectory",
+  "gains": {
+    "kp_body": [1000.0, 1000.0, 5600.0],
+    "kd_body": [1200.0, 1200.0, 6000.0],
+    "ki": [0.1, 0.1, 0.1],
+    "kg": [5.0, 5.0, 5.0, 5.0, 5.0]
+  },
+  "reference_model": {
+    "mass_ref_kg": 251.19,
+    "inertia_ref_kg_m2": 500.58
+  },
+  "adaptation": {
+    "disturbance_limit": [200.0, 200.0, 200.0],
+    "drag_effort_limit": [1000.0, 1000.0, 1000.0],
+    "learning_radius_m": 10.0,
+    "enabled_by_default": false
+  },
+  "output": {
+    "frame": "body",
+    "boundary": "/wrench/autonomous",
+    "thruster_mapper": "separate; not included in this controller"
+  },
+  "known_deviations": [
+    "ROS callback and publication scheduling are represented by a typed Python API.",
+    "Planar yaw replaces the source's full quaternion operations.",
+    "The exact UF phase-3 worlds, scorer binary, submodules, and logs are unavailable."
+  ]
+}

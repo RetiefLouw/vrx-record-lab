@@ -31,6 +31,17 @@ documented in [the environment reproduction guide](docs/environment-reproduction
 The environment records historical-source and package-availability inferences;
 it is not itself a claim to have reproduced the published `0.11` score.
 
+The closest UF MRAC public-source port can also be exercised against the
+public practice world in the pinned image:
+
+```bash
+docker compose --env-file config/vrx-2019.env run --rm simulator uf-mrac-practice
+```
+
+That practice adapter uses Gazebo ground truth, a stationary goal, and a
+co-located thruster mapper for legacy ROS compatibility. Its result is not
+comparable to the UF phase-3 result; see [`docs/uf-mrac-port.md`](docs/uf-mrac-port.md).
+
 ## Baseline harness
 
 The dependency-light experiment/result harness is available through
@@ -52,10 +63,13 @@ PYTHONPATH=src python3 -m unittest discover -s tests -v
 ## Controller package
 
 `src/vrx_controller` contains simulator-independent planar station-keeping
-components.  It currently provides angle-safe state errors, a linear model
-interface for future LQR/MPC work, anti-windup PID, a wrench disturbance
-observer, constrained thruster allocation, and actuator saturation/rate/
-dead-zone handling.  The package has no ROS, Gazebo, VRX, or scorer dependency.
+components. It provides angle-safe state errors, a linear model interface for
+future LQR/MPC work, anti-windup PID, a wrench disturbance observer,
+constrained thruster allocation, actuator saturation/rate/dead-zone handling,
+and a clearly labelled closest public-source port of UF's VRX MRAC controller.
+The UF port follows the external trajectory-to-body-wrench boundary and has no
+ROS, Gazebo, VRX, or scorer dependency. Its source, attribution, and deliberate
+deviations are documented in [`docs/uf-mrac-port.md`](docs/uf-mrac-port.md).
 
 Run the deterministic unit tests with:
 

@@ -13,6 +13,7 @@ from .observer import DisturbanceObserver
 from .pid import PIDController, PIDGains
 from .state import BodyVelocity, Pose2D, StationKeepingState, pose_error
 from .station_keeping import ControlLaw, ControllerOutput, StationKeepingController
+from .uf_mrac import UFMRACController, UFMRACOutput, UFMRACParameters, UFMRACReference
 
 __all__ = [
     "ActuatorCommand",
@@ -31,6 +32,10 @@ __all__ = [
     "StationKeepingController",
     "StationKeepingState",
     "ThrusterAllocator",
+    "UFMRACController",
+    "UFMRACOutput",
+    "UFMRACParameters",
+    "UFMRACReference",
     "angle_error",
     "pose_error",
     "wrap_angle",

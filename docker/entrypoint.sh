@@ -8,6 +8,9 @@ case "${1:-run}" in
   run)
     exec /usr/local/bin/vrx-run-stationkeeping
     ;;
+  uf-mrac-practice)
+    exec /usr/local/bin/vrx-run-uf-mrac-practice
+    ;;
   bash)
     shift
     exec /bin/bash "$@"

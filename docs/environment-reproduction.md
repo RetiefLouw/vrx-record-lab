@@ -104,9 +104,12 @@ repository.
 
 ## Scope and validation limits
 
-This change adds only container/bootstrap/smoke-test plumbing and
-documentation. The fetched upstream tree is built at the pinned commit; no
-benchmark, task, or scorer source is copied into or modified in this project.
+This project adds a legacy-ROS practice adapter for the closest UF MRAC
+public-source port. The fetched upstream tree is still built at the pinned
+commit; no benchmark, task, or scorer source is copied into or modified in
+this project. The adapter's ground-truth state, stationary goal, and
+co-located mapper are explicitly practice-only deviations; see
+[`docs/uf-mrac-port.md`](uf-mrac-port.md).
 
 The smoke test is intentionally a startup test: it does not wait through the
 full 300-second station-keeping running state or assert a score. A clean
