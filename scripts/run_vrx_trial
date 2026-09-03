@@ -28,6 +28,7 @@ docker run --rm --platform linux/amd64 --init --shm-size=1gb \
   --env VRX_TRIAL_TIMEOUT_S="${timeout_s}" \
   --env VRX_VERBOSE="${VRX_VERBOSE}" \
   --env VRX_NAMESPACE="${VRX_NAMESPACE}" \
+  --env VRX_CONTROLLER_PARAMETERS_JSON="${VRX_CONTROLLER_PARAMETERS_JSON}" \
   --volume "${host_artifact_dir}:/var/log/vrx" \
   "${VRX_IMAGE_NAME}" /usr/local/bin/vrx-run-trial
 

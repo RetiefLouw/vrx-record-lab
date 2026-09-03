@@ -1,0 +1,29 @@
+{
+  "schema_version": "campaign-evidence-1.0",
+  "claim_status": "public-practice-task-result-independently-unverified",
+  "benchmark": "VRX 2019 station keeping public practice",
+  "world": "2019_practice/stationkeeping0.world",
+  "seed": 10,
+  "score_direction": "minimize",
+  "score": 0.008326716568191546,
+  "published_reference": 0.11,
+  "reference_scope_warning": "The 0.11 reference is UF's six-run phase-3 aggregate; this single public-practice world is not directly comparable.",
+  "vrx_revision": "a62df11109ee95c206111c37a37c60d39bc7b705",
+  "container_digest": "sha256:c67d1d45abebe34ec6c5a101cb8bf16320855807c58f6d0775caabec5e26ab98",
+  "experiment_manifest": "config/experiments/vrx2019-station-keeping-practice0-fast-pd.json",
+  "canonical_local_result_sha256": "afdfd17c16d2885b00c7d4c20a600a80044dfe331db03a6fd1e8d03ca15c4f52",
+  "canonical_local_checksums_sha256": "5bd08924f7cf4f4ce2ae9636fbd782e53829585a7410ec701422673872d8c9e7",
+  "duration_s": 300.0,
+  "controller_samples_required": true,
+  "verification": {
+    "schema": "pass",
+    "artifact_sha256": "pass",
+    "checksums_file": "pass",
+    "aggregate": "pass",
+    "manifest_sha256": "pass",
+    "pinned_identity": "pass",
+    "completed_trials": "pass",
+    "independent_clean_rerun": "pending"
+  },
+  "compute_cost_usd": 0.0
+}

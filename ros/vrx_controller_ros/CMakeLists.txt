@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.0.2)
 project(vrx_controller_ros)
 
-find_package(catkin REQUIRED COMPONENTS geographic_msgs nav_msgs rospy robot_localization std_msgs)
+find_package(catkin REQUIRED COMPONENTS geographic_msgs nav_msgs rospy robot_localization sensor_msgs std_msgs)
 
 catkin_package()
 

@@ -12,16 +12,18 @@ result has passed a clean independent rerun.
 ## Campaign status
 
 - Target: VRX 2019 station keeping
-- Status: public practice protocol runnable; first valid localized baseline `0.524325` on `stationkeeping0` (seed 10)
+- Status: public practice result `0.00832672` on `stationkeeping0` (seed 10); independent rerun pending
 - Compute policy: OrbStack first; Vast.ai only through a bounded campaign
 - Claim policy: independently reproduced task-level record unless recognized
   by the benchmark maintainers
 
-The `0.524325` baseline is a public-practice result, not directly comparable
+The current `0.00832672` result and the `0.524325` baseline are public-practice
+results, not directly comparable
 to UF's unrecovered phase-3 evaluation. A separate ground-truth UF-port
 practice run scored `0.005811`, but is explicitly non-comparable because it
 uses simulator state rather than the competition localization interface.
-See [`results/README.md`](results/README.md) for the evidence ledger.
+See [`results/README.md`](results/README.md) and the machine-readable
+[`results/practice0-fast-pd-gps.json`](results/practice0-fast-pd-gps.json).
 
 ## Environment bootstrap
 

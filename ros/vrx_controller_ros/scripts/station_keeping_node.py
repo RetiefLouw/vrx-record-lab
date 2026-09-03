@@ -2,11 +2,14 @@
 """Melodic-native conservative station-keeping baseline for the stock T WAM-V."""
 
 import math
+import json
+import os
 import threading
 
 import rospy
 from geographic_msgs.msg import GeoPoseStamped
 from nav_msgs.msg import Odometry
+from sensor_msgs.msg import NavSatFix
 from std_msgs.msg import Float32, Float32MultiArray
 
 
@@ -19,9 +22,23 @@ def quaternion_to_yaw(q):
 
 
 def wgs84_to_enu(latitude, longitude, datum_latitude, datum_longitude):
-    radius = 6378137.0
-    north = math.radians(latitude - datum_latitude) * radius
-    east = math.radians(longitude - datum_longitude) * radius * math.cos(math.radians(datum_latitude))
+    semi_major = 6378137.0
+    flattening = 1.0 / 298.257223563
+    eccentricity_sq = 2.0 * flattening - flattening * flattening
+
+    def ecef(lat_deg, lon_deg):
+        lat, lon = math.radians(lat_deg), math.radians(lon_deg)
+        normal = semi_major / math.sqrt(1.0 - eccentricity_sq * math.sin(lat) ** 2)
+        return (normal * math.cos(lat) * math.cos(lon),
+                normal * math.cos(lat) * math.sin(lon),
+                normal * (1.0 - eccentricity_sq) * math.sin(lat))
+
+    origin, point = ecef(datum_latitude, datum_longitude), ecef(latitude, longitude)
+    dx, dy, dz = [point[i] - origin[i] for i in range(3)]
+    lat, lon = math.radians(datum_latitude), math.radians(datum_longitude)
+    east = -math.sin(lon) * dx + math.cos(lon) * dy
+    north = (-math.sin(lat) * math.cos(lon) * dx - math.sin(lat) * math.sin(lon) * dy
+             + math.cos(lat) * dz)
     return east, north
 
 
@@ -52,17 +69,22 @@ class StationKeepingNode(object):
     def __init__(self):
         self.datum_latitude = float(rospy.get_param("/controller/datum_latitude_deg", 21.30996))
         self.datum_longitude = float(rospy.get_param("/controller/datum_longitude_deg", -157.8901))
-        self.kp = rospy.get_param("/controller/pid/kp", [12.0, 12.0, 60.0])
-        self.kd = rospy.get_param("/controller/pid/kd", [50.0, 50.0, 100.0])
+        experiment = json.loads(os.environ.get("VRX_CONTROLLER_PARAMETERS_JSON", "{}"))
+        self.kp = experiment.get("kp", rospy.get_param("/controller/pid/kp", [12.0, 12.0, 60.0]))
+        self.kd = experiment.get("kd", rospy.get_param("/controller/pid/kd", [50.0, 50.0, 100.0]))
+        self.output_min = experiment.get("output_min", [-100.0, -100.0, -160.0])
+        self.output_max = experiment.get("output_max", [150.0, 150.0, 160.0])
         self.lock = threading.Lock()
         self.state = None
         self.target = None
+        self.gps_xy = None
         self.namespace = rospy.get_param("~namespace", "wamv").strip("/")
         names = ["left", "right", "lateral"]
         self.thrust = [rospy.Publisher("/{}/thrusters/{}_thrust_cmd".format(self.namespace, n), Float32, queue_size=1) for n in names]
         self.angle = [rospy.Publisher("/{}/thrusters/{}_thrust_angle".format(self.namespace, n), Float32, queue_size=1) for n in names]
         self.diagnostics = rospy.Publisher("~diagnostics", Float32MultiArray, queue_size=10)
         rospy.Subscriber(rospy.get_param("~localization_topic", "/wamv/robot_localization/odometry/filtered"), Odometry, self.on_odometry, queue_size=1)
+        rospy.Subscriber("/wamv/sensors/gps/gps/fix", NavSatFix, self.on_gps, queue_size=1)
         rospy.Subscriber("/vrx/station_keeping/goal", GeoPoseStamped, self.on_goal, queue_size=1)
         rospy.Timer(rospy.Duration(0.1), self.on_timer)
         rospy.on_shutdown(self.stop)
@@ -80,21 +102,26 @@ class StationKeepingNode(object):
             self.state = (p.position.x, p.position.y, quaternion_to_yaw(p.orientation),
                           v.linear.x, v.linear.y, v.angular.z)
 
+    def on_gps(self, message):
+        if not any(math.isnan(v) or math.isinf(v) for v in (message.latitude, message.longitude)):
+            with self.lock:
+                self.gps_xy = wgs84_to_enu(message.latitude, message.longitude,
+                                           self.datum_latitude, self.datum_longitude)
+
     def on_timer(self, _event):
         with self.lock:
-            state, target = self.state, self.target
-        if state is None or target is None:
+            state, target, gps_xy = self.state, self.target, self.gps_xy
+        if state is None or target is None or gps_xy is None:
             self.stop()
             return
-        x, y, yaw, surge, sway, yaw_rate = state
+        _odom_x, _odom_y, yaw, surge, sway, yaw_rate = state
+        x, y = gps_xy
         dx, dy = target[0] - x, target[1] - y
         c, s = math.cos(yaw), math.sin(yaw)
         errors = (c * dx + s * dy, -s * dx + c * dy, wrap_angle(target[2] - yaw))
         velocities = (surge, sway, yaw_rate)
         wrench = [self.kp[i] * errors[i] - self.kd[i] * velocities[i] for i in range(3)]
-        wrench[0] = max(-100.0, min(150.0, wrench[0]))
-        wrench[1] = max(-100.0, min(150.0, wrench[1]))
-        wrench[2] = max(-160.0, min(160.0, wrench[2]))
+        wrench = [max(self.output_min[i], min(self.output_max[i], wrench[i])) for i in range(3)]
         lever = 1.027135
         forces = [0.5 * wrench[0] - wrench[2] / (2.0 * lever),
                   0.5 * wrench[0] + wrench[2] / (2.0 * lever), wrench[1]]

@@ -10,6 +10,9 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 def test_wgs84_datum_and_yaw_conventions():
     assert wgs84_to_local_enu(21.30996, -157.8901, 21.30996, -157.8901) == (0.0, 0.0)
     assert abs(quaternion_to_yaw(0.0, 0.0, 0.70710678118, 0.70710678118) - 1.57079632679) < 1e-9
+    east, north = wgs84_to_local_enu(21.31085, -157.8886, 21.30996, -157.8901)
+    assert abs(east - 155.630419) < 1e-6
+    assert abs(north - 98.542506) < 1e-6
 
 
 def test_stock_thruster_mapping_round_trips_force_requests():
