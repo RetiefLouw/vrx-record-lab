@@ -1,0 +1,550 @@
+{
+  "schema_version": "1.0",
+  "subject": "VRX 2019 station-keeping protocol",
+  "research": {
+    "retrieved_at": "2026-09-03",
+    "repository": "https://github.com/RetiefLouw/vrx-record-lab",
+    "branch": "codex/protocol-archaeology"
+  },
+  "status": "partially_recovered",
+  "status_legend": {
+    "confirmed": "Directly stated by an official document or directly present at an immutable source revision.",
+    "inferred": "Best reconstruction from public evidence; not proof of the hidden evaluator setting.",
+    "unavailable": "Not exposed by the public primary sources located for this campaign."
+  },
+  "sources": [
+    {
+      "id": "task_descriptions_v1_4",
+      "kind": "official_pdf",
+      "status": "confirmed",
+      "url": "https://github.com/osrf/vrx/wiki/files/VRX2019_Task_Descriptions_v1.4.pdf",
+      "revision": "v1.4",
+      "sha256": "d67a48560b25e6dae2ff595cc046697651c67a0bed6737fb15ee44291543d352",
+      "claims": [
+        "run_state_machine",
+        "published_rms_formula",
+        "leaderboard_task_ranks",
+        "leaderboard_overall_ranks",
+        "scorer_sampling"
+      ]
+    },
+    {
+      "id": "technical_guide_v1_2",
+      "kind": "official_pdf",
+      "status": "confirmed",
+      "url": "https://github.com/osrf/vrx/wiki/files/VRX2019_Technical%20Guide_V1.2.pdf",
+      "revision": "v1.2",
+      "sha256": "3742c434f78980b0a08db4728f627c1358e6878c7e0cbdd3bab18ea50c5390d7",
+      "claims": [
+        "runtime_requirements",
+        "initial_pose",
+        "environment_envelope",
+        "run_state_machine"
+      ]
+    },
+    {
+      "id": "official_results",
+      "kind": "official_wiki",
+      "status": "confirmed",
+      "url": "https://github.com/osrf/vrx/wiki/vrx_2019-results/0305065c335a2511141e9bd03136afe1f85eba69",
+      "revision": "0305065c335a2511141e9bd03136afe1f85eba69",
+      "claims": [
+        "uf_stationkeeping_result",
+        "six_trial_selection",
+        "leaderboard_task_ranks",
+        "leaderboard_overall_ranks"
+      ]
+    },
+    {
+      "id": "phase3_competition_page",
+      "kind": "official_wiki",
+      "status": "confirmed",
+      "url": "https://github.com/osrf/vrx/wiki/vrx_2019-phase3_competition/32984d15beb6f24091ec7ca9455ca03d0469010f",
+      "revision": "32984d15beb6f24091ec7ca9455ca03d0469010f",
+      "claims": [
+        "six_trial_selection",
+        "final_worlds"
+      ]
+    },
+    {
+      "id": "system_requirements",
+      "kind": "official_wiki",
+      "status": "confirmed",
+      "url": "https://github.com/osrf/vrx/wiki/vrx_2019-system_requirements",
+      "revision": null,
+      "revision_note": "The public GitHub wiki API did not expose an immutable revision for this page.",
+      "claims": [
+        "runtime_requirements"
+      ]
+    },
+    {
+      "id": "vrx_tag_1_3_0",
+      "kind": "source_repository",
+      "status": "confirmed",
+      "url": "https://github.com/osrf/vrx/tree/7a784814c90f203cebf1e471e5af64fbb76be53d",
+      "revision": "7a784814c90f203cebf1e471e5af64fbb76be53d",
+      "tag": "1.3.0",
+      "claims": [
+        "vrx_package_version",
+        "initial_pose",
+        "public_practice_worlds",
+        "public_stationkeeping_scorer"
+      ]
+    },
+    {
+      "id": "vrx_final_window_tip",
+      "kind": "source_repository",
+      "status": "inferred",
+      "url": "https://github.com/osrf/vrx/tree/dd6187ca2eb24838b4288bf1154031556bb73cf6",
+      "revision": "dd6187ca2eb24838b4288bf1154031556bb73cf6",
+      "committed_at": "2019-11-22T21:57:48Z",
+      "claims": [
+        "final_window_code_anchor",
+        "public_stationkeeping_scorer"
+      ]
+    },
+    {
+      "id": "vrx_stationkeeping_source",
+      "kind": "source_file",
+      "status": "confirmed",
+      "url": "https://github.com/osrf/vrx/blob/dd6187ca2eb24838b4288bf1154031556bb73cf6/vrx_gazebo/src/stationkeeping_scoring_plugin.cc",
+      "revision": "dd6187ca2eb24838b4288bf1154031556bb73cf6",
+      "sha256": "e7142d0064e9f390e39ed60766f823a568863e4fb5e7477f9f5291bfd52b4e9b",
+      "claims": [
+        "public_stationkeeping_scorer",
+        "scorer_sampling",
+        "goal_conversion"
+      ]
+    },
+    {
+      "id": "vrx_docker_phase3",
+      "kind": "source_repository",
+      "status": "confirmed",
+      "url": "https://github.com/osrf/vrx-docker/tree/ce6a9b4a11d30767e2b44d62b0097630e9d3fd69",
+      "revision": "ce6a9b4a11d30767e2b44d62b0097630e9d3fd69",
+      "committed_at": "2019-11-23T09:28:04Z",
+      "claims": [
+        "exact_evaluator_revision",
+        "trial_filtering",
+        "raw_score_artifacts"
+      ]
+    },
+    {
+      "id": "vrx_trial_harness_script",
+      "kind": "source_file",
+      "status": "confirmed",
+      "url": "https://github.com/osrf/vrx-docker/blob/ce6a9b4a11d30767e2b44d62b0097630e9d3fd69/vrx_server/vrx-server/run_vrx_trial.sh",
+      "revision": "ce6a9b4a11d30767e2b44d62b0097630e9d3fd69",
+      "sha256": "e48b74fb2c6c88daddecd4f6fbf32aeb093f5c76e554cb559d3577508ed34a17",
+      "claims": [
+        "initial_pose",
+        "trial_filtering"
+      ]
+    },
+    {
+      "id": "vrx_task_score_script",
+      "kind": "source_file",
+      "status": "confirmed",
+      "url": "https://github.com/osrf/vrx-docker/blob/ce6a9b4a11d30767e2b44d62b0097630e9d3fd69/utils/get_task_score.py",
+      "revision": "ce6a9b4a11d30767e2b44d62b0097630e9d3fd69",
+      "claims": [
+        "trial_filtering",
+        "raw_score_artifacts"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "runtime_requirements",
+      "status": "confirmed",
+      "claim": "The official 2019 environment requirement was Ubuntu Desktop 18.04 Bionic 64-bit, ROS Melodic, and Gazebo 9.11.0 or newer.",
+      "evidence": ["system_requirements", "technical_guide_v1_2", "vrx_docker_phase3"]
+    },
+    {
+      "id": "vrx_package_version",
+      "status": "confirmed",
+      "claim": "The public vrx_gazebo package reports version 1.3.0 in the VRX 1.3.0 tag.",
+      "evidence": ["vrx_tag_1_3_0"]
+    },
+    {
+      "id": "final_window_code_anchor",
+      "status": "inferred",
+      "claim": "VRX commit dd6187ca2eb24838b4288bf1154031556bb73cf6 is the best public code anchor near the final submission window; it is not a confirmed evaluator checkout.",
+      "reason": "The commit is the public VRX tip on 2019-11-22 and contains the final-era scorer, but the public phase-3 Dockerfile clones VRX without a revision.",
+      "evidence": ["vrx_final_window_tip", "vrx_docker_phase3"]
+    },
+    {
+      "id": "exact_evaluator_revision",
+      "status": "unavailable",
+      "claim": "The exact VRX commit and apt package versions used by the phase-3 evaluator are not recorded in the public harness.",
+      "reason": "The Dockerfile uses an unpinned Mercurial clone and unpinned distribution packages.",
+      "evidence": ["vrx_docker_phase3"]
+    },
+    {
+      "id": "run_state_machine",
+      "status": "confirmed",
+      "claim": "A run transitions through Initial, Ready, Running, and Finished; scoring starts only in Running.",
+      "evidence": ["task_descriptions_v1_4", "technical_guide_v1_2", "vrx_stationkeeping_source"]
+    },
+    {
+      "id": "public_timing",
+      "status": "confirmed",
+      "claim": "The public station-keeping world uses 10 seconds Initial, 10 seconds Ready, and 300 seconds Running, for 320 seconds from the public simulation state-clock origin to timeout.",
+      "evidence": ["vrx_tag_1_3_0"]
+    },
+    {
+      "id": "phase3_timing",
+      "status": "unavailable",
+      "claim": "The exact phase-3 hidden-world durations and timeout behavior are not independently published.",
+      "evidence": ["phase3_competition_page", "vrx_docker_phase3"]
+    },
+    {
+      "id": "initial_pose",
+      "status": "inferred",
+      "claim": "The public auto-evaluation path starts with local pose x=158, y=108, z=0.1, roll=0, pitch=0, yaw=-2.76, but the final phase-3 harness may have overridden it.",
+      "reason": "These are the sandisland.launch defaults and the public trial script does not pass pose overrides; the Technical Guide also says starting pose varies between runs.",
+      "evidence": ["vrx_tag_1_3_0", "vrx_trial_harness_script", "technical_guide_v1_2"]
+    },
+    {
+      "id": "final_initial_pose",
+      "status": "unavailable",
+      "claim": "The exact initial pose for each hidden phase-3 trial is not public.",
+      "evidence": ["phase3_competition_page", "technical_guide_v1_2"]
+    },
+    {
+      "id": "goal_conversion",
+      "status": "confirmed",
+      "claim": "The world provides goal latitude, longitude, and yaw; the plugin converts latitude/longitude through spherical WGS84 world coordinates to local X/Y and publishes a GeoPoseStamped goal with a yaw quaternion.",
+      "evidence": ["vrx_stationkeeping_source", "vrx_tag_1_3_0"]
+    },
+    {
+      "id": "final_goal_poses",
+      "status": "unavailable",
+      "claim": "The exact goal poses for hidden phase-3 trials are unavailable because the evaluation configurations were not released before the deadline.",
+      "evidence": ["phase3_competition_page"]
+    },
+    {
+      "id": "environment_envelope",
+      "status": "confirmed",
+      "claim": "The Technical Guide enumerates fog color/density, ambient light, wind mean velocity, wind variance gain/time, wind direction, and wave period/gain/direction/angle ranges.",
+      "evidence": ["technical_guide_v1_2"]
+    },
+    {
+      "id": "current_parameter",
+      "status": "unavailable",
+      "claim": "No current parameter appears in the enumerated public Technical Guide envelope, but hidden-evaluation use or non-use of a current is not proven.",
+      "evidence": ["technical_guide_v1_2", "phase3_competition_page"]
+    },
+    {
+      "id": "public_practice_worlds",
+      "status": "confirmed",
+      "claim": "The VRX 1.3.0 source contains six public phase-2 station-keeping practice worlds with explicit goal, wave, wind, seed, and 10/10/300 timing values.",
+      "evidence": ["vrx_tag_1_3_0"]
+    },
+    {
+      "id": "final_worlds",
+      "status": "unavailable",
+      "claim": "The six hidden phase-3 station-keeping world files and exact per-trial environment values are not public.",
+      "evidence": ["phase3_competition_page", "vrx_docker_phase3"]
+    },
+    {
+      "id": "published_rms_formula",
+      "status": "confirmed",
+      "claim": "The official task description specifies RMS = sqrt(sum((x_i-x_o)^2 + (y_i-y_o)^2 + W(h_i-h_o)^2) / n), with W in meters and heading in radians.",
+      "evidence": ["task_descriptions_v1_4"]
+    },
+    {
+      "id": "rms_weight",
+      "status": "unavailable",
+      "claim": "The official task description does not publish the numeric heading weight W, angle-wrapping rule, or an exact scorer sampling period.",
+      "evidence": ["task_descriptions_v1_4"]
+    },
+    {
+      "id": "public_stationkeeping_scorer",
+      "status": "confirmed",
+      "claim": "At the cited public source revision, the executable station-keeping score is the arithmetic mean over world-update samples of sqrt(dx^2 + dy^2) + 1 - abs(abs(goal_yaw-current_yaw)-pi)/pi.",
+      "evidence": ["vrx_stationkeeping_source", "vrx_final_window_tip"]
+    },
+    {
+      "id": "phase3_runtime_metric",
+      "status": "inferred",
+      "claim": "The public mean-pose implementation is the best reconstruction of the phase-3 executable metric, but it cannot be proven to be the exact evaluator metric.",
+      "reason": "The public source history shows the change before the final event, while the public phase-3 Dockerfile does not pin the VRX checkout and the official PDF still describes RMS.",
+      "evidence": ["vrx_final_window_tip", "vrx_stationkeeping_source", "task_descriptions_v1_4", "vrx_docker_phase3"]
+    },
+    {
+      "id": "scorer_sampling",
+      "status": "confirmed",
+      "claim": "The scorer updates on Gazebo WorldUpdateBegin; its debug publishers are throttled to 1 Hz, which is not the scorer sample interval.",
+      "evidence": ["vrx_stationkeeping_source", "task_descriptions_v1_4"]
+    },
+    {
+      "id": "stationkeeping_penalties",
+      "status": "confirmed",
+      "claim": "No station-keeping-specific timeout score or penalty is present in the cited public station-keeping world/plugin; scoring is suppressed before Running and stops at Finished.",
+      "evidence": ["vrx_stationkeeping_source", "vrx_tag_1_3_0"]
+    },
+    {
+      "id": "private_wrapper_behavior",
+      "status": "unavailable",
+      "claim": "Any private wrapper logic around the public Docker harness is unavailable.",
+      "evidence": ["vrx_docker_phase3", "phase3_competition_page"]
+    },
+    {
+      "id": "six_trial_selection",
+      "status": "confirmed",
+      "claim": "The official results summarize each task over six trial runs, and UF station keeping lists six run values.",
+      "evidence": ["official_results"]
+    },
+    {
+      "id": "trial_filtering",
+      "status": "unavailable",
+      "claim": "No public evidence identifies any hidden filtering or selection before the six published trial values.",
+      "evidence": ["official_results", "vrx_task_score_script", "phase3_competition_page"]
+    },
+    {
+      "id": "uf_stationkeeping_result",
+      "status": "confirmed",
+      "claim": "The official results report UF station-keeping run scores 0.02, 0.04, 0.35, 0.04, 0.10, and 0.11, with task score 0.11 and task rank 1.",
+      "evidence": ["official_results"]
+    },
+    {
+      "id": "uf_result_arithmetic",
+      "status": "confirmed",
+      "claim": "The arithmetic mean of the six displayed UF values is (0.02 + 0.04 + 0.35 + 0.04 + 0.10 + 0.11) / 6 = 0.11.",
+      "precision_note": "This is calculated from values displayed to two decimal places; unrounded source scores are unavailable.",
+      "evidence": ["official_results"]
+    },
+    {
+      "id": "leaderboard_task_ranks",
+      "status": "confirmed",
+      "claim": "Teams are ranked low-to-high by task score; DNF/DSQ receives rank equal to the number of teams for that task.",
+      "evidence": ["task_descriptions_v1_4", "official_results"]
+    },
+    {
+      "id": "leaderboard_overall_ranks",
+      "status": "confirmed",
+      "claim": "The overall total is the sum of task ranks, with the lowest total first; UF's published total is 25 and overall rank is 5.",
+      "evidence": ["task_descriptions_v1_4", "official_results"]
+    },
+    {
+      "id": "raw_score_artifacts",
+      "status": "unavailable",
+      "claim": "Raw UF rosbag/log artifacts and unrounded per-run scores were not exposed in the public repository or result page used for this reconstruction.",
+      "evidence": ["official_results", "vrx_docker_phase3"]
+    }
+  ],
+  "protocol": {
+    "runtime": {
+      "status": "confirmed",
+      "os": "Ubuntu Desktop 18.04 Bionic 64-bit",
+      "ros": "Melodic",
+      "gazebo": "9.11.0 or newer",
+      "vrx_package": "vrx_gazebo 1.3.0",
+      "wamv": "standard VRX WAM-V model; competition model modification prohibited",
+      "exact_evaluator_checkout": null,
+      "source_ids": ["system_requirements", "technical_guide_v1_2", "vrx_tag_1_3_0", "vrx_docker_phase3"]
+    },
+    "launch": {
+      "status": "confirmed",
+      "public_auto_eval": {
+        "launch_file": "vrx_gazebo/launch/sandisland.launch",
+        "arguments": {
+          "gui": false,
+          "non_competition_mode": false,
+          "record_period": 0.01,
+          "record_period_units": "seconds"
+        },
+        "world": "trial-specific generated world",
+        "score_topic_recorded": "/vrx/task/info",
+        "score_extraction": "last task-info score"
+      },
+      "tutorial_launch": "vrx_gazebo/launch/station_keeping.launch",
+      "source_ids": ["vrx_trial_harness_script", "vrx_docker_phase3", "vrx_tag_1_3_0"]
+    },
+    "timing": {
+      "status": "confirmed",
+      "scope": "public station-keeping world; exact phase-3 values are unavailable",
+      "initial_seconds": 10,
+      "ready_seconds": 10,
+      "running_seconds": 300,
+      "nominal_timeout_from_state_clock_seconds": 320,
+      "phase3_exact_values": null,
+      "source_ids": ["vrx_tag_1_3_0", "task_descriptions_v1_4", "technical_guide_v1_2"]
+    },
+    "initial_pose": {
+      "status": "inferred",
+      "scope": "public auto-evaluation path",
+      "frame": "local Gazebo world frame",
+      "public_default": {
+        "x": 158.0,
+        "y": 108.0,
+        "z": 0.1,
+        "roll": 0.0,
+        "pitch": 0.0,
+        "yaw": -2.76
+      },
+      "phase3_per_trial": null,
+      "reason": "sandisland.launch supplies these defaults and the public trial script does not override them; the Technical Guide says starting pose varies between runs.",
+      "source_ids": ["vrx_tag_1_3_0", "vrx_trial_harness_script", "technical_guide_v1_2"]
+    },
+    "goal": {
+      "status": "confirmed",
+      "scope": "public goal format and xacro default; exact phase-3 goals are unavailable",
+      "encoding": "latitude, longitude, yaw in the world/plugin; GeoPoseStamped with WGS84 coordinates and yaw quaternion on /vrx/station_keeping/goal",
+      "public_xacro_default": {
+        "latitude": 21.31091,
+        "longitude": -157.88868,
+        "heading": 0.0
+      },
+      "phase3_per_trial": null,
+      "source_ids": ["vrx_stationkeeping_source", "vrx_tag_1_3_0", "phase3_competition_page"]
+    },
+    "environment": {
+      "status": "confirmed",
+      "scope": "official envelope; exact phase-3 values are unavailable",
+      "envelope": {
+        "fog_color_rgba_min": [0.7, 0.7, 0.7, 1.0],
+        "fog_color_rgba_max": [0.9, 0.9, 0.9, 1.0],
+        "fog_density_min": 0.0,
+        "fog_density_max": 0.1,
+        "ambient_rgba_min": [0.3, 0.3, 0.3, 1.0],
+        "ambient_rgba_max": [1.0, 1.0, 1.0, 1.0],
+        "wind_mean_velocity_min": 0.0,
+        "wind_mean_velocity_max": 8.0,
+        "wind_variance_gain_min": 0.0,
+        "wind_variance_gain_max": 8.0,
+        "wind_variance_time_min": 2.0,
+        "wind_variance_time_max": 20.0,
+        "wind_direction_degrees_min": 0.0,
+        "wind_direction_degrees_max": 360.0,
+        "wave_model": "Pierson-Moskowitz (PMS)",
+        "wave_period_and_gain": "bounded by Figure 7 in Technical Guide v1.2",
+        "wave_direction_degrees_min": 0.0,
+        "wave_direction_degrees_max": 360.0,
+        "wave_angle_degrees_min": 0.0,
+        "wave_angle_degrees_max": 360.0
+      },
+      "current": null,
+      "current_status": "unavailable",
+      "source_ids": ["technical_guide_v1_2", "phase3_competition_page"]
+    },
+    "scorer": {
+      "published_specification": {
+        "status": "confirmed",
+        "formula": "sqrt(sum_i(((x_i-x_o)^2)+((y_i-y_o)^2)+W*((h_i-h_o)^2))/n)",
+        "heading_weight": null,
+        "heading_weight_units": "meters",
+        "heading_units": "radians",
+        "source_ids": ["task_descriptions_v1_4"]
+      },
+      "public_executable": {
+        "status": "confirmed",
+        "scope": "cited public source revision",
+        "source_revision": "dd6187ca2eb24838b4288bf1154031556bb73cf6",
+        "formula": "mean(sqrt(dx^2+dy^2) + 1 - abs(abs(goal_yaw-current_yaw)-pi)/pi)",
+        "sample_trigger": "Gazebo WorldUpdateBegin",
+        "score_assignment": "SetScore(mean_error)",
+        "debug_topics": [
+          "/vrx/station_keeping/pose_error",
+          "/vrx/station_keeping/rms_error"
+        ],
+        "debug_publish_rate_hz": 1.0,
+        "source_ids": ["vrx_stationkeeping_source"]
+      },
+      "phase3_metric": {
+        "status": "inferred",
+        "value": "public_executable_mean_pose_error",
+        "reason": "The mean implementation predates the final event in public history, but the evaluator checkout is not pinned and the official PDF still specifies RMS.",
+        "source_ids": ["vrx_final_window_tip", "vrx_stationkeeping_source", "task_descriptions_v1_4", "vrx_docker_phase3"]
+      },
+      "penalties": null,
+      "penalties_status": "unavailable_for_private_wrapper"
+    },
+    "trials": {
+      "status": "confirmed",
+      "scope": "six published trial scores; exact hidden configs are unavailable",
+      "published_trial_count": 6,
+      "selection_rule": "official results summarize six station-keeping trial runs",
+      "public_harness_behavior": "collect all trial-directory scores into a comma-separated task-score file; no best-run selection or mean calculation",
+      "phase3_worlds": null,
+      "source_ids": ["official_results", "vrx_task_score_script", "phase3_competition_page"]
+    },
+    "aggregation": {
+      "status": "confirmed",
+      "task_score": "mean of run scores",
+      "task_rank": "low-to-high task score",
+      "overall_total": "sum of task ranks",
+      "dnf_dsq_rank": "number of teams for that task",
+      "source_ids": ["task_descriptions_v1_4", "official_results"]
+    }
+  },
+  "practice_worlds": [
+    {
+      "world": "stationkeeping0.world",
+      "status": "confirmed",
+      "scope": "public phase-2 fixture",
+      "goal": {"latitude": 21.31085, "longitude": -157.8886, "yaw": 1.05},
+      "waves": {"model": "PMS", "gain": 0.0, "period": 7.0, "direction_vector": [1.0, 0.0], "number": 3, "scale": 1.5, "angle": 0.4, "tau": 2.0, "amplitude": 0.0, "steepness": 0.0},
+      "wind": {"mean_velocity": 0.0, "variance_gain": 0.0, "variance_time": 1.0, "direction_degrees": 240.0, "seed": 10}
+    },
+    {
+      "world": "stationkeeping1.world",
+      "status": "confirmed",
+      "scope": "public phase-2 fixture",
+      "goal": {"latitude": 21.31099, "longitude": -157.8887, "yaw": 3.0},
+      "waves": {"model": "PMS", "gain": 0.2, "period": 8.0, "direction_vector": [1.0, 0.0], "number": 3, "scale": 1.5, "angle": 0.4, "tau": 2.0, "amplitude": 0.0, "steepness": 0.0},
+      "wind": {"mean_velocity": 4.0, "variance_gain": 2.0, "variance_time": 2.0, "direction_degrees": 192.0, "seed": 15}
+    },
+    {
+      "world": "stationkeeping2.world",
+      "status": "confirmed",
+      "scope": "public phase-2 fixture",
+      "goal": {"latitude": 21.31092, "longitude": -157.88874, "yaw": 2.35},
+      "waves": {"model": "PMS", "gain": 0.7, "period": 3.0, "direction_vector": [1.0, 0.0], "number": 3, "scale": 1.5, "angle": 0.4, "tau": 2.0, "amplitude": 0.0, "steepness": 0.0},
+      "wind": {"mean_velocity": 8.0, "variance_gain": 8.0, "variance_time": 2.0, "direction_degrees": 45.0, "seed": 11}
+    },
+    {
+      "world": "stationkeeping3.world",
+      "status": "confirmed",
+      "scope": "public phase-2 fixture",
+      "goal": {"latitude": 21.3108, "longitude": -157.8906, "yaw": 0.0},
+      "waves": {"model": "PMS", "gain": 0.0, "period": 7.0, "direction_vector": [1.0, 0.0], "number": 3, "scale": 1.5, "angle": 0.4, "tau": 2.0, "amplitude": 0.0, "steepness": 0.0},
+      "wind": {"mean_velocity": 0.0, "variance_gain": 0.0, "variance_time": 1.0, "direction_degrees": 240.0, "seed": 10}
+    },
+    {
+      "world": "stationkeeping4.world",
+      "status": "confirmed",
+      "scope": "public phase-2 fixture",
+      "goal": {"latitude": 21.3105, "longitude": -157.8894, "yaw": -2.27},
+      "waves": {"model": "PMS", "gain": 0.2, "period": 7.0, "direction_vector": [0.5, 0.5], "number": 3, "scale": 1.5, "angle": 0.4, "tau": 2.0, "amplitude": 0.0, "steepness": 0.0},
+      "wind": {"mean_velocity": 5.0, "variance_gain": 0.0, "variance_time": 2.0, "direction_degrees": 50.0, "seed": 42}
+    },
+    {
+      "world": "stationkeeping5.world",
+      "status": "confirmed",
+      "scope": "public phase-2 fixture",
+      "goal": {"latitude": 21.311, "longitude": -157.8899, "yaw": 2.0},
+      "waves": {"model": "PMS", "gain": 0.7, "period": 3.0, "direction_vector": [1.0, 0.0], "number": 3, "scale": 1.5, "angle": 0.4, "tau": 2.0, "amplitude": 0.0, "steepness": 0.0},
+      "wind": {"mean_velocity": 4.0, "variance_gain": 4.0, "variance_time": 10.0, "direction_degrees": 45.0, "seed": 12}
+    }
+  ],
+  "uf_result": {
+    "phase": "VRX Challenge phase 3",
+    "team": "University of Florida",
+    "task": "stationkeeping",
+    "run_scores": [0.02, 0.04, 0.35, 0.04, 0.1, 0.11],
+    "reported_task_score": 0.11,
+    "published_task_rank": 1,
+    "published_overall_total": 25,
+    "published_overall_rank": 5,
+    "calculation_from_displayed_values": {
+      "operation": "arithmetic_mean",
+      "sum": 0.66,
+      "n": 6,
+      "result": 0.11
+    },
+    "precision_note": "The six values are displayed to two decimal places; raw unrounded values and raw score artifacts are unavailable.",
+    "source_ids": ["official_results"]
+  }
+}
