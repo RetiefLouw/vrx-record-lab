@@ -17,9 +17,8 @@ controller:
   thrusters:
     names: [left, right, lateral]
     positions: [-2.373776, 1.027135, -2.373776, -1.027135, 0.0, 0.0]
-    directions: [1.0, 0.0, 0.0, 1.0, 0.0, 1.0]
+    directions: [1.0, 0.0, 1.0, 0.0, 0.0, 1.0]
     force_min: [-100.0, -100.0, -100.0]
     force_max: [240.0, 240.0, 240.0]
     rate_limit: [500.0, 500.0, 500.0]
     dead_zone: [0.5, 0.5, 0.5]
-

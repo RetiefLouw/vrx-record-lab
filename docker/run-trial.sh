@@ -51,6 +51,7 @@ rosbag record -O "${artifact_dir}/topics.bag" \
 bag_pid=$!
 
 VRX_TRIAL_ARTIFACT_DIR="${artifact_dir}" VRX_TRIAL_TIMEOUT_S="${timeout_s}" \
+  VRX_REQUIRED_NODE="/vrx_controller" \
   rosrun vrx_controller_ros trial_monitor.py \
   >"${artifact_dir}/monitor.log" 2>&1 &
 monitor_pid=$!

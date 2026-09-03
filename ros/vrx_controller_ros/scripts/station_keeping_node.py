@@ -109,7 +109,9 @@ class StationKeepingNode(object):
             dtype=float,
         ).reshape(3, 2)
         directions = np.asarray(
-            thrusters.get("directions", [1.0, 0.0, 0.0, 1.0, 0.0, 1.0]),
+            # The stock T layout has two longitudinal stern thrusters and one
+            # transverse centre thruster (wamv_t_thrusters.xacro).
+            thrusters.get("directions", [1.0, 0.0, 1.0, 0.0, 0.0, 1.0]),
             dtype=float,
         ).reshape(3, 2)
         effectiveness = np.vstack(
@@ -274,4 +276,3 @@ def main():
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

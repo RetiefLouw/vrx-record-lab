@@ -38,6 +38,7 @@ RUN apt-get update \
       pkg-config \
       python3-pip \
       python3-setuptools \
+      python3-numpy \
       ruby \
       libeigen3-dev \
       libprotobuf-dev \

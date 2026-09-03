@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python2
 """Record the real VRX task state and exit only after scorer completion."""
 
 import json
@@ -7,6 +7,7 @@ import sys
 import time
 
 import rospy
+import rosnode
 from vrx_gazebo.msg import Task
 
 
@@ -41,8 +42,16 @@ class TrialMonitor(object):
         # Use wall time for the watchdog.  ROS time can remain at zero when
         # Gazebo fails before publishing /clock, and must not make a broken
         # launch hang the harness indefinitely.
-        deadline = time.monotonic() + timeout_s
-        while not rospy.is_shutdown() and not self.finished and time.monotonic() < deadline:
+        # Use the Melodic-native Python 2 runtime for generated message
+        # compatibility. time.time is wall clock and remains valid when
+        # /use_sim_time is enabled or Gazebo is paused.
+        deadline = time.time() + timeout_s
+        while not rospy.is_shutdown() and not self.finished and time.time() < deadline:
+            required_node = os.environ.get("VRX_REQUIRED_NODE", "/vrx_controller")
+            if required_node and required_node not in rosnode.get_node_names():
+                rospy.logerr("Required controller node disappeared: %s", required_node)
+                self.history.close()
+                return 3
             # Do not use rospy.Rate here: with /use_sim_time enabled, a
             # failed Gazebo launch can leave ROS time frozen at zero.
             time.sleep(0.1)

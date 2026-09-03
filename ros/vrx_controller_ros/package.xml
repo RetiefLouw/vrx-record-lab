@@ -12,6 +12,7 @@
   <depend>rospy</depend>
   <depend>robot_localization</depend>
   <depend>std_msgs</depend>
+  <exec_depend>python3-numpy</exec_depend>
 
   <export>
   </export>

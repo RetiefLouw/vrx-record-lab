@@ -11,9 +11,8 @@ class therefore has no VRX/scorer dependency and makes the recovered
 assumptions explicit in :class:`UFMRACParameters`.
 """
 
-from __future__ import annotations
-
 from dataclasses import dataclass, field
+from typing import Optional, Tuple, Union
 
 import numpy as np
 
@@ -21,7 +20,7 @@ from .angles import angle_error
 from .state import Pose2D, StationKeepingState
 
 
-def _vector(value: object, shape: tuple[int, ...], name: str) -> np.ndarray:
+def _vector(value: object, shape: Tuple[int, ...], name: str) -> np.ndarray:
     array = np.asarray(value, dtype=float)
     if array.shape != shape:
         raise ValueError(f"{name} must have shape {shape}, got {array.shape}")
@@ -30,14 +29,14 @@ def _vector(value: object, shape: tuple[int, ...], name: str) -> np.ndarray:
     return array.copy()
 
 
-def _positive_vector(value: object, shape: tuple[int, ...], name: str) -> np.ndarray:
+def _positive_vector(value: object, shape: Tuple[int, ...], name: str) -> np.ndarray:
     array = _vector(value, shape, name)
     if np.any(array <= 0.0):
         raise ValueError(f"{name} must be positive")
     return array
 
 
-def _nonnegative_vector(value: object, shape: tuple[int, ...], name: str) -> np.ndarray:
+def _nonnegative_vector(value: object, shape: Tuple[int, ...], name: str) -> np.ndarray:
     array = _vector(value, shape, name)
     if np.any(array < 0.0):
         raise ValueError(f"{name} must be non-negative")
@@ -239,13 +238,13 @@ class UFMRACController:
 
     LEARN_WRENCHES = frozenset(("/wrench/autonomous", "autonomous"))
 
-    def __init__(self, parameters: UFMRACParameters | None = None, learning_enabled: bool = False) -> None:
+    def __init__(self, parameters: Optional[UFMRACParameters] = None, learning_enabled: bool = False) -> None:
         self.parameters = UFMRACParameters() if parameters is None else parameters
         self.learning_enabled = bool(learning_enabled)
         self.only_pd = False
         self.disturbance_estimate = np.zeros(3, dtype=float)
         self.drag_parameters = np.zeros(5, dtype=float)
-        self.last_output: UFMRACOutput | None = None
+        self.last_output = None  # type: Optional[UFMRACOutput]
 
     @property
     def dist_est(self) -> np.ndarray:
@@ -279,7 +278,7 @@ class UFMRACController:
         self.disturbance_estimate.fill(0.0)
         self.drag_parameters.fill(0.0)
 
-    def set_learning(self, selected_wrench: str | bool) -> None:
+    def set_learning(self, selected_wrench: Union[str, bool]) -> None:
         """Apply the tagged node's ``/wrench/selected`` learning semantics."""
 
         if isinstance(selected_wrench, str):
@@ -334,7 +333,7 @@ class UFMRACController:
             command = (thrust_max / command_max) * command
         return command
 
-    def step(self, state: StationKeepingState, reference: UFMRACReference | Pose2D, dt: float) -> UFMRACOutput:
+    def step(self, state: StationKeepingState, reference: Union[UFMRACReference, Pose2D], dt: float) -> UFMRACOutput:
         """Calculate one world/body wrench from measured state and reference."""
 
         if not np.isfinite(dt) or dt <= 0.0:
