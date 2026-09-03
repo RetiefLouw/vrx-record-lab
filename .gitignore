@@ -13,3 +13,8 @@ results/runs/
 secrets/
 *.bag
 *.mp4
+
+# Keep the tiny verifier fixture visible; real run artifacts remain ignored.
+!verification/examples/
+!verification/examples/artifacts/
+!verification/examples/artifacts/**
