@@ -12,10 +12,16 @@ result has passed a clean independent rerun.
 ## Campaign status
 
 - Target: VRX 2019 station keeping
-- Status: protocol reconstruction; UF 0.11 reproduction dossier published
+- Status: public practice protocol runnable; first valid localized baseline `0.524325` on `stationkeeping0` (seed 10)
 - Compute policy: OrbStack first; Vast.ai only through a bounded campaign
 - Claim policy: independently reproduced task-level record unless recognized
   by the benchmark maintainers
+
+The `0.524325` baseline is a public-practice result, not directly comparable
+to UF's unrecovered phase-3 evaluation. A separate ground-truth UF-port
+practice run scored `0.005811`, but is explicitly non-comparable because it
+uses simulator state rather than the competition localization interface.
+See [`results/README.md`](results/README.md) for the evidence ledger.
 
 ## Environment bootstrap
 

@@ -8,6 +8,7 @@ import time
 
 import rospy
 import rosnode
+from std_msgs.msg import Float32MultiArray
 from vrx_gazebo.msg import Task
 
 
@@ -16,9 +17,14 @@ class TrialMonitor(object):
         self.history_path = os.path.join(output_dir, "task-info.jsonl")
         self.summary_path = os.path.join(output_dir, "task-summary.json")
         self.finished = False
+        self.controller_samples = 0
         self.last = None
         self.history = open(self.history_path, "w")
         rospy.Subscriber("/vrx/task/info", Task, self._on_task, queue_size=100)
+        rospy.Subscriber("/vrx_controller/diagnostics", Float32MultiArray, self._on_controller, queue_size=100)
+
+    def _on_controller(self, _message):
+        self.controller_samples += 1
 
     def _on_task(self, message):
         value = {
@@ -56,8 +62,11 @@ class TrialMonitor(object):
             # failed Gazebo launch can leave ROS time frozen at zero.
             time.sleep(0.1)
         self.history.close()
-        if self.last is None or not self.finished:
+        if self.last is None or not self.finished or self.controller_samples == 0:
+            if self.controller_samples == 0:
+                rospy.logerr("No controller diagnostic samples were observed")
             return 2
+        self.last["controller_samples"] = self.controller_samples
         with open(self.summary_path, "w") as stream:
             json.dump(self.last, stream, indent=2, sort_keys=True)
             stream.write("\n")
