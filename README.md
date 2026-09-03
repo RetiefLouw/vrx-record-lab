@@ -17,6 +17,25 @@ result has passed a clean independent rerun.
 - Claim policy: independently reproduced task-level record unless recognized
   by the benchmark maintainers
 
+## Controller package
+
+`src/vrx_controller` contains simulator-independent planar station-keeping
+components.  It currently provides angle-safe state errors, a linear model
+interface for future LQR/MPC work, anti-windup PID, a wrench disturbance
+observer, constrained thruster allocation, and actuator saturation/rate/
+dead-zone handling.  The package has no ROS, Gazebo, VRX, or scorer dependency.
+
+Run the deterministic unit tests with:
+
+```bash
+python -m pip install -e '.[test]'
+python -m pytest
+```
+
+The controller design assumptions and all inferences made in the absence of
+recovered VRX runtime interfaces are recorded in
+[`docs/controller-design.md`](docs/controller-design.md).
+
 ## Sources
 
 - [Official VRX 2019 results](https://github.com/osrf/vrx/wiki/vrx_2019-results)
