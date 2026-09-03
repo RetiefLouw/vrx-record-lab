@@ -1,0 +1,128 @@
+{
+  "$schema": "../../schemas/experiment.schema.json",
+  "schema_version": "1.0.0",
+  "experiment_id": "vrx2019-station-keeping-phase2-public-practice",
+  "benchmark": {
+    "name": "vrx-2019-station-keeping-phase2-public-practice",
+    "revision": "a62df11109ee95c206111c37a37c60d39bc7b705",
+    "protocol_revision": "public-phase2-six-world-reconstruction-v1",
+    "score_direction": "minimize",
+    "scorer": {
+      "name": "vrx-2019-station-keeping-scorer",
+      "revision": "a62df11109ee95c206111c37a37c60d39bc7b705"
+    }
+  },
+  "controller": {
+    "name": "upstream-station-keeping-practice-launch",
+    "source": "unchanged upstream station_keeping.launch; no controller process is injected",
+    "revision": "a62df11109ee95c206111c37a37c60d39bc7b705",
+    "command": [],
+    "parameters": {}
+  },
+  "container": {
+    "image": "vrx-record-lab:2019-amd64",
+    "digest": null
+  },
+  "task": {
+    "name": "station_keeping",
+    "parameters": {
+      "protocol": {
+        "name": "public-vrx-2019-phase2-station-keeping",
+        "run_mode": "complete_scored",
+        "source_repository": "https://github.com/osrf/vrx.git",
+        "source_revision": "a62df11109ee95c206111c37a37c60d39bc7b705",
+        "world_root": "vrx_gazebo/worlds/2019_phase2",
+        "trial_order": [
+          "stationkeeping0",
+          "stationkeeping1",
+          "stationkeeping2",
+          "stationkeeping3",
+          "stationkeeping4",
+          "stationkeeping5"
+        ],
+        "initial_state_duration_s": 10,
+        "ready_state_duration_s": 10,
+        "scored_running_duration_s": 300,
+        "wall_timeout_s": 840,
+        "score_topic": "/vrx/task/info",
+        "score_field": "score",
+        "debug_topics": {
+          "pose_error": "/vrx/station_keeping/pose_error",
+          "mean_error": "/vrx/station_keeping/rms_error"
+        },
+        "worlds": [
+          {
+            "id": "stationkeeping0",
+            "path": "vrx_gazebo/worlds/2019_phase2/stationkeeping0.world",
+            "source_commit": "a62df11109ee95c206111c37a37c60d39bc7b705",
+            "source_sha256": "a9eab1dbd40b8d8c9fb35e66d477c3dd5bc29378a5691c865b37c1f9b2cc0aac",
+            "goal": {"latitude": 21.31085, "longitude": -157.8886, "yaw": 1.05},
+            "wave": {"model": "PMS", "gain": 0.0, "period_s": 7.0, "direction": [1.0, 0.0]},
+            "wind": {"mean_velocity": 0.0, "variance_gain": 0.0, "variance_time_s": 1.0, "direction_deg": 240.0},
+            "wind_seed": 10
+          },
+          {
+            "id": "stationkeeping1",
+            "path": "vrx_gazebo/worlds/2019_phase2/stationkeeping1.world",
+            "source_commit": "a62df11109ee95c206111c37a37c60d39bc7b705",
+            "source_sha256": "9b05f608c8ccb808c4bacc444a38dcd03f08a0d9c578f949762ad20c187be5a9",
+            "goal": {"latitude": 21.31099, "longitude": -157.8887, "yaw": 3.0},
+            "wave": {"model": "PMS", "gain": 0.2, "period_s": 8.0, "direction": [1.0, 0.0]},
+            "wind": {"mean_velocity": 4.0, "variance_gain": 2.0, "variance_time_s": 2.0, "direction_deg": 192.0},
+            "wind_seed": 15
+          },
+          {
+            "id": "stationkeeping2",
+            "path": "vrx_gazebo/worlds/2019_phase2/stationkeeping2.world",
+            "source_commit": "a62df11109ee95c206111c37a37c60d39bc7b705",
+            "source_sha256": "dc4f66a998aab7347d3f4868727d78cc9ae36a2a512d4aec804891005362ffc3",
+            "goal": {"latitude": 21.31092, "longitude": -157.88874, "yaw": 2.35},
+            "wave": {"model": "PMS", "gain": 0.7, "period_s": 3.0, "direction": [1.0, 0.0]},
+            "wind": {"mean_velocity": 8.0, "variance_gain": 8.0, "variance_time_s": 2.0, "direction_deg": 45.0},
+            "wind_seed": 11
+          },
+          {
+            "id": "stationkeeping3",
+            "path": "vrx_gazebo/worlds/2019_phase2/stationkeeping3.world",
+            "source_commit": "a62df11109ee95c206111c37a37c60d39bc7b705",
+            "source_sha256": "398e646215edc1fc5831e17d9b85fc9442fc19375b1856ddf0f5bbe42522c6a8",
+            "goal": {"latitude": 21.3108, "longitude": -157.8906, "yaw": 0.0},
+            "wave": {"model": "PMS", "gain": 0.0, "period_s": 7.0, "direction": [1.0, 0.0]},
+            "wind": {"mean_velocity": 0.0, "variance_gain": 0.0, "variance_time_s": 1.0, "direction_deg": 240.0},
+            "wind_seed": 10
+          },
+          {
+            "id": "stationkeeping4",
+            "path": "vrx_gazebo/worlds/2019_phase2/stationkeeping4.world",
+            "source_commit": "a62df11109ee95c206111c37a37c60d39bc7b705",
+            "source_sha256": "6757676c07af2d95dbef34ae48cf259d318cfca7d02d756d8e3cc2ba7535aa34",
+            "goal": {"latitude": 21.3105, "longitude": -157.8894, "yaw": -2.27},
+            "wave": {"model": "PMS", "gain": 0.2, "period_s": 7.0, "direction": [0.5, 0.5]},
+            "wind": {"mean_velocity": 5.0, "variance_gain": 0.0, "variance_time_s": 2.0, "direction_deg": 50.0},
+            "wind_seed": 42
+          },
+          {
+            "id": "stationkeeping5",
+            "path": "vrx_gazebo/worlds/2019_phase2/stationkeeping5.world",
+            "source_commit": "a62df11109ee95c206111c37a37c60d39bc7b705",
+            "source_sha256": "168e11ad58de1dc56a9cfb82861ef6639ff4641c4788bedd9dae1020495c96ee",
+            "goal": {"latitude": 21.311, "longitude": -157.8899, "yaw": 2.0},
+            "wave": {"model": "PMS", "gain": 0.7, "period_s": 3.0, "direction": [1.0, 0.0]},
+            "wind": {"mean_velocity": 4.0, "variance_gain": 4.0, "variance_time_s": 10.0, "direction_deg": 45.0},
+            "wind_seed": 12
+          }
+        ]
+      }
+    }
+  },
+  "trials": {
+    "seeds": [0, 1, 2, 3, 4, 5],
+    "seed_provenance": "Stable zero-based trial indices; each index selects the corresponding explicit public phase-2 world in task.parameters.protocol.trial_order. The embedded wind_seed belongs to that upstream world.",
+    "environment": {}
+  },
+  "execution": {
+    "command": ["scripts/run_phase2_trial"],
+    "timeout_s": 900,
+    "cwd": "../.."
+  }
+}
