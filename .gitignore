@@ -1,0 +1,15 @@
+.DS_Store
+.env
+.venv/
+__pycache__/
+*.pyc
+build/
+devel/
+install/
+log/
+.catkin_tools/
+artifacts/
+results/runs/
+secrets/
+*.bag
+*.mp4

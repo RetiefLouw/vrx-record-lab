@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use this reproducibility campaign, cite this repository."
+title: "VRX Record Lab"
+type: software
+authors:
+  - family-names: Louw
+    given-names: Retief
+repository-code: "https://github.com/RetiefLouw/vrx-record-lab"
+license: Apache-2.0
+date-released: 2026-09-03
