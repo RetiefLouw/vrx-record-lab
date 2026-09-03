@@ -6,15 +6,44 @@ mkdir -p "${artifact_dir}"
 world="${VRX_WORLD:-${VRX_SOURCE_DIR}/vrx_gazebo/worlds/stationkeeping_task.world}"
 timeout_s="${VRX_TRIAL_TIMEOUT_S:-600}"
 
+controller_parameter() {
+  local key="$1"
+  local fallback="$2"
+  python3 - "$key" "$fallback" <<'PY'
+import json
+import os
+import sys
+
+key, fallback = sys.argv[1:]
+try:
+    parameters = json.loads(os.environ.get("VRX_CONTROLLER_PARAMETERS_JSON", "{}"))
+except (TypeError, ValueError):
+    parameters = {}
+value = parameters.get(key, fallback) if isinstance(parameters, dict) else fallback
+if not isinstance(value, str) or not value:
+    value = fallback
+print(value)
+PY
+}
+
+localization_topic="${VRX_CONTROLLER_LOCALIZATION_TOPIC:-$(controller_parameter localization_topic /wamv/robot_localization/odometry/filtered)}"
+position_source="${VRX_CONTROLLER_POSITION_SOURCE:-$(controller_parameter position_source /wamv/sensors/gps/gps/fix)}"
+goal_topic="${VRX_CONTROLLER_GOAL_TOPIC:-$(controller_parameter goal_topic /vrx/station_keeping/goal)}"
+diagnostics_topic="${VRX_CONTROLLER_DIAGNOSTICS_TOPIC:-$(controller_parameter diagnostics_topic /vrx_controller/diagnostics)}"
+
 echo "world=${world}" | tee "${artifact_dir}/trial-protocol.txt"
 echo "task_info=/vrx/task/info type=vrx_gazebo/Task" | tee -a "${artifact_dir}/trial-protocol.txt"
-echo "goal=/vrx/station_keeping/goal type=geographic_msgs/GeoPoseStamped" | tee -a "${artifact_dir}/trial-protocol.txt"
-echo "localization=/wamv/robot_localization/odometry/filtered type=nav_msgs/Odometry" | tee -a "${artifact_dir}/trial-protocol.txt"
+echo "goal=${goal_topic} type=geographic_msgs/GeoPoseStamped" | tee -a "${artifact_dir}/trial-protocol.txt"
+echo "localization=${localization_topic} type=nav_msgs/Odometry" | tee -a "${artifact_dir}/trial-protocol.txt"
+echo "position_source=${position_source} type=sensor_msgs/NavSatFix" | tee -a "${artifact_dir}/trial-protocol.txt"
 echo "thrusters=/wamv/thrusters/{left,right,lateral}_thrust_cmd type=std_msgs/Float32" | tee -a "${artifact_dir}/trial-protocol.txt"
+echo "controller_diagnostics=${diagnostics_topic} type=std_msgs/Float32MultiArray" | tee -a "${artifact_dir}/trial-protocol.txt"
 
 roslaunch vrx_controller_ros scored_station_keeping.launch \
   world:="${world}" gui:=false verbose:=${VRX_VERBOSE:-false} \
   namespace:=${VRX_NAMESPACE:-wamv} wamv_locked:=false \
+  localization_topic:="${localization_topic}" position_source:="${position_source}" \
+  goal_topic:="${goal_topic}" diagnostics_topic:="${diagnostics_topic}" \
   >"${artifact_dir}/simulator.log" 2>&1 &
 launch_pid=$!
 
@@ -41,16 +70,16 @@ if ! rostopic list 2>/dev/null | grep -Fxq /vrx/task/info; then
 fi
 
 rosbag record -O "${artifact_dir}/topics.bag" \
-  /vrx/task/info /vrx/station_keeping/goal \
-  /wamv/robot_localization/odometry/filtered \
+  /vrx/task/info "${goal_topic}" "${localization_topic}" "${position_source}" \
   /wamv/thrusters/left_thrust_cmd /wamv/thrusters/right_thrust_cmd \
   /wamv/thrusters/lateral_thrust_cmd /wamv/thrusters/left_thrust_angle \
   /wamv/thrusters/right_thrust_angle /wamv/thrusters/lateral_thrust_angle \
-  /vrx_controller/diagnostics \
+  "${diagnostics_topic}" \
   >"${artifact_dir}/rosbag.log" 2>&1 &
 bag_pid=$!
 
 VRX_TRIAL_ARTIFACT_DIR="${artifact_dir}" VRX_TRIAL_TIMEOUT_S="${timeout_s}" \
+  VRX_CONTROLLER_DIAGNOSTICS_TOPIC="${diagnostics_topic}" VRX_CONTROLLER_POSITION_SOURCE="${position_source}" \
   VRX_REQUIRED_NODE="/vrx_controller" \
   rosrun vrx_controller_ros trial_monitor.py \
   >"${artifact_dir}/monitor.log" 2>&1 &

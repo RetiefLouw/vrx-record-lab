@@ -13,11 +13,31 @@
     }
   },
   "controller": {
-    "name": "upstream-station-keeping-practice-launch",
-    "source": "unchanged upstream station_keeping.launch; no controller process is injected",
-    "revision": "a62df11109ee95c206111c37a37c60d39bc7b705",
-    "command": [],
-    "parameters": {}
+    "name": "saturation-aware-fast-pd-stock-t-thrusters",
+    "source": "ros/vrx_controller_ros",
+    "revision": "fast-pd-v1-2026-09-03",
+    "command": ["roslaunch", "vrx_controller_ros", "scored_station_keeping.launch"],
+    "runtime": {
+      "enabled": true,
+      "controller_config": "/opt/vrx_ws/src/vrx_controller_ros/config/controller.yaml"
+    },
+    "parameters": {
+      "layout": "T",
+      "localization_topic": "/wamv/robot_localization/odometry/filtered",
+      "position_source": "/wamv/sensors/gps/gps/fix",
+      "goal_topic": "/vrx/station_keeping/goal",
+      "diagnostics_topic": "/vrx_controller/diagnostics",
+      "control_hz": 10.0,
+      "world_frame": "ENU",
+      "datum_latitude_deg": 21.30996,
+      "datum_longitude_deg": -157.8901,
+      "wamv_locked": false,
+      "thruster_mapping": "stock_mappingType_1_glf",
+      "kp": [80.0, 80.0, 250.0],
+      "kd": [250.0, 250.0, 600.0],
+      "output_min": [-200.0, -100.0, -349.0],
+      "output_max": [480.0, 240.0, 349.0]
+    }
   },
   "container": {
     "image": "vrx-record-lab:2019-amd64",

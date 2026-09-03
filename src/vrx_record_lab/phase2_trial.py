@@ -96,6 +96,23 @@ def main(argv: list[str] | None = None) -> int:
 
     repo_root = manifest_path.parents[2]
     protocol = manifest["task"]["parameters"]["protocol"]
+    controller = manifest.get("controller", {})
+    controller_parameters = controller.get("parameters", {})
+    controller_runtime = controller.get("runtime", {})
+    controller_enabled = bool(controller_runtime.get("enabled", False))
+    if controller_enabled and not isinstance(controller_parameters, dict):
+        _write(output_path, _output("invalid", error="controller.parameters must be an object when the phase-2 controller is enabled"))
+        return 0
+    if controller_enabled and controller.get("command") != ["roslaunch", "vrx_controller_ros", "scored_station_keeping.launch"]:
+        _write(output_path, _output("invalid", error="phase-2 controller command must be the pinned ROS scored_station_keeping.launch"))
+        return 0
+    localization_topic = controller_parameters.get("localization_topic", "/wamv/robot_localization/odometry/filtered")
+    position_source = controller_parameters.get("position_source", "/wamv/sensors/gps/gps/fix")
+    goal_topic = controller_parameters.get("goal_topic", "/vrx/station_keeping/goal")
+    diagnostics_topic = controller_parameters.get("diagnostics_topic", "/vrx_controller/diagnostics")
+    if not all(isinstance(value, str) and value for value in (localization_topic, position_source, goal_topic, diagnostics_topic)):
+        _write(output_path, _output("invalid", error="enabled phase-2 controller topic parameters must be non-empty strings"))
+        return 0
     container_world = f"/opt/vrx_ws/src/vrx/{world['path']}"
     run_metadata = {
         "protocol": "public-vrx-2019-phase2-station-keeping",
@@ -113,6 +130,14 @@ def main(argv: list[str] | None = None) -> int:
         "score_topic": protocol["score_topic"],
         "score_field": protocol["score_field"],
         "debug_topics": protocol["debug_topics"],
+        "controller": {
+            "enabled": controller_enabled,
+            "name": controller.get("name"),
+            "source": controller.get("source"),
+            "revision": controller.get("revision"),
+            "command": controller.get("command", []),
+            "parameters": controller_parameters,
+        },
         "source": {
             "repository": protocol["source_repository"],
             "commit": world["source_commit"],
@@ -131,6 +156,15 @@ def main(argv: list[str] | None = None) -> int:
             "VRX_PHASE2_ARTIFACT_DIR": "/var/log/vrx",
             "VRX_PHASE2_WALL_TIMEOUT_S": str(protocol["wall_timeout_s"]),
             "VRX_PHASE2_EXPECTED_RUNNING_DURATION_S": str(protocol["scored_running_duration_s"]),
+            "VRX_PHASE2_CONTROLLER_ENABLED": "true" if controller_enabled else "false",
+            "VRX_CONTROLLER_CONFIG": controller_runtime.get(
+                "controller_config", "/opt/vrx_ws/src/vrx_controller_ros/config/controller.yaml"
+            ),
+            "VRX_CONTROLLER_LOCALIZATION_TOPIC": localization_topic,
+            "VRX_CONTROLLER_POSITION_SOURCE": position_source,
+            "VRX_CONTROLLER_GOAL_TOPIC": goal_topic,
+            "VRX_CONTROLLER_DIAGNOSTICS_TOPIC": diagnostics_topic,
+            "VRX_CONTROLLER_PARAMETERS_JSON": json.dumps(controller_parameters, sort_keys=True),
         }
     )
     compose = [
@@ -153,6 +187,20 @@ def main(argv: list[str] | None = None) -> int:
         f"VRX_PHASE2_EXPECTED_WORLD_SHA256={world['source_sha256']}",
         "-e",
         "VRX_WIND_SEED=",
+        "-e",
+        f"VRX_PHASE2_CONTROLLER_ENABLED={'true' if controller_enabled else 'false'}",
+        "-e",
+        f"VRX_CONTROLLER_CONFIG={controller_runtime.get('controller_config', '/opt/vrx_ws/src/vrx_controller_ros/config/controller.yaml')}",
+        "-e",
+        f"VRX_CONTROLLER_LOCALIZATION_TOPIC={localization_topic}",
+        "-e",
+        f"VRX_CONTROLLER_POSITION_SOURCE={position_source}",
+        "-e",
+        f"VRX_CONTROLLER_GOAL_TOPIC={goal_topic}",
+        "-e",
+        f"VRX_CONTROLLER_DIAGNOSTICS_TOPIC={diagnostics_topic}",
+        "-e",
+        f"VRX_CONTROLLER_PARAMETERS_JSON={json.dumps(controller_parameters, sort_keys=True)}",
         "simulator",
     ]
     adapter_stdout = artifact_dir / "docker.stdout.log"
@@ -206,6 +254,8 @@ def main(argv: list[str] | None = None) -> int:
                         "task_messages": len(score_doc.get("task_messages", [])),
                         "pose_error_messages": len(debug.get("pose_error", [])) if isinstance(debug, dict) else 0,
                         "mean_error_messages": len(debug.get("mean_error", [])) if isinstance(debug, dict) else 0,
+                        "controller_diagnostic_messages": int(score_doc.get("controller_diagnostics_count", 0)),
+                        "controller_diagnostic_parse_errors": int(score_doc.get("controller_diagnostic_parse_errors", 0)),
                         "finished_timed_out": bool(final.get("timed_out")),
                         "scored_running_duration_s": protocol["scored_running_duration_s"],
                     },

@@ -8,6 +8,9 @@
   <arg name="wamv_locked" default="false" />
   <arg name="controller_config" default="$(find vrx_controller_ros)/config/controller.yaml" />
   <arg name="localization_topic" default="/wamv/robot_localization/odometry/filtered" />
+  <arg name="position_source" default="/wamv/sensors/gps/gps/fix" />
+  <arg name="goal_topic" default="/vrx/station_keeping/goal" />
+  <arg name="diagnostics_topic" default="/vrx_controller/diagnostics" />
 
   <include file="$(find vrx_gazebo)/launch/station_keeping.launch">
     <arg name="world" value="$(arg world)" />
@@ -26,5 +29,8 @@
   <node pkg="vrx_controller_ros" type="station_keeping_node.py" name="vrx_controller" output="screen">
     <param name="namespace" value="$(arg namespace)" />
     <param name="localization_topic" value="$(arg localization_topic)" />
+    <param name="position_source" value="$(arg position_source)" />
+    <param name="goal_topic" value="$(arg goal_topic)" />
+    <param name="diagnostics_topic" value="$(arg diagnostics_topic)" />
   </node>
 </launch>

@@ -74,10 +74,11 @@ The six public 2019 phase-2 practice worlds are runnable through the explicit
 reconstructed protocol in
 [`docs/phase2-practice-suite.md`](docs/phase2-practice-suite.md) and
 [`config/experiments/vrx2019-station-keeping-phase2.json`](config/experiments/vrx2019-station-keeping-phase2.json).
-That suite uses fresh containers, records raw task/debug output, extracts the
-final `/vrx/task/info` score, aggregates all six worlds, and tears down each
-container. Shortened runs are documented separately from complete 300-second
-scored runs.
+That suite uses fresh containers, runs the frozen fast-PD GPS controller,
+records raw task/debug/controller output, extracts the final `/vrx/task/info`
+score, aggregates all six worlds, and tears down each container. Use
+`scripts/extract_diagnostics` for offline Q-03 metrics. Shortened runs are
+documented separately from complete 300-second scored runs.
 
 Run the tests with:
 

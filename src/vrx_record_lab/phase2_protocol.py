@@ -15,6 +15,16 @@ class Phase2ProtocolError(ValueError):
     """The manifest does not describe the public six-world protocol."""
 
 
+FAST_PD_CONTROLLER_NAME = "saturation-aware-fast-pd-stock-t-thrusters"
+FAST_PD_CONTROLLER_COMMAND = ["roslaunch", "vrx_controller_ros", "scored_station_keeping.launch"]
+FAST_PD_CONTROLLER_TOPIC_DEFAULTS = {
+    "localization_topic": "/wamv/robot_localization/odometry/filtered",
+    "position_source": "/wamv/sensors/gps/gps/fix",
+    "goal_topic": "/vrx/station_keeping/goal",
+    "diagnostics_topic": "/vrx_controller/diagnostics",
+}
+
+
 def _worlds(parameters: Mapping[str, Any]) -> tuple[Mapping[str, Any], ...]:
     protocol = parameters.get("protocol")
     if not isinstance(protocol, Mapping):
@@ -29,6 +39,24 @@ def _worlds(parameters: Mapping[str, Any]) -> tuple[Mapping[str, Any], ...]:
 
 def validate_phase2_protocol(manifest: Mapping[str, Any]) -> None:
     """Check the public-world, timing, and score-topic contract."""
+
+    controller = manifest.get("controller")
+    if not isinstance(controller, Mapping):
+        raise Phase2ProtocolError("phase-2 controller must be an object")
+    if controller.get("name") != FAST_PD_CONTROLLER_NAME:
+        raise Phase2ProtocolError("phase-2 manifest must pin the frozen fast-PD controller")
+    if controller.get("command") != FAST_PD_CONTROLLER_COMMAND:
+        raise Phase2ProtocolError("phase-2 manifest must launch the ROS scored station-keeping controller")
+    runtime = controller.get("runtime")
+    if not isinstance(runtime, Mapping) or runtime.get("enabled") is not True:
+        raise Phase2ProtocolError("phase-2 manifest must enable the frozen controller runtime")
+    parameters = controller.get("parameters")
+    if not isinstance(parameters, Mapping):
+        raise Phase2ProtocolError("phase-2 controller.parameters must be an object")
+    for field in FAST_PD_CONTROLLER_TOPIC_DEFAULTS:
+        value = parameters.get(field)
+        if not isinstance(value, str) or not value:
+            raise Phase2ProtocolError(f"phase-2 controller.{field} must be a non-empty topic string")
 
     parameters = manifest.get("task", {}).get("parameters", {})
     if not isinstance(parameters, Mapping):

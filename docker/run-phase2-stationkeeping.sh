@@ -8,6 +8,12 @@ artifact_dir="${VRX_PHASE2_ARTIFACT_DIR:-/var/log/vrx}"
 world_path="${VRX_WORLD_PATH:-}"
 world_id="${VRX_WORLD_ID:-unknown}"
 wall_timeout="${VRX_PHASE2_WALL_TIMEOUT_S:-840}"
+controller_enabled="${VRX_PHASE2_CONTROLLER_ENABLED:-false}"
+controller_config="${VRX_CONTROLLER_CONFIG:-/opt/vrx_ws/src/vrx_controller_ros/config/controller.yaml}"
+localization_topic="${VRX_CONTROLLER_LOCALIZATION_TOPIC:-/wamv/robot_localization/odometry/filtered}"
+position_source="${VRX_CONTROLLER_POSITION_SOURCE:-/wamv/sensors/gps/gps/fix}"
+goal_topic="${VRX_CONTROLLER_GOAL_TOPIC:-/vrx/station_keeping/goal}"
+diagnostics_topic="${VRX_CONTROLLER_DIAGNOSTICS_TOPIC:-/vrx_controller/diagnostics}"
 mkdir -p "${artifact_dir}"
 
 if [[ ! "${world_path}" =~ ^/opt/vrx_ws/src/vrx/vrx_gazebo/worlds/2019_phase2/stationkeeping[0-5]\.world$ ]]; then
@@ -63,6 +69,12 @@ cat > "${artifact_dir}/runtime-metadata.json" <<EOF
   "world_path": "${world_path}",
   "world_sha256": "${expected_world_sha256:-}",
   "run_mode": "${run_mode}",
+  "controller_enabled": ${controller_enabled},
+  "controller_config": "${controller_config}",
+  "localization_topic": "${localization_topic}",
+  "position_source": "${position_source}",
+  "goal_topic": "${goal_topic}",
+  "diagnostics_topic": "${diagnostics_topic}",
   "initial_state_duration_override_s": ${initial_override:-null},
   "ready_state_duration_override_s": ${ready_override:-null},
   "running_state_duration_override_s": ${running_override:-null},
@@ -83,13 +95,29 @@ cleanup() {
 }
 trap cleanup EXIT INT TERM
 
-setsid roslaunch vrx_gazebo station_keeping.launch \
-  "gui:=${VRX_GUI:-false}" \
-  "verbose:=${VRX_VERBOSE:-false}" \
-  "namespace:=${VRX_NAMESPACE:-wamv}" \
-  "world:=${selected_world}" \
-  "extra_gazebo_args:=${VRX_EXTRA_GAZEBO_ARGS:-}" \
-  >"${artifact_dir}/gazebo.log" 2>&1 &
+if [[ "${controller_enabled}" == "true" ]]; then
+  setsid roslaunch vrx_controller_ros scored_station_keeping.launch \
+    "gui:=${VRX_GUI:-false}" \
+    "verbose:=${VRX_VERBOSE:-false}" \
+    "namespace:=${VRX_NAMESPACE:-wamv}" \
+    "world:=${selected_world}" \
+    "extra_gazebo_args:=${VRX_EXTRA_GAZEBO_ARGS:-}" \
+    "wamv_locked:=false" \
+    "controller_config:=${controller_config}" \
+    "localization_topic:=${localization_topic}" \
+    "position_source:=${position_source}" \
+    "goal_topic:=${goal_topic}" \
+    "diagnostics_topic:=${diagnostics_topic}" \
+    >"${artifact_dir}/gazebo.log" 2>&1 &
+else
+  setsid roslaunch vrx_gazebo station_keeping.launch \
+    "gui:=${VRX_GUI:-false}" \
+    "verbose:=${VRX_VERBOSE:-false}" \
+    "namespace:=${VRX_NAMESPACE:-wamv}" \
+    "world:=${selected_world}" \
+    "extra_gazebo_args:=${VRX_EXTRA_GAZEBO_ARGS:-}" \
+    >"${artifact_dir}/gazebo.log" 2>&1 &
+fi
 launch_pid=$!
 
 startup_deadline=$((SECONDS + 60))
@@ -105,10 +133,17 @@ until rostopic list 2>/dev/null | grep -Fxq /vrx/task/info; do
   sleep 1
 done
 
+collector_args=(
+  --output "${artifact_dir}/score.json"
+  --score-topic /vrx/task/info
+  --pose-error-topic /vrx/station_keeping/pose_error
+  --mean-error-topic /vrx/station_keeping/rms_error
+  --controller-diagnostics-topic "${diagnostics_topic}"
+  --position-source "${position_source}"
+)
+if [[ "${controller_enabled}" == "true" ]]; then
+  collector_args+=(--require-controller-diagnostics)
+fi
 timeout --signal=TERM --kill-after=10 "${wall_timeout}" \
-    python /usr/local/bin/vrx-collect-task-info \
-    --output "${artifact_dir}/score.json" \
-    --score-topic /vrx/task/info \
-    --pose-error-topic /vrx/station_keeping/pose_error \
-    --mean-error-topic /vrx/station_keeping/rms_error \
+    python /usr/local/bin/vrx-collect-task-info "${collector_args[@]}" \
   >"${artifact_dir}/collector.log" 2>&1

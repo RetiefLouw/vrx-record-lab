@@ -79,13 +79,16 @@ class StationKeepingNode(object):
         self.target = None
         self.gps_xy = None
         self.namespace = rospy.get_param("~namespace", "wamv").strip("/")
+        self.position_source_topic = rospy.get_param("~position_source", "/wamv/sensors/gps/gps/fix")
+        self.goal_topic = rospy.get_param("~goal_topic", "/vrx/station_keeping/goal")
+        self.diagnostics_topic = rospy.get_param("~diagnostics_topic", "/vrx_controller/diagnostics")
         names = ["left", "right", "lateral"]
         self.thrust = [rospy.Publisher("/{}/thrusters/{}_thrust_cmd".format(self.namespace, n), Float32, queue_size=1) for n in names]
         self.angle = [rospy.Publisher("/{}/thrusters/{}_thrust_angle".format(self.namespace, n), Float32, queue_size=1) for n in names]
-        self.diagnostics = rospy.Publisher("~diagnostics", Float32MultiArray, queue_size=10)
+        self.diagnostics = rospy.Publisher(self.diagnostics_topic, Float32MultiArray, queue_size=10)
         rospy.Subscriber(rospy.get_param("~localization_topic", "/wamv/robot_localization/odometry/filtered"), Odometry, self.on_odometry, queue_size=1)
-        rospy.Subscriber("/wamv/sensors/gps/gps/fix", NavSatFix, self.on_gps, queue_size=1)
-        rospy.Subscriber("/vrx/station_keeping/goal", GeoPoseStamped, self.on_goal, queue_size=1)
+        rospy.Subscriber(self.position_source_topic, NavSatFix, self.on_gps, queue_size=1)
+        rospy.Subscriber(self.goal_topic, GeoPoseStamped, self.on_goal, queue_size=1)
         rospy.Timer(rospy.Duration(0.1), self.on_timer)
         rospy.on_shutdown(self.stop)
 

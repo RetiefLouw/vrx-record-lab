@@ -28,7 +28,13 @@ def test_ros_boundary_declares_real_vrx_topics_and_unlocked_robot():
     assert 'wamv_locked:=false' not in launch  # launch forwards the explicit arg rather than hard-coding it
     assert 'wamv_locked" default="false"' in launch
     assert "/wamv/robot_localization/odometry/filtered" in launch
+    assert 'name="position_source"' in launch
+    assert 'name="goal_topic"' in launch
+    assert 'name="diagnostics_topic"' in launch
     assert "/vrx/station_keeping/goal" in node
+    assert "~position_source" in node
+    assert "~goal_topic" in node
+    assert "~diagnostics_topic" in node
     assert "std_msgs.msg import Float32" in node
     assert "force_to_command" in node
 

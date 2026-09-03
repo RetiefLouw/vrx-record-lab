@@ -98,7 +98,11 @@ class HarnessTests(unittest.TestCase):
                 execute_trial(manifest_path, manifest, 99, output, "trial-unlisted")
 
     def test_result_schema_files_are_valid_json(self):
-        for path in (REPO / "schemas/experiment.schema.json", REPO / "schemas/result.schema.json"):
+        for path in (
+            REPO / "schemas/experiment.schema.json",
+            REPO / "schemas/result.schema.json",
+            REPO / "schemas/diagnostics.schema.json",
+        ):
             with self.subTest(path=path):
                 value = json.loads(path.read_text(encoding="utf-8"))
                 self.assertEqual(value["$schema"], "https://json-schema.org/draft/2020-12/schema")

@@ -15,6 +15,18 @@ class Phase2ProtocolTests(unittest.TestCase):
 
     def test_manifest_describes_six_explicit_complete_worlds(self):
         validate_phase2_protocol(self.manifest)
+        frozen = json.loads(
+            (REPO_ROOT / "config/experiments/vrx2019-station-keeping-practice0-fast-pd.json").read_text(encoding="utf-8")
+        )
+        self.assertEqual(self.manifest["controller"]["name"], frozen["controller"]["name"])
+        self.assertEqual(self.manifest["controller"]["revision"], frozen["controller"]["revision"])
+        self.assertEqual(self.manifest["controller"]["parameters"], frozen["controller"]["parameters"])
+        self.assertEqual(self.manifest["controller"]["name"], "saturation-aware-fast-pd-stock-t-thrusters")
+        self.assertTrue(self.manifest["controller"]["runtime"]["enabled"])
+        self.assertEqual(
+            self.manifest["controller"]["parameters"]["position_source"],
+            "/wamv/sensors/gps/gps/fix",
+        )
         protocol = self.manifest["task"]["parameters"]["protocol"]
         self.assertEqual(protocol["run_mode"], "complete_scored")
         self.assertEqual(protocol["scored_running_duration_s"], 300)
@@ -39,6 +51,28 @@ class Phase2ProtocolTests(unittest.TestCase):
         self.manifest["task"]["parameters"]["protocol"]["worlds"][0]["path"] = "../stationkeeping0.world"
         with self.assertRaisesRegex(Phase2ProtocolError, "path must be"):
             validate_phase2_protocol(self.manifest)
+
+    def test_controller_command_and_runtime_are_pinned(self):
+        self.manifest["controller"]["command"] = []
+        with self.assertRaisesRegex(Phase2ProtocolError, "launch the ROS scored"):
+            validate_phase2_protocol(self.manifest)
+
+    def test_controller_sensor_topics_are_manifest_parameters(self):
+        self.manifest["controller"]["parameters"]["position_source"] = "/test/gps/fix"
+        validate_phase2_protocol(self.manifest)
+
+    def test_phase2_runner_wires_controller_and_diagnostics(self):
+        runner = (REPO_ROOT / "src/vrx_record_lab/phase2_trial.py").read_text(encoding="utf-8")
+        container_runner = (REPO_ROOT / "docker/run-phase2-stationkeeping.sh").read_text(encoding="utf-8")
+        for marker in (
+            "VRX_PHASE2_CONTROLLER_ENABLED",
+            "VRX_CONTROLLER_PARAMETERS_JSON",
+            "VRX_CONTROLLER_POSITION_SOURCE",
+            "VRX_CONTROLLER_DIAGNOSTICS_TOPIC",
+        ):
+            self.assertIn(marker, runner)
+        self.assertIn("vrx_controller_ros scored_station_keeping.launch", container_runner)
+        self.assertIn("--require-controller-diagnostics", container_runner)
 
 
 if __name__ == "__main__":

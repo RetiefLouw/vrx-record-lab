@@ -104,6 +104,7 @@ gate passes.
 |---|---|---|---|---|
 | done | Campaign lead | Establish current-best ledger | `results/practice0-fast-pd-gps.json`; local result and checksum files | Q-01 independent clean rerun |
 | done | Verification | Validate current-best local result | Schema, artifacts, aggregate, manifest, pinned identity, and completion checks pass; independent rerun pending | Record the verifier output beside the rerun |
+| done | Thyris implementation | Wire the frozen fast-PD GPS controller into the six-world Q-02 runner and emit Q-03 diagnostics | Phase-2 manifest/controller launch wiring; named task/controller JSONL; offline extractor and tests | Build the updated image, then execute Q-01 before Q-02 |
 | next | Independent runner | Re-run current best from a clean clone/container on seed 10 | New result directory with fresh image digest, full logs, bag, task info, and SHA-256 manifest | Same controller/config identity; no missing messages; score and protocol match Q-01 |
 | next | Evaluation | Run the fixed fast-PD controller across all six public phase-2 worlds | Six complete trial records under one immutable suite result | Six/ six finished trials; no world/seed drift; aggregate and artifacts verify |
 | next | Controller | Diagnose cross-world failure modes before tuning | Per-world position acquisition time, saturation time, steady-state error, yaw error, and score decomposition | Choose one hypothesis from Q-03/Q-04; do not tune against a single scalar alone |
@@ -231,6 +232,7 @@ score.
 | 2026-09-03 | Fast PD v1 measured `0.501616083452644` | Faster PD alone insufficient; preserve identity and inspect sensor path |
 | 2026-09-03 | GPS fast PD measured **`0.008326716568191546`** on `stationkeeping0`, seed 10 | Freeze as current best; require Q-01 before tuning or broad claims |
 | 2026-09-03 | Campaign tracker created on clean `main` at parent snapshot `cca878f` | This file becomes the canonical performance plan and decision register |
+| 2026-09-03 | Q-03/Q-02 infrastructure added without simulator execution | Fast-PD GPS is now reusable from the six-world manifest; named controller/task JSONL and offline extraction are ready. Q-01 remains first; no paid compute used. |
 
 ## 9. Open brainstorm, constrained by evidence
 
@@ -254,6 +256,10 @@ score.
 - The UF MRAC/LQ-RRT path remains the most historically faithful route, but it
   should not displace Q-01/Q-02: missing submodules and phase-3 artifacts are
   external blockers, not reasons to spend unbounded compute on a surrogate.
+- The Q-02 phase-2 manifest now launches the frozen fast-PD GPS controller for
+  every public world. Its image digest is intentionally still `null` until the
+  updated image is built and captured; no performance run has been made from
+  this implementation change.
 
 ## References
 
@@ -264,4 +270,5 @@ score.
 - [UF reproduction dossier](uf-2019-station-keeping-reproduction.md)
 - [Public phase-2 protocol](phase2-practice-suite.md)
 - [Verification README](../verification/README.md)
+- [Q-03 diagnostics extractor](../scripts/extract_diagnostics)
 - [Official VRX 2019 results](https://github.com/osrf/vrx/wiki/vrx_2019-results)

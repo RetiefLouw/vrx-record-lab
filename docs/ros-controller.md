@@ -8,11 +8,15 @@ ROS Melodic/Gazebo 9 container and is launched by
 
 - Input localization: `/wamv/robot_localization/odometry/filtered`,
   `nav_msgs/Odometry`. Position is local ENU metres; twist is body-frame
-  `[u, v, r]`.
+  `[u, v, r]`. The topic is a launch argument and manifest parameter.
+- Input position source: `/wamv/sensors/gps/gps/fix`, `sensor_msgs/NavSatFix`.
+  The topic is a launch argument and manifest parameter; GPS XY supplies the
+  position feedback while odometry supplies yaw and velocity.
 - Input target: `/vrx/station_keeping/goal`,
   `geographic_msgs/GeoPoseStamped`. The WGS84 latitude/longitude is converted
   to local ENU using datum `(21.30996, -157.8901)`; the quaternion is converted
-  to positive-counter-clockwise yaw in radians.
+  to positive-counter-clockwise yaw in radians. The topic is a launch argument
+  and manifest parameter.
 - Output: `/wamv/thrusters/left_thrust_cmd`,
   `/wamv/thrusters/right_thrust_cmd`, and
   `/wamv/thrusters/lateral_thrust_cmd`, each `std_msgs/Float32` in the stock
@@ -21,6 +25,10 @@ ROS Melodic/Gazebo 9 container and is launched by
 - Scorer observation: `/vrx/task/info`, `vrx_gazebo/Task`. A trial is accepted
   only when this topic reports `state=finished`; the score is copied from its
   `score` field without local recomputation.
+- Controller diagnostics: `/vrx_controller/diagnostics`,
+  `std_msgs/Float32MultiArray`. The ROS monitor writes the named fields to
+  `controller-diagnostics.jsonl` for offline Q-03 extraction. The topic is a
+  launch argument and manifest parameter.
 
 The launch passes `wamv_locked:=false`, uses the stock `T` thrust layout, and
 starts the upstream localization example. Missing or stale localization and
@@ -39,9 +47,11 @@ actuator model is substituted.
 `docker/run-trial.sh` starts the launch, records a rosbag, monitors the real
 task topic, and writes `adapter-output.json` only after a finished scorer
 message. It also retains `task-info.jsonl`, `task-summary.json`,
-`trial-protocol.txt`, `simulator.log`, `rosbag.log`, `monitor.log`, and the
-bag. The host adapter maps those files into the harness trial artifact
-directory, where the suite adds SHA-256 entries.
+`controller-diagnostics.jsonl`, `trial-protocol.txt`, `simulator.log`,
+`rosbag.log`, `monitor.log`, and the bag. The host adapter maps those files
+into the harness trial artifact directory, where the suite adds SHA-256
+entries. Run `scripts/extract_diagnostics <trial-or-suite-dir> --output
+diagnostics.json` after a completed run to generate the Q-03 report.
 
 The practice manifest uses `stationkeeping0.world`, whose pinned public world
 sets `random_seed=10`, with no runtime wind-seed override. Its 10 s initial,

@@ -18,6 +18,7 @@
       "layout": "T",
       "localization_topic": "/wamv/robot_localization/odometry/filtered",
       "goal_topic": "/vrx/station_keeping/goal",
+      "diagnostics_topic": "/vrx_controller/diagnostics",
       "control_hz": 10.0,
       "world_frame": "ENU",
       "position_source": "/wamv/sensors/gps/gps/fix",

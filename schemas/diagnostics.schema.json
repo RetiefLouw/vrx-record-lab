@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/RetiefLouw/vrx-record-lab/blob/main/schemas/diagnostics.schema.json",
+  "title": "VRX controller diagnostics extraction",
+  "type": "object",
+  "required": ["schema_version", "source", "run_window", "metrics", "quality"],
+  "properties": {
+    "schema_version": {"const": "vrx-controller-diagnostics/v1"},
+    "score": {"type": "number"},
+    "source": {"type": "object", "required": ["trial_directory", "task_file", "controller_file", "position_source"]},
+    "run_window": {
+      "type": "object",
+      "required": ["start_s", "end_s", "duration_s", "sample_count"],
+      "properties": {
+        "start_s": {"type": "number"},
+        "end_s": {"type": "number"},
+        "duration_s": {"type": "number", "exclusiveMinimum": 0},
+        "sample_count": {"type": "integer", "minimum": 1}
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "required": [
+        "time_to_0_25_m_s", "time_to_0_5_m_s", "max_position_error_m",
+        "max_yaw_error_rad", "peak_force_abs_n", "force_saturation_fraction",
+        "first_window_s", "first_window_mean_position_error_m",
+        "last_window_mean_position_error_m", "first_window_mean_heading_error_rad",
+        "last_window_mean_heading_error_rad"
+      ]
+    },
+    "quality": {"type": "object", "required": ["task_message_count", "controller_message_count", "running_controller_message_count", "task_finished_observed"]}
+  }
+}

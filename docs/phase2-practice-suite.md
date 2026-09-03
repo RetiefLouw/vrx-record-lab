@@ -19,12 +19,25 @@ seconds of scored Running time. The adapter allows 840 seconds of wall time
 for emulation and startup. A finished task message is required; a missing
 message or wall timeout produces an incomplete trial and no fabricated score.
 
+The Q-02 controller is pinned in the same manifest: the saturation-aware fast
+PD controller uses GPS position feedback, odometry yaw/velocity, and the stock
+T-thruster mapping. The phase-2 adapter launches
+`vrx_controller_ros/scored_station_keeping.launch` for every world and passes
+the controller parameters and permitted sensor topics from the manifest. The
+world files and upstream scorer remain unchanged. The image digest is left
+`null` until the updated controller image is built and its digest is captured;
+that is an intentional identity gate, not an implicit default.
+
 The scorer value is extracted from the final `/vrx/task/info` message's
 `score` field. The collector also retains the task messages and the public
 station-keeping debug topics `/vrx/station_keeping/pose_error` and
 `/vrx/station_keeping/rms_error`. For every trial, the artifact directory
 contains the selected world copy, run metadata, runtime metadata, collector
-output, Gazebo output, Docker output, and teardown output. The existing
+output, task-info JSONL, controller-diagnostics JSONL, Gazebo output, Docker
+output, and teardown output. The offline
+[`scripts/extract_diagnostics`](../scripts/extract_diagnostics) command derives
+Q-03 acquisition, error, and actuator-saturation metrics from those JSONL
+streams without reading or recomputing the scorer. The existing
 `scripts/run_suite` runner adds normalized trial JSON, SHA-256 entries, and
 the aggregate result; `scripts/verify_result` checks those artifacts and the
 manifest digest.
