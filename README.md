@@ -31,6 +31,14 @@ documented in [the environment reproduction guide](docs/environment-reproduction
 The environment records historical-source and package-availability inferences;
 it is not itself a claim to have reproduced the published `0.11` score.
 
+## Challenge explainer and sample runs
+
+The visual [VRX 2019 station-keeping challenge guide](docs/vrx-station-keeping-challenge.html)
+includes three deterministic illustrative run previews, the run lifecycle,
+the public scoring discrepancy, the six-run UF arithmetic check, and the
+reproducibility boundary. The previews are teaching media, not official
+phase-3 recordings or benchmark claims.
+
 The closest UF MRAC public-source port can also be exercised against the
 public practice world in the pinned image:
 

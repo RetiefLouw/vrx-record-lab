@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A complete visual guide to the VRX 2019 station-keeping challenge, its run lifecycle, scoring ambiguity, and reproducibility posture.">
+  <title>VRX 2019 Station Keeping — Challenge Guide</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --ink: #e1eef7;
+      --muted: #89a4b7;
+      --bg: #07101b;
+      --surface: #0d1b2d;
+      --surface-2: #10253a;
+      --line: #243e54;
+      --cyan: #40d3ca;
+      --yellow: #f9be46;
+      --red: #fa695e;
+      --green: #5edb89;
+      --blue: #5797ff;
+      --max: 1180px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at 75% -15%, #16344a 0, transparent 38%), var(--bg);
+      color: var(--ink);
+      font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    a { color: var(--cyan); }
+    a:hover { color: #8bf3e6; }
+    .wrap { width: min(var(--max), calc(100% - 40px)); margin: 0 auto; }
+    header { padding: 76px 0 58px; border-bottom: 1px solid var(--line); }
+    .eyebrow { color: var(--cyan); text-transform: uppercase; letter-spacing: .14em; font-size: .78rem; font-weight: 700; }
+    h1, h2, h3 { line-height: 1.15; margin: 0 0 16px; letter-spacing: -.025em; }
+    h1 { max-width: 850px; font-size: clamp(2.5rem, 7vw, 5.4rem); }
+    h2 { font-size: clamp(1.7rem, 3vw, 2.7rem); }
+    h3 { font-size: 1.2rem; }
+    .lede { max-width: 800px; color: var(--muted); font-size: 1.18rem; margin: 18px 0 0; }
+    .notice { margin-top: 28px; padding: 16px 18px; border: 1px solid #80631f; border-left: 4px solid var(--yellow); background: rgba(249,190,70,.08); color: #f6dfaa; }
+    nav { position: sticky; top: 0; z-index: 5; background: rgba(7,16,27,.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
+    nav .wrap { display: flex; gap: 20px; overflow-x: auto; padding: 13px 0; }
+    nav a { white-space: nowrap; text-decoration: none; color: var(--muted); font-size: .9rem; }
+    nav a:hover { color: var(--ink); }
+    section { padding: 72px 0; border-bottom: 1px solid var(--line); }
+    .section-intro { max-width: 760px; color: var(--muted); margin: -4px 0 30px; }
+    .grid-3, .grid-2 { display: grid; gap: 18px; }
+    .grid-3 { grid-template-columns: repeat(3, 1fr); }
+    .grid-2 { grid-template-columns: repeat(2, 1fr); }
+    .card { background: linear-gradient(145deg, rgba(16,37,58,.96), rgba(13,27,45,.96)); border: 1px solid var(--line); padding: 24px; }
+    .card p:last-child, .card ul:last-child { margin-bottom: 0; }
+    .num { color: var(--cyan); font-size: 2rem; font-weight: 750; }
+    .muted { color: var(--muted); }
+    .tag { display: inline-block; padding: 3px 8px; border: 1px solid var(--line); color: var(--muted); font-size: .76rem; text-transform: uppercase; letter-spacing: .08em; }
+    .tag.confirmed { border-color: rgba(94,219,137,.5); color: var(--green); }
+    .tag.inferred { border-color: rgba(249,190,70,.5); color: var(--yellow); }
+    .tag.unavailable { border-color: rgba(250,105,94,.5); color: var(--red); }
+    .video-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    figure { margin: 0; background: var(--surface); border: 1px solid var(--line); }
+    video { display: block; width: 100%; aspect-ratio: 16 / 9; background: #050b12; }
+    figcaption { padding: 16px 18px 18px; }
+    figcaption h3 { margin-bottom: 6px; }
+    figcaption p { color: var(--muted); font-size: .92rem; margin: 0; }
+    .meta { display: flex; flex-wrap: wrap; gap: 7px 14px; margin: 12px 0 0; color: var(--muted); font-size: .8rem; }
+    .meta span::before { content: "·"; color: var(--cyan); padding-right: 6px; }
+    .table-wrap { overflow-x: auto; border: 1px solid var(--line); }
+    table { width: 100%; border-collapse: collapse; min-width: 650px; }
+    th, td { text-align: left; vertical-align: top; padding: 14px 16px; border-bottom: 1px solid var(--line); }
+    th { color: var(--muted); font-size: .78rem; text-transform: uppercase; letter-spacing: .08em; background: var(--surface-2); }
+    tr:last-child td { border-bottom: 0; }
+    code { color: #b8f2e8; background: #071823; padding: 2px 5px; border-radius: 3px; }
+    pre { overflow-x: auto; padding: 18px; background: #050c14; border: 1px solid var(--line); color: #c9e8ef; }
+    .formula { font: 1.04rem/1.8 ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre-wrap; }
+    .timeline { display: grid; grid-template-columns: .8fr .8fr 3fr 1fr; gap: 3px; margin: 24px 0 10px; }
+    .phase { min-height: 86px; padding: 14px; background: var(--surface-2); border-top: 4px solid var(--muted); }
+    .phase.running { border-color: var(--green); }
+    .phase.ready { border-color: var(--yellow); }
+    .phase.finished { border-color: var(--red); }
+    .phase strong { display: block; margin-bottom: 5px; }
+    .phase small { color: var(--muted); }
+    .callout { border-left: 4px solid var(--cyan); padding: 14px 18px; background: rgba(64,211,202,.08); }
+    ul { padding-left: 21px; }
+    li + li { margin-top: 7px; }
+    footer { padding: 32px 0 58px; color: var(--muted); font-size: .88rem; }
+    @media (max-width: 900px) {
+      .video-grid, .grid-3 { grid-template-columns: 1fr; }
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 620px) {
+      .wrap { width: min(var(--max), calc(100% - 28px)); }
+      header { padding: 52px 0 38px; }
+      section { padding: 48px 0; }
+      .timeline { grid-template-columns: 1fr; }
+      .phase { min-height: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header id="top">
+    <div class="wrap">
+      <div class="eyebrow">VRX Record Lab · challenge guide</div>
+      <h1>Hold a vessel on station while the world pushes back.</h1>
+      <p class="lede">VRX 2019 station keeping is a maritime autonomy benchmark: control a WAM-V surface vessel so its position and heading stay close to a fixed goal under simulated wind, waves, and environmental variation.</p>
+      <div class="notice"><strong>Evidence boundary.</strong> This page separates confirmed public evidence from reconstruction. The three videos are deterministic illustrative previews generated for this repository; they are not official VRX phase-3 recordings, and they do not establish a benchmark score.</div>
+    </div>
+  </header>
+
+  <nav aria-label="Page sections">
+    <div class="wrap">
+      <a href="#runs">Sample runs</a><a href="#task">The task</a><a href="#lifecycle">Run lifecycle</a><a href="#score">Scoring</a><a href="#trials">Trials</a><a href="#reproduce">Reproduce responsibly</a><a href="#sources">Sources</a>
+    </div>
+  </nav>
+
+  <main>
+    <section id="runs">
+      <div class="wrap">
+        <h2>Three sample runs</h2>
+        <p class="section-intro">Each preview uses the same 12-second visual timeline: top-down local pose error at left, live position error at right, and the Initial → Ready → Running → Finished state machine along the bottom. The public task is much longer; these are compressed teaching examples.</p>
+        <div class="video-grid">
+          <figure>
+            <video controls preload="metadata" poster="assets/sample-runs/vrx-sample-run-01-calm.png" src="assets/sample-runs/vrx-sample-run-01-calm.mp4"></video>
+            <figcaption><h3>01 · Calm water / clean hold</h3><p>The controller damps the initial offset and settles near the goal with low residual motion.</p><div class="meta"><span>seed 10</span><span>zero-mean wind</span><span>completed</span></div></figcaption>
+          </figure>
+          <figure>
+            <video controls preload="metadata" poster="assets/sample-runs/vrx-sample-run-02-disturbed.png" src="assets/sample-runs/vrx-sample-run-02-disturbed.mp4"></video>
+            <figcaption><h3>02 · Crosswind / oscillating hold</h3><p>Persistent disturbance produces a larger error envelope and visible corrective oscillation.</p><div class="meta"><span>seed 15</span><span>4 m/s mean wind</span><span>completed</span></div></figcaption>
+          </figure>
+          <figure>
+            <video controls preload="metadata" poster="assets/sample-runs/vrx-sample-run-03-timeout.png" src="assets/sample-runs/vrx-sample-run-03-timeout.mp4"></video>
+            <figcaption><h3>03 · Gust / timeout recovery</h3><p>A strong disturbance pushes the vessel away late in the run; the preview ends in a timeout state.</p><div class="meta"><span>seed 42</span><span>8 m/s gust</span><span>timeout</span></div></figcaption>
+          </figure>
+        </div>
+        <p class="muted" style="margin:18px 0 0">The previews are made by <a href="../scripts/create_sample_run_videos.py">the deterministic generator</a>. Their trajectories and scores are illustrative, not recovered historical data.</p>
+      </div>
+    </section>
+
+    <section id="task">
+      <div class="wrap">
+        <h2>What the challenge asks</h2>
+        <p class="section-intro">Station keeping is a closed-loop control problem. The goal is a pose—local X, local Y, and yaw—not a waypoint sequence. Your autonomy stack observes the vessel, estimates disturbance, produces a body-frame wrench or actuator command, and tries to keep the pose error small for the scored interval.</p>
+        <div class="grid-3">
+          <article class="card"><div class="num">01</div><h3>Observe</h3><p>Read the vessel state and the published geographic goal. Convert the goal into a local reference and handle yaw wrap safely.</p></article>
+          <article class="card"><div class="num">02</div><h3>Control</h3><p>Generate surge, sway, and yaw effort. The repository includes PID, a disturbance observer, constrained allocation, actuator limits, and a closest public-source UF MRAC port.</p></article>
+          <article class="card"><div class="num">03</div><h3>Hold</h3><p>Remain close to the fixed pose while wind, waves, initial state, and scenario-specific parameters vary. Lower aggregate error wins.</p></article>
+        </div>
+        <div class="grid-2" style="margin-top:18px">
+          <div class="card"><h3>Vehicle and frame</h3><p>The benchmark uses the standard VRX WAM-V surface vessel. Pose error is interpreted in the local world frame; controller effort is ultimately applied in the body frame through the actuator stack.</p></div>
+          <div class="card"><h3>Environment knobs</h3><p>Public documentation describes bounded fog, ambient light, wind mean/variance/time/direction, and Pierson–Moskowitz waves. The exact hidden phase-3 configuration is unavailable.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="lifecycle">
+      <div class="wrap">
+        <h2>One run, four states</h2>
+        <p class="section-intro">Scoring is not active during setup. A run becomes meaningful only once the vehicle is released and the evaluator enters Running.</p>
+        <div class="timeline" aria-label="VRX station-keeping run lifecycle">
+          <div class="phase"><strong>Initial</strong><small>Spawn and settle. Public world: 10 s.</small></div>
+          <div class="phase ready"><strong>Ready</strong><small>Goal published; release. Public world: 10 s.</small></div>
+          <div class="phase running"><strong>Running</strong><small>Timer and score active. Public world: 300 s.</small></div>
+          <div class="phase finished"><strong>Finished</strong><small>Task ends or times out.</small></div>
+        </div>
+        <div class="callout"><strong>Timing caveat.</strong> The 10 s + 10 s + 300 s timing is confirmed for the public station-keeping world. The private phase-3 world timing and wrapper behavior are not published.</div>
+        <div class="grid-2" style="margin-top:24px">
+          <div class="card"><h3>Initial state</h3><p>The Technical Guide says X, Y, and yaw are locked while transient Z, pitch, and roll can settle. The public launch path has a default local pose, but the guide also says starting pose varies between runs; the phase-3 override is unknown.</p></div>
+          <div class="card"><h3>Goal state</h3><p>The public world expresses the goal as latitude, longitude, and yaw, then converts it to a local pose. Exact phase-3 goal poses were not released.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="score">
+      <div class="wrap">
+        <h2>How the score works—and why it is ambiguous</h2>
+        <p class="section-intro">There are two public descriptions that must be kept side by side. The mismatch is part of the reproducibility problem; silently choosing one would overstate what is known.</p>
+        <div class="grid-2">
+          <article class="card"><span class="tag inferred">published task description</span><h3 style="margin-top:16px">RMS pose error</h3><pre class="formula">RMS = sqrt( Σ[ dx² + dy² + W·(Δheading)² ] / n )</pre><p>The PDF defines an RMS pose error with a heading weight <code>W</code>. It does not publish the numeric weight, exact angle wrapping, or exact scorer sampling period.</p></article>
+          <article class="card"><span class="tag confirmed">public final-era code</span><h3 style="margin-top:16px">Mean pose error</h3><pre class="formula">pose = sqrt(dx² + dy²)
+      + 1 - | |goal_yaw - current_yaw| - π | / π
+score = mean(pose)</pre><p>The public station-keeping plugin accumulates this value on every world update. Its debug topic is named <code>rms_error</code>, although the assigned score is a mean.</p></article>
+        </div>
+        <p class="callout" style="margin-top:18px"><strong>Practical implication.</strong> A number produced by the local practice adapter is useful for engineering feedback, but it is not directly comparable to the historical UF result until evaluator revision, dependencies, hidden worlds, and scorer behavior are pinned.</p>
+      </div>
+    </section>
+
+    <section id="trials">
+      <div class="wrap">
+        <h2>Runs are aggregated, not cherry-picked</h2>
+        <p class="section-intro">The official results page reports six station-keeping trials for the University of Florida. The published task score is the arithmetic mean of the six displayed run scores.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Run</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>Task score</th></tr></thead>
+            <tbody><tr><td>UF station keeping</td><td>0.02</td><td>0.04</td><td>0.35</td><td>0.04</td><td>0.10</td><td>0.11</td><td><strong>0.11</strong></td></tr></tbody>
+          </table>
+        </div>
+        <p class="muted">Arithmetic check: (0.02 + 0.04 + 0.35 + 0.04 + 0.10 + 0.11) / 6 = 0.11. This confirms the displayed arithmetic only; hidden worlds, unrounded values, and evaluator checkout remain unresolved.</p>
+        <div class="grid-3" style="margin-top:24px">
+          <div class="card"><h3>Task ranking</h3><p>Teams are ranked low-to-high on the task score because this is a minimization problem.</p></div>
+          <div class="card"><h3>Overall ranking</h3><p>The overall total is the sum of task ranks. The lowest total wins.</p></div>
+          <div class="card"><h3>UF reference</h3><p>UF’s station-keeping task rank was 1; its official overall total was 25 and overall rank 5.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="reproduce">
+      <div class="wrap">
+        <h2>What a defensible rerun needs</h2>
+        <p class="section-intro">A credible result is more than a low number. It needs an auditable experiment record that another person can run from a clean clone.</p>
+        <div class="grid-2">
+          <div class="card"><h3>Record these inputs</h3><ul><li>Controller commit and configuration</li><li>Exact VRX, ROS, Gazebo, and OS package revisions</li><li>Container image digest and launch command</li><li>Every trial seed and environment parameter</li><li>Raw task info, run logs, and checksums</li></ul></div>
+          <div class="card"><h3>Verify these claims</h3><ul><li>Protected benchmark/scorer tree is unchanged</li><li>Development, verification, and evaluation seeds are disjoint</li><li>Aggregate arithmetic matches the raw trial values</li><li>Artifacts are present and SHA-256 manifests match</li><li>Claim language says “reproduced” only when direct comparability is demonstrated</li></ul></div>
+        </div>
+        <div class="card" style="margin-top:18px"><h3>Repository entry points</h3><p>Start with the <a href="../README.md">project README</a>, then read the <a href="vrx-2019-protocol.md">protocol reconstruction</a>, <a href="uf-2019-station-keeping-reproduction.md">UF reproduction dossier</a>, <a href="environment-reproduction.md">environment guide</a>, and <a href="result-format.md">result format</a>. The harness commands are <code>scripts/run_trial</code>, <code>scripts/run_suite</code>, and <code>scripts/verify_result</code>.</p></div>
+      </div>
+    </section>
+
+    <section id="sources">
+      <div class="wrap">
+        <h2>Primary sources</h2>
+        <p class="section-intro">The local documents preserve the campaign’s evidence labels and source anchors. External links below point to the primary VRX or competition records.</p>
+        <div class="grid-2">
+          <div class="card"><h3>Official VRX material</h3><ul><li><a href="https://github.com/osrf/vrx/wiki/vrx_2019-results">VRX 2019 official results</a></li><li><a href="https://github.com/osrf/vrx">VRX repository</a></li><li><a href="https://github.com/osrf/vrx/wiki/files/VRX2019_Task_Descriptions_v1.4.pdf">VRX 2019 Task Descriptions v1.4</a></li><li><a href="https://github.com/osrf/vrx/wiki/files/VRX2019_Technical%20Guide_V1.2.pdf">VRX 2019 Technical Guide v1.2</a></li></ul></div>
+          <div class="card"><h3>Local evidence posture</h3><p><span class="tag confirmed">confirmed</span> directly stated or present at an immutable source revision.</p><p><span class="tag inferred">inferred</span> best reconstruction from public evidence.</p><p><span class="tag unavailable">unavailable</span> not exposed by the public record located for this campaign.</p></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer><div class="wrap"><a href="#top">Back to top</a> · VRX Record Lab · Prepared 2026-09-03 · Illustrative media is generated locally and carries no benchmark claim.</div></footer>
+</body>
+</html>

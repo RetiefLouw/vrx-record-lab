@@ -15,6 +15,11 @@ secrets/
 *.bag
 *.mp4
 
+# Keep the compact, illustrative challenge-guide previews visible.
+!docs/assets/
+!docs/assets/sample-runs/
+!docs/assets/sample-runs/*.mp4
+
 # Keep the tiny verifier fixture visible; real run artifacts remain ignored.
 !verification/examples/
 !verification/examples/artifacts/
