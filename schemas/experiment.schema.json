@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/RetiefLouw/vrx-record-lab/blob/main/schemas/experiment.schema.json",
+  "title": "VRX Record Lab experiment manifest",
+  "type": "object",
+  "required": ["schema_version", "experiment_id", "benchmark", "controller", "container", "task", "trials", "execution"],
+  "properties": {
+    "$schema": {"type": "string"},
+    "schema_version": {"const": "1.0.0"},
+    "experiment_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"},
+    "benchmark": {
+      "type": "object",
+      "required": ["name", "revision", "protocol_revision", "score_direction", "scorer"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "revision": {"type": ["string", "null"]},
+        "protocol_revision": {"type": ["string", "null"]},
+        "score_direction": {"enum": ["minimize", "maximize"]},
+        "scorer": {
+          "type": "object",
+          "required": ["name", "revision"],
+          "properties": {"name": {"type": "string", "minLength": 1}, "revision": {"type": ["string", "null"]}},
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "controller": {
+      "type": "object",
+      "required": ["name", "source", "revision", "command", "parameters"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "source": {"type": "string", "minLength": 1},
+        "revision": {"type": ["string", "null"]},
+        "command": {"type": "array", "items": {"type": "string"}},
+        "parameters": {"type": "object"}
+      },
+      "additionalProperties": true
+    },
+    "container": {
+      "type": "object",
+      "required": ["image", "digest"],
+      "properties": {"image": {"type": "string", "minLength": 1}, "digest": {"type": ["string", "null"]}},
+      "additionalProperties": true
+    },
+    "task": {
+      "type": "object",
+      "required": ["name", "parameters"],
+      "properties": {"name": {"type": "string", "minLength": 1}, "parameters": {"type": "object"}},
+      "additionalProperties": true
+    },
+    "trials": {
+      "type": "object",
+      "required": ["seeds", "seed_provenance", "environment"],
+      "properties": {
+        "seeds": {"type": "array", "items": {"type": "integer"}, "uniqueItems": true},
+        "seed_provenance": {"type": "string"},
+        "environment": {"type": "object"}
+      },
+      "additionalProperties": true
+    },
+    "execution": {
+      "type": "object",
+      "required": ["command", "timeout_s", "cwd"],
+      "properties": {
+        "command": {"type": "array", "items": {"type": "string"}},
+        "timeout_s": {"type": "number", "exclusiveMinimum": 0},
+        "cwd": {"type": ["string", "null"]}
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}
