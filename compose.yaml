@@ -1,0 +1,43 @@
+name: ${COMPOSE_PROJECT_NAME}
+
+services:
+  simulator:
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      args:
+        BASE_IMAGE: ${VRX_BASE_IMAGE}
+        VRX_REPOSITORY: ${VRX_REPOSITORY}
+        VRX_COMMIT: ${VRX_COMMIT}
+        GAZEBO_VERSION: ${GAZEBO_VERSION}
+        IGNITION_COMMON_VERSION: ${IGNITION_COMMON_VERSION}
+        IGNITION_FUEL_TOOLS_VERSION: ${IGNITION_FUEL_TOOLS_VERSION}
+        SDFORMAT_VERSION: ${SDFORMAT_VERSION}
+    image: ${VRX_IMAGE_NAME}
+    init: true
+    environment:
+      HOME: /home/vrx
+      ROS_MASTER_URI: http://127.0.0.1:11311
+      ROS_HOSTNAME: localhost
+      VRX_GUI: ${VRX_GUI}
+      VRX_VERBOSE: ${VRX_VERBOSE}
+      VRX_NAMESPACE: ${VRX_NAMESPACE}
+      VRX_WIND_SEED: ${VRX_WIND_SEED}
+      VRX_EXTRA_GAZEBO_ARGS: ${VRX_EXTRA_GAZEBO_ARGS}
+    shm_size: 1gb
+    volumes:
+      - type: bind
+        source: ${VRX_ARTIFACT_DIR}
+        target: /var/log/vrx
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - >-
+          bash -lc 'source /opt/ros/melodic/setup.bash &&
+          source /opt/vrx_ws/devel/setup.bash &&
+          rostopic list 2>/dev/null | grep -Fxq /vrx/task/info'
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 45s
