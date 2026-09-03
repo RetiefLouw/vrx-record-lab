@@ -52,10 +52,26 @@ PYTHONPATH=src python3 -m unittest discover -s tests -v
 ## Controller package
 
 `src/vrx_controller` contains simulator-independent planar station-keeping
-components.  It currently provides angle-safe state errors, a linear model
-interface for future LQR/MPC work, anti-windup PID, a wrench disturbance
-observer, constrained thruster allocation, and actuator saturation/rate/
-dead-zone handling.  The package has no ROS, Gazebo, VRX, or scorer dependency.
+components. It provides angle-safe state errors, a linear model interface for
+future LQR/MPC work, anti-windup PID, a wrench disturbance observer, constrained
+thruster allocation, actuator saturation/rate/dead-zone handling, WGS84-to-ENU
+conversion, and the stock VRX T-thruster mapping. The ROS bridge in
+`ros/vrx_controller_ros` consumes real `robot_localization` odometry and the
+latched VRX geographic goal, then publishes the stock `std_msgs/Float32`
+thruster topics.
+
+Run the bounded, real scored practice-world trial with:
+
+```bash
+scripts/run_suite config/experiments/vrx2019-station-keeping-practice0-baseline.json \
+  --output-dir /absolute/path/to/trial-output
+```
+
+The trial records `/vrx/task/info`, the geographic goal, filtered localization,
+all stock thruster commands/angles, controller diagnostics, simulator logs,
+and a rosbag. The checked-in baseline manifest is for public practice world 0;
+it is not a reproduction of the private 2019 competition evaluator or the
+published UF result.
 
 Run the deterministic unit tests with:
 
@@ -67,6 +83,10 @@ python -m pytest
 The controller design assumptions and all inferences made in the absence of
 recovered VRX runtime interfaces are recorded in
 [`docs/controller-design.md`](docs/controller-design.md).
+
+The ROS/VRX boundary, coordinate convention, stock plugin mapping, launch
+graph, and trial artifact contract are recorded in
+[`docs/ros-controller.md`](docs/ros-controller.md).
 
 The historical `0.11` value is a reference point, not an accepted directly
 comparable record. The public evidence does not currently pin the complete

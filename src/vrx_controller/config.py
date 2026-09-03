@@ -1,9 +1,8 @@
 """Validated controller configuration with explicit, serializable fields."""
 
-from __future__ import annotations
-
 from dataclasses import dataclass, field
 import json
+from typing import Dict, List, Optional
 
 import numpy as np
 
@@ -14,13 +13,13 @@ from .observer import DisturbanceObserver
 from .pid import PIDGains
 
 
-def _json_optional_vector(values: np.ndarray) -> list[float | None] | None:
+def _json_optional_vector(values: np.ndarray) -> Optional[List[Optional[float]]]:
     if np.all(~np.isfinite(values)):
         return None
     return [float(value) if np.isfinite(value) else None for value in values]
 
 
-def _parse_optional_vector(value: object, negative_infinity: bool) -> np.ndarray | None:
+def _parse_optional_vector(value: object, negative_infinity: bool) -> Optional[np.ndarray]:
     if value is None:
         return None
     values = np.asarray(value, dtype=object)
@@ -72,7 +71,7 @@ class ControllerConfig:
     def observer(self) -> DisturbanceObserver:
         return DisturbanceObserver(self.model, self.observer_bandwidth_hz)
 
-    def to_dict(self) -> dict[str, object]:
+    def to_dict(self) -> Dict[str, object]:
         """Return JSON-compatible configuration data."""
 
         return {
@@ -101,7 +100,7 @@ class ControllerConfig:
         }
 
     @classmethod
-    def from_dict(cls, data: dict[str, object]) -> "ControllerConfig":
+    def from_dict(cls, data: Dict[str, object]) -> "ControllerConfig":
         """Construct a validated configuration from JSON-like mappings."""
 
         model_data = data["model"]

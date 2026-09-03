@@ -1,13 +1,12 @@
 """Vector PID with back-calculation anti-windup."""
 
-from __future__ import annotations
-
 from dataclasses import dataclass
+from typing import List, Optional, Tuple, Union
 
 import numpy as np
 
 
-def _vector(value: np.ndarray | list[float] | tuple[float, ...], name: str) -> np.ndarray:
+def _vector(value: Union[np.ndarray, List[float], Tuple[float, ...]], name: str) -> np.ndarray:
     result = np.asarray(value, dtype=float)
     if result.shape != (3,):
         raise ValueError(f"{name} must have shape (3,), got {result.shape}")
@@ -25,9 +24,9 @@ class PIDGains:
     kd: np.ndarray
     output_min: np.ndarray
     output_max: np.ndarray
-    integral_min: np.ndarray | None = None
-    integral_max: np.ndarray | None = None
-    anti_windup_gain: np.ndarray | float = 1.0
+    integral_min: Optional[np.ndarray] = None
+    integral_max: Optional[np.ndarray] = None
+    anti_windup_gain: Union[np.ndarray, float] = 1.0
 
     def __post_init__(self) -> None:
         kp = _vector(self.kp, "kp")

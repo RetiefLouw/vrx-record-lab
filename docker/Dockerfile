@@ -40,6 +40,11 @@ RUN apt-get update \
       libeigen3-dev \
       libprotobuf-dev \
       protobuf-compiler \
+      python3-numpy \
+      python3-netifaces \
+      python3-pip \
+      python3-setuptools \
+      python3-yaml \
       qtbase5-dev \
       libgles2-mesa-dev \
  && apt-key add /tmp/gazebo.key \
@@ -74,6 +79,13 @@ RUN apt-get update \
  && rm -f /tmp/gazebo.key \
  && rm -rf /var/lib/apt/lists/*
 
+RUN python3 -m pip install --no-cache-dir \
+      "catkin_pkg==0.5.2" \
+      "dataclasses==0.8" \
+      "defusedxml==0.7.1" \
+      "empy==3.3.4" \
+      "rospkg==1.5.0"
+
 RUN groupadd --gid "${VRX_GID}" "${VRX_USER}" \
  && useradd --uid "${VRX_UID}" --gid "${VRX_GID}" --create-home --shell /bin/bash "${VRX_USER}"
 
@@ -88,9 +100,18 @@ RUN source /opt/ros/melodic/setup.bash \
  && cd "${VRX_WORKSPACE}" \
  && catkin_make -DCMAKE_BUILD_TYPE=Release
 
+COPY ros/vrx_controller_ros "${VRX_WORKSPACE}/src/vrx_controller_ros"
+COPY src/vrx_controller /opt/vrx_controller/src/vrx_controller
+RUN chmod 0755 "${VRX_WORKSPACE}/src/vrx_controller_ros/scripts/"*.py \
+ && source /opt/ros/melodic/setup.bash \
+ && cd "${VRX_WORKSPACE}" \
+ && catkin_make -DCMAKE_BUILD_TYPE=Release
+
 COPY docker/entrypoint.sh /usr/local/bin/vrx-entrypoint
 COPY docker/run-stationkeeping.sh /usr/local/bin/vrx-run-stationkeeping
-RUN chmod 0755 /usr/local/bin/vrx-entrypoint /usr/local/bin/vrx-run-stationkeeping \
+COPY docker/run-trial.sh /usr/local/bin/vrx-run-trial
+ENV PYTHONPATH=/opt/vrx_controller/src
+RUN chmod 0755 /usr/local/bin/vrx-entrypoint /usr/local/bin/vrx-run-stationkeeping /usr/local/bin/vrx-run-trial \
  && chown -R "${VRX_USER}:${VRX_USER}" /home/"${VRX_USER}" "${VRX_WORKSPACE}"
 
 LABEL org.opencontainers.image.source="https://github.com/RetiefLouw/vrx-record-lab" \

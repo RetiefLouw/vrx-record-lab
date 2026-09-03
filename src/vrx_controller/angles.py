@@ -1,7 +1,5 @@
 """Angle utilities with explicit shortest-path semantics."""
 
-from __future__ import annotations
-
 import math
 
 
