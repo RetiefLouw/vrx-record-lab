@@ -1,0 +1,11 @@
+{
+  "schema_version": "sha256-manifest/v1",
+  "root": ".",
+  "files": [
+    {
+      "path": "run-log.txt",
+      "sha256": "716a7907df6f76c79f775404120a5fc422f81e9be56be21a56ea50fbbe3befd3",
+      "size_bytes": 30
+    }
+  ]
+}
