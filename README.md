@@ -43,6 +43,15 @@ scorer, revisions, and official seeds remain unavailable, so the harness will
 refuse to fabricate a score. Fixture-driven tests exercise the full execution,
 statistics, checksum, and verification path.
 
+The six public 2019 phase-2 practice worlds are runnable through the explicit
+reconstructed protocol in
+[`docs/phase2-practice-suite.md`](docs/phase2-practice-suite.md) and
+[`config/experiments/vrx2019-station-keeping-phase2.json`](config/experiments/vrx2019-station-keeping-phase2.json).
+That suite uses fresh containers, records raw task/debug output, extracts the
+final `/vrx/task/info` score, aggregates all six worlds, and tears down each
+container. Shortened runs are documented separately from complete 300-second
+scored runs.
+
 Run the tests with:
 
 ```sh

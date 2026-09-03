@@ -90,7 +90,10 @@ RUN source /opt/ros/melodic/setup.bash \
 
 COPY docker/entrypoint.sh /usr/local/bin/vrx-entrypoint
 COPY docker/run-stationkeeping.sh /usr/local/bin/vrx-run-stationkeeping
+COPY docker/run-phase2-stationkeeping.sh /usr/local/bin/vrx-run-phase2-stationkeeping
+COPY docker/collect_task_info.py /usr/local/bin/vrx-collect-task-info
 RUN chmod 0755 /usr/local/bin/vrx-entrypoint /usr/local/bin/vrx-run-stationkeeping \
+      /usr/local/bin/vrx-run-phase2-stationkeeping /usr/local/bin/vrx-collect-task-info \
  && chown -R "${VRX_USER}:${VRX_USER}" /home/"${VRX_USER}" "${VRX_WORKSPACE}"
 
 LABEL org.opencontainers.image.source="https://github.com/RetiefLouw/vrx-record-lab" \
