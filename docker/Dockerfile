@@ -36,6 +36,8 @@ RUN apt-get update \
       build-essential \
       cmake \
       pkg-config \
+      python3-pip \
+      python3-setuptools \
       ruby \
       libeigen3-dev \
       libprotobuf-dev \
