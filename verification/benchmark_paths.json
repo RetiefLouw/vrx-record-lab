@@ -1,0 +1,12 @@
+{
+  "schema_version": "vrx-benchmark-integrity/v1",
+  "description": "Protected roots must be replaced with the exact evaluator tree paths before any VRX record run.",
+  "protected_prefixes": [
+    "benchmark",
+    "benchmarks",
+    "scorer",
+    "scoring"
+  ],
+  "protected_exact_paths": [],
+  "allow_missing": true
+}

@@ -1,0 +1,280 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/RetiefLouw/vrx-record-lab/blob/main/verification/result.schema.json",
+  "title": "VRX independently verifiable result",
+  "description": "A result record with enough provenance to audit a promoted claim.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "campaign_id",
+    "challenge",
+    "task",
+    "claim_status",
+    "metric",
+    "direction",
+    "aggregate",
+    "runs",
+    "provenance",
+    "protocol",
+    "seed_set",
+    "artifacts"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "vrx-record-result/v1"
+    },
+    "campaign_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "challenge": {
+      "type": "string",
+      "minLength": 1
+    },
+    "task": {
+      "type": "string",
+      "minLength": 1
+    },
+    "claim_status": {
+      "enum": [
+        "unaccepted",
+        "candidate",
+        "reproduced",
+        "promoted"
+      ]
+    },
+    "metric": {
+      "type": "string",
+      "minLength": 1
+    },
+    "direction": {
+      "enum": [
+        "lower_is_better",
+        "higher_is_better"
+      ]
+    },
+    "aggregate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "method",
+        "value",
+        "n"
+      ],
+      "properties": {
+        "method": {
+          "const": "mean"
+        },
+        "value": {
+          "type": "number"
+        },
+        "n": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "runs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "run_id",
+          "seed",
+          "score",
+          "artifacts"
+        ],
+        "properties": {
+          "run_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "seed": {
+            "type": "integer"
+          },
+          "score": {
+            "type": "number"
+          },
+          "artifacts": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository_url",
+        "candidate_commit",
+        "benchmark_commit",
+        "scorer_commit",
+        "clean_clone_commit",
+        "controller_commit",
+        "container_digest",
+        "config_sha256"
+      ],
+      "properties": {
+        "repository_url": {
+          "type": "string",
+          "minLength": 1
+        },
+        "candidate_commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "benchmark_commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "scorer_commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "clean_clone_commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "controller_commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "container_digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "config_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "clean_clone_verified": {
+          "type": "boolean"
+        },
+        "benchmark_tree_verified": {
+          "type": "boolean"
+        },
+        "manifest_verified": {
+          "type": "boolean"
+        }
+      }
+    },
+    "protocol": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol_id",
+        "protocol_revision",
+        "comparability",
+        "evidence"
+      ],
+      "properties": {
+        "protocol_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "protocol_revision": {
+          "type": "string",
+          "minLength": 1
+        },
+        "comparability": {
+          "enum": [
+            "direct",
+            "conditional",
+            "not_comparable",
+            "unknown"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "url",
+              "claim",
+              "status"
+            ],
+            "properties": {
+              "url": {
+                "type": "string",
+                "minLength": 1
+              },
+              "claim": {
+                "type": "string",
+                "minLength": 1
+              },
+              "status": {
+                "enum": [
+                  "verified",
+                  "inferred",
+                  "unknown",
+                  "contradicted"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "seed_set": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "seeds"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "seeds": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "path",
+          "sha256",
+          "size_bytes"
+        ],
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "size_bytes": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "notes": {
+      "type": "string"
+    }
+  }
+}
