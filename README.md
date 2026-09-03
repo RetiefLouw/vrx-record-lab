@@ -12,7 +12,7 @@ result has passed a clean independent rerun.
 ## Campaign status
 
 - Target: VRX 2019 station keeping
-- Status: protocol reconstruction and environment bootstrap
+- Status: protocol reconstruction; UF 0.11 reproduction dossier published
 - Compute policy: OrbStack first; Vast.ai only through a bounded campaign
 - Claim policy: independently reproduced task-level record unless recognized
   by the benchmark maintainers
@@ -57,6 +57,7 @@ recovered VRX runtime interfaces are recorded in
 
 - [Official VRX 2019 results](https://github.com/osrf/vrx/wiki/vrx_2019-results)
 - [VRX repository](https://github.com/osrf/vrx)
+- [UF 2019 station-keeping reproduction dossier](docs/uf-2019-station-keeping-reproduction.md)
 
 ## License
 
