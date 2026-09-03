@@ -17,6 +17,20 @@ result has passed a clean independent rerun.
 - Claim policy: independently reproduced task-level record unless recognized
   by the benchmark maintainers
 
+## Environment bootstrap
+
+The pinned `linux/amd64` OrbStack environment, headless station-keeping
+container, deterministic local seed override, health check, and smoke test are
+documented in [the environment reproduction guide](docs/environment-reproduction.md).
+
+```bash
+./scripts/bootstrap.sh
+./scripts/smoke-test.sh
+```
+
+The environment records historical-source and package-availability inferences;
+it is not itself a claim to have reproduced the published `0.11` score.
+
 ## Baseline harness
 
 The dependency-light experiment/result harness is available through
