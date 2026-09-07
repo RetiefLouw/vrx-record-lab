@@ -121,6 +121,10 @@ The controller design assumptions and all inferences made in the absence of
 recovered VRX runtime interfaces are recorded in
 [`docs/controller-design.md`](docs/controller-design.md).
 
+The ROS/VRX boundary, coordinate convention, stock plugin mapping, launch
+graph, and trial artifact contract are recorded in
+[`docs/ros-controller.md`](docs/ros-controller.md).
+
 The historical `0.11` value is a reference point, not an accepted directly
 comparable record. The public evidence does not currently pin the complete
 evaluation inputs needed for direct comparison; see

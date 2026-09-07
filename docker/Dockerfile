@@ -43,6 +43,11 @@ RUN apt-get update \
       libeigen3-dev \
       libprotobuf-dev \
       protobuf-compiler \
+      python3-numpy \
+      python3-netifaces \
+      python3-pip \
+      python3-setuptools \
+      python3-yaml \
       qtbase5-dev \
       libgles2-mesa-dev \
  && apt-key add /tmp/gazebo.key \
