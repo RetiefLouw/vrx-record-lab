@@ -1,0 +1,35 @@
+#!/usr/bin/env python3
+"""Audit a BARN output log against the public path files."""
+
+from __future__ import annotations
+
+import argparse
+import json
+from pathlib import Path
+
+from vrx_record_lab.barn_metric import aggregate, parse_log, path_length_to_optimal_time
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--log", required=True, type=Path)
+    parser.add_argument("--barn-root", required=True, type=Path, help="directory containing jackal_helper/worlds/BARN")
+    parser.add_argument("--output", type=Path)
+    args = parser.parse_args()
+
+    path_root = args.barn_root / "jackal_helper/worlds/BARN/path_files"
+    world_indices = tuple(index * 6 for index in range(50))
+    optimal_times = {
+        world: path_length_to_optimal_time(path_root / f"path_{world}.npy") for world in world_indices
+    }
+    result = aggregate(parse_log(args.log.read_text().splitlines()), optimal_times, expected_worlds=world_indices)
+    payload = json.dumps(result, indent=2, sort_keys=True) + "\n"
+    if args.output:
+        args.output.write_text(payload)
+    else:
+        print(payload, end="")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

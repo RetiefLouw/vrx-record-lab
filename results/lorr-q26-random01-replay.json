@@ -1,0 +1,34 @@
+{
+  "queue_id": "Q-26",
+  "benchmark": "League of Robot Runners 2024 Main Round",
+  "instance": "RANDOM-01",
+  "protocol": {
+    "version": "2024 LoRR",
+    "team_size": 100,
+    "makespan_ticks": 600,
+    "input_sha256": "c09782a2d79e7779b82457095f8881b9fd5a08a6a6e4c68035a5e56a12445302",
+    "input_source": "MAPF-Competition/Benchmark-Archive@25ffd5b6a39b6fe30e5bc6cb5e22720a9531ea8a",
+    "best_known_tasks": 696,
+    "best_known_solution_sha256": "e1aa1b237919db756d5741faa5cab445748af73fa5823effe4dd30640d62f50c",
+    "best_known_source": "MAPF-Competition/Code_Archive Team_RAPID/3635cb44497727271f173582a86a2cea72e9e17e"
+  },
+  "runtime": {
+    "start_kit_tag": "v2.0.0",
+    "start_kit_commit": "6425dcd720ecc79b34bc1352a77166265144482b",
+    "default_image_digest": "sha256:627638714b5e1a4c3daccb947a8327b5a32c071da578ea12e4e28d12ed0ac478",
+    "archived_team_image": "lorr-rapid-2024@sha256:4a49d3b7720b8caf93cc72a00af8eeb8e91178b9d44ab95396df2ec0eeb27309",
+    "archived_team_image_status": "build_failed_on_ubuntu_24_then_succeeded_on_ubuntu_22_with_libspdlog",
+    "replay_note": "An initial replay stalled under host contention; a rerun with an explicit file-storage path completed cleanly and is recorded as Q-27."
+  },
+  "local_replay": {
+    "default_start_kit": {"status": "completed", "output": "lorr-q26-random01-v2.json", "num_task_finished": 492, "all_valid": true, "makespan": 600},
+    "team_rapid": {"status": "completed", "output": "lorr-q27-random01-team-rapid.json", "num_task_finished": 690, "reference_gap": -6, "zero_errors": true}
+  },
+  "claim_status": "protocol_replay_successful_winner_not_exactly_reproduced",
+  "next_queue_id": "Q-31",
+  "notes": [
+    "A current 3.x Start-Kit run with invented delayConfig is excluded from score comparison.",
+    "The archived 696-task JSON is a reference output, not evidence that the local evaluator reproduced the winner.",
+    "Official leaderboard equivalence requires the archived 2024 evaluator semantics and source identity to align."
+  ]
+}

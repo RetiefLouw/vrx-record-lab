@@ -1,0 +1,37 @@
+{
+  "record_type": "barn_q12_runtime_feasibility",
+  "benchmark": "BARN Challenge public Gazebo world",
+  "world_index": 0,
+  "status": "completed",
+  "command": "docker run --rm --init --platform linux/amd64 --network host --shm-size 1g -v $PWD/results/barn-q12:/out vrx-record-lab:barn-dwa --world_idx 0 --out /out/world-0.txt",
+  "container": {
+    "image": "vrx-record-lab:barn-dwa",
+    "image_digest": "sha256:82f0161c2913d2c1c148a633074a9977aa00f3cb810cb3f880e234a2ef341ce6",
+    "base_image": "osrf/ros:melodic-desktop-full-bionic@sha256:39b2900892a32886033f168e55fd8ce4e01d804ed1ffdde156639b3cf789ee71",
+    "architecture": "linux/amd64"
+  },
+  "source_commits": {
+    "barn": "bf5a226f6088ec96bf0d2dbee3253a8ea6119b83",
+    "jackal": "0d8d76f96bd52102b69a3b9cb735fd5f9e15f695",
+    "jackal_simulator": "f72ffe1c160db5595dc033b323eb924abec539c4",
+    "jackal_desktop": "5dbf81c6266c3810d37b3d966a22ec149fd28e99",
+    "eband_local_planner": "eefda44382024d52d45bb93e6dcf7294ff0ef8ae"
+  },
+  "raw_output": {
+    "path": "results/barn-q12/world-0.txt",
+    "sha256": "d705eff20f53cc7ef187760da2c8d884fe273a9a980d6ac59d953346c3109a81",
+    "line": "0 1 0 0 37.2580 0.1824"
+  },
+  "organizer_fields": {
+    "succeeded": true,
+    "collided": false,
+    "timeout": false,
+    "traversal_time_s": 37.258,
+    "runner_logged_metric": 0.1824,
+    "report_script_optimal_time_s": 6.71589296755924,
+    "report_script_metric": 0.18025371645174834,
+    "runner_report_metric_delta": 0.002146283548251665
+  },
+  "claim_status": "feasibility_only",
+  "interpretation": "The pinned evaluator stack builds and completes one public world. This is not a suite score, leaderboard result, or official claim. The sixth-column runner metric is retained, but scoring follows the published report-script start pose and is independently recomputable."
+}

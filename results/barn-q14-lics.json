@@ -1,0 +1,30 @@
+{
+  "record_type": "barn_q14_published_controller_smoke",
+  "benchmark": "BARN Challenge public Gazebo world",
+  "source_commit": "f7bd87cc232b04f6ce9edd10a6a05b84a6c7dfaa",
+  "world_index": 0,
+  "status": "completed_with_collision",
+  "container": {
+    "image": "vrx-record-lab:barn-lics",
+    "image_digest": "sha256:ff35f17db925735ef71467982b1ad9f3c5a23d8ffa0c0d2d2a7f3c9955338082",
+    "architecture": "linux/amd64",
+    "base_image_digest": "sha256:39b2900892a32886033f168e55fd8ce4e01d804ed1ffdde156639b3cf789ee71",
+    "model": "lics/models/transformer_99.pth",
+    "model_sha256": "dfd39d7c4690eeef54bc45b9462ab7bcbf9d3b7305f994a9ec7888ad2ae7919d"
+  },
+  "raw_output": {
+    "path": "results/barn-q14-lics/world-0-lics-v3.txt",
+    "sha256": "651bdac66eb237e20b64b9c9c7ac123e9e6932b6113f7f99856b79f87d6fe0c8",
+    "line": "0 0 1 0 3.8050 0.0000"
+  },
+  "observed": {
+    "succeeded": false,
+    "collided": true,
+    "timeout": false,
+    "traversal_time_s": 3.805,
+    "report_script_metric": 0.0,
+    "runner_metric": 0.0
+  },
+  "claim_status": "candidate_rejected_for_screen",
+  "interpretation": "The released LiCS controller and model load successfully in the pinned CPU-PyTorch image, but the first public world ended in collision after 3.805 seconds. This is a reproducibility/portability smoke result, not a leaderboard score. Do not start a ten-world LiCS screen until the ROS/Python runtime and controller-to-cmd_vel boundary are diagnosed."
+}

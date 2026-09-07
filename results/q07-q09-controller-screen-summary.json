@@ -1,0 +1,58 @@
+{
+  "schema_version": "vrx-record-lab/controller-screen/v1",
+  "created_at": "2026-09-04",
+  "benchmark_scope": "public-vrx-2019-phase2-practice",
+  "not_a_suite_result": true,
+  "baseline": {
+    "world3_score": 37.95612985923057,
+    "world2_score": 1.1048966380251557,
+    "manifest": "config/experiments/vrx2019-station-keeping-phase2.json"
+  },
+  "screens": [
+    {
+      "id": "Q-07",
+      "manifest": "config/experiments/vrx2019-station-keeping-phase2-hybrid-transit.json",
+      "manifest_sha256": "8aced3f999f820990398d7bdda3e18e7851dcf63f57c28e2f5c2eb641de5f96c",
+      "world": "stationkeeping3",
+      "score": 38.02656831042876,
+      "baseline_score": 37.95612985923057,
+      "decision": "rejected",
+      "diagnostics": {
+        "time_to_0_5_m_s": 128.5050048828125,
+        "last_window_mean_position_error_m": 0.002900105770812374,
+        "force_saturation_fraction": 0.39820059980006667
+      },
+      "raw_trial_directory": "artifacts/q07-hybrid-world3.7oGMBF"
+    },
+    {
+      "id": "Q-08",
+      "manifest": "config/experiments/vrx2019-station-keeping-phase2-hybrid-hold-integral.json",
+      "manifest_sha256": "5c0345ec1f6d91c215c6f414b4b9d41ceca3e1bc6523c910986f3b1dbecca4dc",
+      "world": "stationkeeping2",
+      "score": 1.1042453888647972,
+      "baseline_score": 1.1048966380251557,
+      "decision": "hold-for-six-world-evaluation",
+      "diagnostics": {
+        "time_to_0_5_m_s": 31.602001190185547,
+        "last_window_mean_position_error_m": 0.9712365437954686,
+        "force_saturation_fraction": 0.08030656447850716
+      },
+      "raw_trial_directory": "artifacts/q08-hybrid-hold-integral-world2.e7jkbi"
+    },
+    {
+      "id": "Q-09",
+      "manifest": "config/experiments/vrx2019-station-keeping-phase2-hybrid-hold-integral-strong.json",
+      "manifest_sha256": "5047293ea3d3a566fe8f0ea604ffc5b1c987b0b51387dfc4402b16219c37f4b2",
+      "world": "stationkeeping2",
+      "score": 1.105672372538201,
+      "baseline_score": 1.1048966380251557,
+      "decision": "rejected",
+      "diagnostics": {
+        "time_to_0_5_m_s": 31.601001739501953,
+        "last_window_mean_position_error_m": 0.9740121889077403,
+        "force_saturation_fraction": 0.07997334221926025
+      },
+      "raw_trial_directory": "artifacts/q09-hybrid-hold-integral-strong-world2.mLOsPd"
+    }
+  ]
+}

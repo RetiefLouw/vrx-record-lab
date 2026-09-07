@@ -1,0 +1,47 @@
+{
+  "schema_version": "vrx-2019-phase3-log-evidence/v1",
+  "status": "confirmed_from_official_public_logs",
+  "source": {
+    "kind": "official_public_s3_log_bucket",
+    "bucket_prefix": "s3://vrx-events/2019/phase3_vrx_challenge/uf/stationkeeping/",
+    "object_url_template": "https://vrx-events.s3.amazonaws.com/2019/phase3_vrx_challenge/uf/stationkeeping/{trial}/trial_score.txt",
+    "download_documentation": "https://github.com/osrf/vrx/wiki/download_logs"
+  },
+  "trial_scores": [
+    0.020469539545113,
+    0.037360867340913,
+    0.35484590924613,
+    0.041314142274213,
+    0.095887547367613,
+    0.11270006061613
+  ],
+  "trial_count": 6,
+  "sum": 0.662578066390112,
+  "arithmetic_mean": 0.110429677731685,
+  "reported_rounded_mean": 0.11,
+  "per_trial_artifacts_observed": [
+    "trial_score.txt",
+    "verbose_output.txt",
+    "vrx_rostopics.bag",
+    "gazebo-server/state.log",
+    "gazebo-server/ogre.log",
+    "gazebo-server logs",
+    "ROS server logs"
+  ],
+  "reproduction_boundary": {
+    "recovered": [
+      "exact per-trial scores",
+      "server-side Gazebo state recordings",
+      "task-info ROS bags",
+      "partial environment and runtime messages"
+    ],
+    "not_recovered": [
+      "generated phase-3 world SDF files",
+      "exact evaluator container image digest",
+      "exact UF competitor container image digest",
+      "complete source and dependency identities",
+      "controller-side trajectory and wrench diagnostics"
+    ],
+    "conclusion": "The official result can be audited more precisely and its runtime can be partially reconstructed, but exact replay is not yet established."
+  }
+}

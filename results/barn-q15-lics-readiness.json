@@ -1,0 +1,32 @@
+{
+  "record_type": "barn_q15_lics_readiness_screen",
+  "benchmark": "BARN Challenge public Gazebo world",
+  "source_commit": "f7bd87cc232b04f6ce9edd10a6a05b84a6c7dfaa",
+  "world_index": 0,
+  "status": "completed_successfully",
+  "hypothesis": "Holding zero velocity until a valid local goal exists removes the released policy's avoidable startup collision.",
+  "container": {
+    "image": "vrx-record-lab:barn-lics-ready",
+    "image_digest": "sha256:4a05c0ddb58cab8d3620298c287653d4dbebdfc35cbdc839ec7534a264f043a4",
+    "base_image_digest": "sha256:ff35f17db925735ef71467982b1ad9f3c5a23d8ffa0c0d2d2a7f3c9955338082",
+    "architecture": "linux/amd64",
+    "model_sha256": "dfd39d7c4690eeef54bc45b9462ab7bcbf9d3b7305f994a9ec7888ad2ae7919d",
+    "patch": "docker/barn-lics-readiness.patch"
+  },
+  "raw_output": {
+    "path": "results/barn-q14-lics/world-0-readiness.txt",
+    "sha256": "b87aa1db5552d7cf96660a93f3dcca7c25e83db40223d2b0e171a75c9695803e",
+    "line": "0 1 0 0 6.7390 0.5000"
+  },
+  "observed": {
+    "succeeded": true,
+    "collided": false,
+    "timeout": false,
+    "traversal_time_s": 6.739,
+    "report_script_metric": 0.5,
+    "runner_metric": 0.5,
+    "score_cap_reached": true
+  },
+  "claim_status": "single_world_causal_screen_only",
+  "interpretation": "The one-line output is organizer-compatible and independently recomputable. This is not a suite score or official leaderboard claim; Q-16 must test the same frozen image on the declared ten-world screen."
+}

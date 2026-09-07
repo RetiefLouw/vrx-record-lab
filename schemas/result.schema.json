@@ -112,7 +112,13 @@
     "verification": {
       "type": "object",
       "required": ["verified", "claim_eligible", "checks"],
-      "properties": {"verified": {"type": "boolean"}, "claim_eligible": {"type": "boolean"}, "checks": {"type": "array"}},
+      "properties": {
+        "verified": {"type": "boolean"},
+        "claim_eligible": {"type": "boolean"},
+        "claim_scope": {"type": "string"},
+        "record_claim_eligible": {"type": "boolean"},
+        "checks": {"type": "array"}
+      },
       "additionalProperties": true
     }
   }

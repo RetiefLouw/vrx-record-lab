@@ -1,0 +1,22 @@
+diff --git a/lics/scripts/env/robot.py b/lics/scripts/env/robot.py
+index 8d6ce8d..d7a7f20 100644
+--- a/lics/scripts/env/robot.py
++++ b/lics/scripts/env/robot.py
+@@ -161,11 +161,11 @@ class Robot:
+             # bounded reactive safety layer: stop translation in a short
+             # frontal corridor and turn toward the clearer side. This does
+             # not alter the observation or learned policy outside the shield.
+-            front = float(np.min(self.laser[300:420]))
+-            if front < 0.75:
+-                left = float(np.mean(self.laser[420:600]))
+-                right = float(np.mean(self.laser[120:300]))
++            front = float(np.min(self.laser[260:460]))
++            if front < 1.50:
++                left = float(np.mean(self.laser[460:620]))
++                right = float(np.mean(self.laser[100:260]))
+                 linear = 0.0
+                 angular = 0.8 * self.max_w if left >= right else -0.8 * self.max_w
+-            elif front < 1.10 and linear > 0.0:
+-                linear *= max(0.0, (front - 0.75) / 0.35)
++            elif front < 2.00 and linear > 0.0:
++                linear *= max(0.0, (front - 1.50) / 0.50)

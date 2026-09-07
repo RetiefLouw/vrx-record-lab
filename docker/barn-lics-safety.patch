@@ -1,0 +1,29 @@
+diff --git a/lics/scripts/env/robot.py b/lics/scripts/env/robot.py
+index 65e23f4..8d6ce8d 100644
+--- a/lics/scripts/env/robot.py
++++ b/lics/scripts/env/robot.py
+@@ -142,7 +142,22 @@ class Robot:
+     def set_velocity(self, v, w):
+         # Scale the velocity to the maximum and minimum values and clip
+         if self.state == STATE_NORMAL:
+             twist = Twist()
+-            twist.linear.x = np.clip(v * self.max_v * self.v_multiplier, self.min_v, self.max_v)
+-            twist.angular.z = np.clip(w * self.max_w, self.min_w, self.max_w)
++            linear = v * self.max_v * self.v_multiplier
++            angular = w * self.max_w
++            # Policy-only commands can continue into a previously unseen
++            # obstacle before the local planner has a chance to replan. Add a
++            # bounded reactive safety layer: stop translation in a short
++            # frontal corridor and turn toward the clearer side. This does
++            # not alter the observation or learned policy outside the shield.
++            front = float(np.min(self.laser[300:420]))
++            if front < 0.75:
++                left = float(np.mean(self.laser[420:600]))
++                right = float(np.mean(self.laser[120:300]))
++                linear = 0.0
++                angular = 0.8 * self.max_w if left >= right else -0.8 * self.max_w
++            elif front < 1.10 and linear > 0.0:
++                linear *= max(0.0, (front - 0.75) / 0.35)
++            twist.linear.x = np.clip(linear, self.min_v, self.max_v)
++            twist.angular.z = np.clip(angular, self.min_w, self.max_w)
+             self.vel_pub.publish(twist)

@@ -247,9 +247,10 @@ Using the displayed run values:
 ```
 
 This confirms the published task-level arithmetic to the displayed precision.
-It does not recover the hidden world configurations, unrounded scores, exact
-VRX checkout, or whether the evaluator used the PDF RMS formula or the public
-mean-pose implementation.
+The official public log bucket additionally exposes exact `trial_score.txt`
+values whose mean is `0.110429677731685`. It does not recover the generated
+world configurations, exact VRX checkout, or whether the evaluator used the
+PDF RMS formula or the public mean-pose implementation.
 
 ## Reproduction posture and unresolved fields
 
@@ -261,7 +262,7 @@ reproduce the UF phase-3 record. The following remain unavailable:
 - the six private phase-3 world files and their goal/initial poses;
 - the final per-trial wind, wave, fog, light, and any current settings;
 - the numeric RMS heading weight `W`, if the published specification was used;
-- raw UF bags/logs and unrounded per-run scores;
+- generated phase-3 world SDFs and controller-side UF trajectory/wrench logs;
 - any private wrapper logic around the public Docker harness.
 
 The machine-readable manifest records these gaps explicitly so a later primary

@@ -1,0 +1,19 @@
+{
+  "record_type": "barn_q21_lics_laser_shield_screen",
+  "benchmark": "BARN Challenge public Gazebo screen",
+  "source_commit": "f7bd87cc232b04f6ce9edd10a6a05b84a6c7dfaa",
+  "world_indices": [228, 282, 294, 66],
+  "trials_per_world": 1,
+  "status": "partial_causal_improvement",
+  "container_image": "vrx-record-lab:barn-lics-safe",
+  "container_digest": "sha256:26ecae4333c423891f6b1affaec96deb866b6d557b549a112b04c203967993c6",
+  "candidate": "front-clearance-shield-v1",
+  "results": {
+    "228": {"succeeded": true, "collided": false, "timeout": false, "traversal_time_s": 26.773, "logged_metric": 0.2345},
+    "282": {"succeeded": true, "collided": false, "timeout": false, "traversal_time_s": 15.795, "logged_metric": 0.3866},
+    "294": {"succeeded": false, "collided": true, "timeout": false, "traversal_time_s": 7.279, "logged_metric": 0.0},
+    "66": {"succeeded": true, "collided": false, "timeout": false, "traversal_time_s": 11.279, "logged_metric": 0.4732}
+  },
+  "claim_status": "local_targeted_screen_only",
+  "interpretation": "The shield fixes two Q-20 collision worlds and improves world 66, but the remaining world-294 collision prevents promotion. A directional emergency-braking variant is preregistered as Q-22."
+}

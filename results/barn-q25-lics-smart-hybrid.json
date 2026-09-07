@@ -1,0 +1,19 @@
+{
+  "record_type": "barn_q25_lics_smart_hybrid_screen",
+  "benchmark": "BARN Challenge public Gazebo screen",
+  "source_commit": "f7bd87cc232b04f6ce9edd10a6a05b84a6c7dfaa",
+  "world_indices": [294, 228, 282, 66],
+  "trials_per_world": 1,
+  "status": "rejected_timeout_collision",
+  "container_image": "vrx-record-lab:barn-lics-smart-hybrid",
+  "container_digest": "sha256:76b48c3000296cc536378dcf5a691ec2f5579b69514bbec8e0adb32a32eb10b4",
+  "candidate": "directionally-gated-eband-fallback",
+  "results": {
+    "294": {"succeeded": false, "collided": false, "timeout": true, "traversal_time_s": 100.008, "logged_metric": 0.0},
+    "228": {"succeeded": true, "collided": false, "timeout": false, "traversal_time_s": 10.602, "logged_metric": 0.5},
+    "282": {"succeeded": false, "collided": true, "timeout": false, "traversal_time_s": 37.429, "logged_metric": 0.0},
+    "66": {"succeeded": true, "collided": false, "timeout": false, "traversal_time_s": 12.120, "logged_metric": 0.4404}
+  },
+  "claim_status": "local_targeted_screen_only",
+  "interpretation": "Directional agreement gating did not produce a generalizable safety policy: world 294 timed out and world 282 collided. The candidate is rejected and no full breadth run is authorized."
+}

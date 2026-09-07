@@ -23,9 +23,9 @@ reimplementation of UF's station-keeping path:
 5. Map the wrench through a separate thruster-mapper node.
 
 That is not enough to reproduce the published `0.11` score exactly. The
-phase-3 task worlds, the exact Docker/evaluation image, raw logs, and the
-objects named by UF's final VRX and vrx-docker submodule pointers are not all
-available from the current public remotes. The nearest public event-era
+phase-3 task worlds, the exact Docker/evaluation image, controller-side logs,
+and the objects named by UF's final VRX and vrx-docker submodule pointers are
+not all available from the current public remotes. The nearest public event-era
 scorer source also conflicts with the v1.4 task-description formula. The
 correct campaign outcome is therefore a documented reproduction target, not a
 promoted controller or record claim.
@@ -43,6 +43,8 @@ reports the following for phase 3:
 | Run scores | `0.02`, `0.04`, `0.35`, `0.04`, `0.10`, `0.11` | Fact |
 | Number of runs | `6` | Fact |
 | Mean of displayed run scores | `(0.02 + 0.04 + 0.35 + 0.04 + 0.10 + 0.11) / 6 = 0.11` | Arithmetic check |
+| Exact scores from official logs | `0.020469539545113`, `0.037360867340913`, `0.35484590924613`, `0.041314142274213`, `0.095887547367613`, `0.11270006061613` | Fact |
+| Exact logged mean | `0.110429677731685` | Arithmetic check |
 | Phase-3 configuration summary | 4 thrusters, 3 cameras, 1 32-beam lidar, no P3D | Fact |
 
 The [RoboNation final-standings announcement](https://robotx.org/2019/12/06/2019-virtual-robotx-competition-final-standings/)
@@ -347,9 +349,10 @@ files, goals, seeds, or timestamps.
   parameters, random seeds, and reset timing.
 - Whether the final phase-3 scorer accumulated at every simulator update or
   sampled at 1 Hz, and which of the prose or source formulas was used.
-- The raw phase-3 ROS bags, Gazebo logs, trajectory traces, and controller
-  diagnostics needed to compare an implementation causally rather than only
-  by its final scalar score.
+- The official S3 bucket retains task-info ROS bags, server-side Gazebo state
+  logs, exact scores, and partial runtime logs. It does not retain the
+  generated world SDFs, UF's controller-side trajectory/wrench traces, or the
+  image identities needed to replay the trials exactly.
 
 ## 7. Reproduction protocol when the missing artifacts are restored
 
@@ -362,9 +365,11 @@ The following procedure is the minimum defensible rerun:
    scorer, WAM-V, or task-definition code.
 4. Verify the phase-3 task world and score implementation by source hash and
    runtime log; do not use a public phase-2 world as a phase-3 substitute.
-5. Run all six trials with the recovered goal/environment/reset artifacts and
-   retain ROS bags, Gazebo logs, task messages, controller diagnostics, and
-   per-run scores.
+5. Extract every recoverable goal, initial-state, environment, timing, and
+   scorer datum from the official S3 logs; distinguish observed values from
+   reconstructed ones. Run all six trials only after the remaining inputs are
+   pinned, retaining ROS bags, Gazebo logs, task messages, controller
+   diagnostics, and per-run scores.
 6. Independently recompute the score from raw task outputs using the exact
    recovered scorer and separately compute the v1.4 documented RMS metric.
 7. Compare the six reproduced values against the published six-value vector,
@@ -378,6 +383,7 @@ submission,” never “reproduction of UF's 0.11 result.”
 ## References
 
 - [Official VRX 2019 results](https://github.com/osrf/vrx/wiki/vrx_2019-results)
+- [Official VRX log-download instructions](https://github.com/osrf/vrx/wiki/download_logs)
 - [VRX 2019 task descriptions v1.4](https://raw.githubusercontent.com/wiki/osrf/vrx/files/VRX2019_Task_Descriptions_v1.4.pdf)
 - [VRX 2019 technical guide v1.2](https://raw.githubusercontent.com/wiki/osrf/vrx/files/VRX2019_Technical%20Guide_V1.2.pdf)
 - [OSRF VRX event-era source commit](https://github.com/osrf/vrx/tree/dd6187ca2eb24838b4288bf1154031556bb73cf6)

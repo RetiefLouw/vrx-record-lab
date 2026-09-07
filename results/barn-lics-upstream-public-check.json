@@ -1,0 +1,36 @@
+{
+  "record_type": "upstream_artifact_audit",
+  "benchmark": "BARN Challenge 2024 public 50-world suite",
+  "source_repository": "https://github.com/damanikjosh/the-barn-challenge",
+  "source_commit": "f7bd87cc232b04f6ce9edd10a6a05b84a6c7dfaa",
+  "source_output": "out.txt",
+  "source_output_sha256": "502a46d53838b53d8a7e3a3498a580dd87c4f92a1f76ba0961d9d3d9922f145c",
+  "source_report_script": "report_test.py",
+  "source_report_script_sha256": "31fe279c0fbf5bcaf09ab2b4f571a15708e39ab2d2d6705aa0ef050fef359766",
+  "local_recomputation": {
+    "command": "PYTHONPATH=src .venv/bin/python scripts/aggregate_barn --log out.txt --barn-root .",
+    "world_count": 50,
+    "trials_per_world": 10,
+    "trial_count": 500,
+    "overall_score": 0.4889133891483272,
+    "logged_metric_mismatches": 12,
+    "max_logged_metric_delta": 0.0048169611975484306,
+    "success_rate": 0.98,
+    "collision_rate": 0.018,
+    "timeout_rate": 0.002
+  },
+  "published_reference": {
+    "leader": "LiCS-KI",
+    "score": 0.4762,
+    "source": "https://people.cs.gmu.edu/~xiao/Research/BARN_Challenge/BARN_Challenge24.html",
+    "formula_protocol_match": {
+      "status": "verified_at_protocol_level",
+      "organizer_formula": "success * OT / clip(AT, 2*OT, 8*OT)",
+      "liCS_report_script_formula": "int(success) * optimal_time / clip(actual_time, 2*optimal_time, 8*optimal_time)",
+      "evidence": "The public report_test.py and run.py implement the same success-gated OT/AT clipping formula documented by the organizers.",
+      "final_hidden_score_reproduction": "not_verified",
+      "reason": "The 0.4762 leaderboard score was computed on 50 private evaluation worlds with 10 trials each; those worlds and the organizer-side execution trace are unavailable."
+    }
+  },
+  "interpretation": "The checked-in upstream output recomputes to 0.4889133891483272 on the public 50-world files, above the organizer's 0.4762 hidden-test leaderboard score. The public LiCS scripts use the same formula as the organizer specification, so formula/protocol equivalence is verified. The hidden final score itself is not independently reproducible because the private worlds and organizer-side trace are unavailable. Twelve logged sixth-column metrics differ because run.py uses a -2.25 m start while report_test.py recomputes OT from -2.0 m; the strict audit intentionally follows report_test.py and records the discrepancy. This verifies evaluator arithmetic and artifact consistency, not an independent rerun of the LiCS controller or an official re-ranking."
+}

@@ -1,0 +1,25 @@
+diff --git a/lics/scripts/env/robot.py b/lics/scripts/env/robot.py
+--- a/lics/scripts/env/robot.py
++++ b/lics/scripts/env/robot.py
+@@ -164,8 +164,20 @@ class Robot:
+             front = float(np.min(self.laser[300:420]))
+             if front < 0.75:
+                 left = float(np.mean(self.laser[420:600]))
+                 right = float(np.mean(self.laser[120:300]))
+                 linear = 0.0
+                 angular = 0.8 * self.max_w if left >= right else -0.8 * self.max_w
+             elif front < 1.10 and linear > 0.0:
+                 linear *= max(0.0, (front - 0.75) / 0.35)
++            # The narrow frontal test can miss an obstacle at the edge of
++            # the footprint while the policy is turning. Inspect the
++            # commanded travel direction with a low-distance emergency
++            # threshold; unlike the rejected wide shield this only arms when
++            # a genuinely near obstacle is present.
++            if abs(linear) > 0.15:
++                corridor = self.laser[220:500] if linear > 0.0 else np.concatenate((self.laser[:140], self.laser[580:]))
++                valid = corridor[np.isfinite(corridor) & (corridor > 0.05)]
++                if valid.size and float(np.min(valid)) < 0.55:
++                    left = float(np.mean(self.laser[440:620]))
++                    right = float(np.mean(self.laser[100:280]))
++                    linear = 0.0
++                    angular = 0.8 * self.max_w if left >= right else -0.8 * self.max_w

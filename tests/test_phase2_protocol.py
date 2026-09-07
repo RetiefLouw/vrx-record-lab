@@ -69,10 +69,31 @@ class Phase2ProtocolTests(unittest.TestCase):
             "VRX_CONTROLLER_PARAMETERS_JSON",
             "VRX_CONTROLLER_POSITION_SOURCE",
             "VRX_CONTROLLER_DIAGNOSTICS_TOPIC",
+            "VRX_RUNNING_STATE_DURATION_OVERRIDE",
         ):
             self.assertIn(marker, runner)
         self.assertIn("vrx_controller_ros scored_station_keeping.launch", container_runner)
         self.assertIn("--require-controller-diagnostics", container_runner)
+
+    def test_hybrid_candidate_inherits_frozen_world_protocol(self):
+        from vrx_record_lab.manifest import load_manifest
+
+        candidate = load_manifest(REPO_ROOT / "config/experiments/vrx2019-station-keeping-phase2-hybrid-transit.json")
+        baseline = load_manifest(MANIFEST)
+        self.assertEqual(
+            candidate["task"]["parameters"]["protocol"]["worlds"],
+            baseline["task"]["parameters"]["protocol"]["worlds"],
+        )
+        self.assertEqual(candidate["trials"], baseline["trials"])
+        self.assertEqual(candidate["controller"]["parameters"]["guidance_mode"], "hybrid")
+        self.assertEqual(candidate["controller"]["parameters"]["transit_radius_m"], 8.0)
+
+    def test_observer_candidate_inherits_frozen_world_protocol(self):
+        from vrx_record_lab.manifest import load_manifest
+
+        candidate = load_manifest(REPO_ROOT / "config/experiments/vrx2019-station-keeping-phase2-hybrid-observer.json")
+        self.assertEqual(candidate["controller"]["parameters"]["disturbance_observer_bandwidth_hz"], 0.15)
+        self.assertEqual(len(candidate["task"]["parameters"]["protocol"]["worlds"]), 6)
 
 
 if __name__ == "__main__":

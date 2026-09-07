@@ -1,0 +1,19 @@
+{
+  "record_type": "barn_q17_lics_stable_readiness_repeat",
+  "benchmark": "BARN Challenge public Gazebo world",
+  "source_commit": "f7bd87cc232b04f6ce9edd10a6a05b84a6c7dfaa",
+  "world_index": 0,
+  "repeat_count": 3,
+  "status": "passed",
+  "container_image": "vrx-record-lab:barn-lics-ready",
+  "container_digest": "sha256:aeeb068d887085e38ecf98ca3713910be9d3943e2d3c2d5edb97a107bcd35bbc",
+  "patch": "docker/barn-lics-readiness.patch",
+  "model_sha256": "dfd39d7c4690eeef54bc45b9462ab7bcbf9d3b7305f994a9ec7888ad2ae7919d",
+  "repeats": [
+    {"line": "0 1 0 0 8.3380 0.5000", "raw_sha256": "4cbaca6289ea068fff3b7ae71a49cd388b51fb7ebe78250ccb14aef315d22cec"},
+    {"line": "0 1 0 0 7.6480 0.5000", "raw_sha256": "15f273280cf0d2e202976bf1ea17d70c043a527d5223e81d13c797aa133fe90e"},
+    {"line": "0 1 0 0 7.0610 0.5000", "raw_sha256": "6642faa25e9ad708ada6612e18ef29203c95c16047dc0e8fe4d1781438af7796"}
+  ],
+  "hypothesis_result": "Stable-path readiness removed the nondeterministic world-0 startup collision observed in Q-16.",
+  "claim_status": "three_repeat_single_world_screen_only"
+}

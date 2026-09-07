@@ -1,0 +1,42 @@
+{
+  "claim_status": "local_public_screen_only",
+  "collision_rate": 0.0,
+  "container_digest": "sha256:aeeb068d887085e38ecf98ca3713910be9d3943e2d3c2d5edb97a107bcd35bbc",
+  "container_image": "vrx-record-lab:barn-lics-ready",
+  "logged_metric_mismatches": 0,
+  "max_logged_metric_delta": 0.0,
+  "mean_trial_score": 0.5,
+  "metric_formula": "success * OT / clip(AT, 2*OT, 8*OT)",
+  "overall_score": 0.5,
+  "path_source": "BARN public path_files from LiCS source commit f7bd87cc232b04f6ce9edd10a6a05b84a6c7dfaa",
+  "per_world_score": {
+    "0": 0.5,
+    "12": 0.5,
+    "18": 0.5,
+    "24": 0.5,
+    "30": 0.5,
+    "36": 0.5,
+    "42": 0.5,
+    "48": 0.5,
+    "54": 0.5,
+    "6": 0.5
+  },
+  "screen": "Q-19 independent stable-readiness LiCS",
+  "success_rate": 1.0,
+  "timeout_rate": 0.0,
+  "trial_count": 10,
+  "trials_per_world": 1,
+  "world_count": 10,
+  "world_indices": [
+    0,
+    6,
+    12,
+    18,
+    24,
+    30,
+    36,
+    42,
+    48,
+    54
+  ]
+}

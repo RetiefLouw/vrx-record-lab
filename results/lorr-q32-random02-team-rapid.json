@@ -1,0 +1,29 @@
+{
+  "queue_id": "Q-32",
+  "benchmark": "League of Robot Runners 2024 Main Round",
+  "instance": "RANDOM-02.json",
+  "actionModel": "MAPF_T",
+  "version": "2024 LoRR",
+  "team": "Team_RAPID",
+  "teamSize": 200,
+  "numTaskFinished": 1202,
+  "makespan": 600,
+  "numPlannerErrors": 0,
+  "numScheduleErrors": 0,
+  "numEntryTimeouts": 3,
+  "reference_numTaskFinished": 1260,
+  "reference_team": "Team_Kitty_Knight",
+  "reference_gap": -58,
+  "input_sha256": "9d0a4856a404ebacb9871286db80fdd79d0e9b9d4b130eb2ce51ab594e3040e1",
+  "output_sha256": "7ba0c895f3197569dcb48f6288393086c0aae96876a1806f9e25e05ceccc0607",
+  "runtime_image_digest": "sha256:4a49d3b7720b8caf93cc72a00af8eeb8e91178b9d44ab95396df2ec0eeb27309",
+  "start_kit": "v2.0.0 (6425dcd720ecc79b34bc1352a77166265144482b)",
+  "source_archive": "MAPF-Competition/Benchmark-Archive Team_RAPID/3635cb44497727271f173582a86a2cea72e9e17e",
+  "claim_status": "heldout_generalization_failed",
+  "decision": "do_not_promote_as_general_algorithmic_beat",
+  "notes": [
+    "Exact archived RANDOM-02 input and 2024 Main Round simulation time were used.",
+    "The run completed with three entry timeouts and 1202 tasks, below the published 1260-task reference.",
+    "This does not invalidate the narrow Test Round local beat; it limits the claim to that declared instance and protocol."
+  ]
+}

@@ -24,7 +24,13 @@ def verify_result(result_path: Path, manifest_path: Optional[Path] = None) -> di
         checks.append(_check("schema", True, "canonical result structure is valid"))
     except ResultSchemaError as exc:
         checks.append(_check("schema", False, str(exc)))
-        return {"verified": False, "claim_eligible": False, "checks": checks}
+        return {
+            "verified": False,
+            "claim_eligible": False,
+            "claim_scope": "local_result_integrity_only",
+            "record_claim_eligible": False,
+            "checks": checks,
+        }
 
     root = result_path.parent
     artifact_ok = True
@@ -93,5 +99,7 @@ def verify_result(result_path: Path, manifest_path: Optional[Path] = None) -> di
     return {
         "verified": verified,
         "claim_eligible": verified,
+        "claim_scope": "local_result_integrity_only",
+        "record_claim_eligible": False,
         "checks": checks,
     }

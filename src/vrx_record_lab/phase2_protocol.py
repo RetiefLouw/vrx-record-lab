@@ -37,13 +37,13 @@ def _worlds(parameters: Mapping[str, Any]) -> tuple[Mapping[str, Any], ...]:
     return tuple(worlds)
 
 
-def validate_phase2_protocol(manifest: Mapping[str, Any]) -> None:
+def validate_phase2_protocol(manifest: Mapping[str, Any], *, require_frozen_controller: bool = True) -> None:
     """Check the public-world, timing, and score-topic contract."""
 
     controller = manifest.get("controller")
     if not isinstance(controller, Mapping):
         raise Phase2ProtocolError("phase-2 controller must be an object")
-    if controller.get("name") != FAST_PD_CONTROLLER_NAME:
+    if require_frozen_controller and controller.get("name") != FAST_PD_CONTROLLER_NAME:
         raise Phase2ProtocolError("phase-2 manifest must pin the frozen fast-PD controller")
     if controller.get("command") != FAST_PD_CONTROLLER_COMMAND:
         raise Phase2ProtocolError("phase-2 manifest must launch the ROS scored station-keeping controller")
@@ -102,10 +102,12 @@ def validate_phase2_protocol(manifest: Mapping[str, Any]) -> None:
             raise Phase2ProtocolError(f"{world_id}: wind_seed must be an integer")
 
 
-def select_phase2_world(manifest: Mapping[str, Any], seed: int) -> Mapping[str, Any]:
+def select_phase2_world(
+    manifest: Mapping[str, Any], seed: int, *, require_frozen_controller: bool = False
+) -> Mapping[str, Any]:
     """Map the manifest's stable trial index to one explicit public world."""
 
-    validate_phase2_protocol(manifest)
+    validate_phase2_protocol(manifest, require_frozen_controller=require_frozen_controller)
     worlds = _worlds(manifest["task"]["parameters"])
     if not isinstance(seed, int) or isinstance(seed, bool) or seed < 0 or seed >= len(worlds):
         raise Phase2ProtocolError(f"phase-2 trial index must be in [0, 5], got {seed!r}")

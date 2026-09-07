@@ -167,6 +167,18 @@ def main(argv: list[str] | None = None) -> int:
             "VRX_CONTROLLER_PARAMETERS_JSON": json.dumps(controller_parameters, sort_keys=True),
         }
     )
+    # Preserve explicit shortened-run overrides for plumbing smoke tests.
+    # They are intentionally not part of the canonical manifest and are
+    # rejected by the promotion gates as non-performance evidence.
+    duration_overrides = {
+        name: os.environ[name]
+        for name in (
+            "VRX_INITIAL_STATE_DURATION_OVERRIDE",
+            "VRX_READY_STATE_DURATION_OVERRIDE",
+            "VRX_RUNNING_STATE_DURATION_OVERRIDE",
+        )
+        if os.environ.get(name)
+    }
     compose = [
         "docker",
         "compose",
@@ -203,6 +215,8 @@ def main(argv: list[str] | None = None) -> int:
         f"VRX_CONTROLLER_PARAMETERS_JSON={json.dumps(controller_parameters, sort_keys=True)}",
         "simulator",
     ]
+    for name, value in duration_overrides.items():
+        compose[-1:0] = ["-e", f"{name}={value}"]
     adapter_stdout = artifact_dir / "docker.stdout.log"
     adapter_stderr = artifact_dir / "docker.stderr.log"
     return_code = 1

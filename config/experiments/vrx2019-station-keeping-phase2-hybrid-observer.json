@@ -1,0 +1,29 @@
+{
+  "$schema": "../../schemas/experiment.schema.json",
+  "extends": "vrx2019-station-keeping-phase2.json",
+  "experiment_id": "vrx2019-station-keeping-phase2-hybrid-observer",
+  "benchmark": {
+    "name": "vrx-2019-station-keeping-phase2-public-practice-hybrid-observer",
+    "protocol_revision": "public-phase2-six-world-reconstruction-v1-hybrid-observer-candidate"
+  },
+  "controller": {
+    "name": "hybrid-transit-hold-observer-fast-pd-stock-t-thrusters",
+    "revision": "hybrid-transit-hold-observer-v1-2026-09-04",
+    "parameters": {
+      "guidance_mode": "hybrid",
+      "transit_radius_m": 8.0,
+      "transit_speed_mps": 2.5,
+      "transit_speed_gain": 0.35,
+      "transit_position_clip_m": 4.0,
+      "transit_kp_position": 20.0,
+      "transit_kd_velocity": 180.0,
+      "transit_heading_kp": 250.0,
+      "transit_heading_kd": 600.0,
+      "hold_ki": [0.6, 0.6, 1.2],
+      "hold_integral_limit": [20.0, 20.0, 2.0],
+      "disturbance_observer_bandwidth_hz": 0.15,
+      "disturbance_observer_mass": [320.0, 320.0, 446.0],
+      "disturbance_observer_damping": [51.3, 40.0, 400.0]
+    }
+  }
+}

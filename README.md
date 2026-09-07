@@ -7,23 +7,43 @@ The first reference target is the University of Florida score reported as
 `0.11` in the official 2019 results. This repository does **not** claim a new
 record until the historical protocol has been reconstructed, the reference
 has been reproduced as closely as surviving artifacts allow, and a better
-result has passed a clean independent rerun.
+result has passed a separate clean-clone or external replication.
 
 ## Campaign status
 
-- Target: VRX 2019 station keeping
-- Status: public practice result `0.00832672` on `stationkeeping0` (seed 10); independent rerun pending
+- Primary target: LoRR 2024 Test Round task-count reference (published Team Kitty Knight `1186`)
+- Secondary targets: BARN 2024 public-suite navigation and VRX 2019 station keeping
+- Status: archived Kitty Knight source replayed cleanly at `1199/1186`; Team RAPID Q-31 completed `1318/1186` with zero errors; Q-32–Q-34 expose the generalization/runtime-sensitivity boundary
 - Compute policy: OrbStack first; Vast.ai only through a bounded campaign
 - Claim policy: independently reproduced task-level record unless recognized
   by the benchmark maintainers
 
-The current `0.00832672` result and the `0.524325` baseline are public-practice
-results, not directly comparable
-to UF's unrecovered phase-3 evaluation. A separate ground-truth UF-port
+The `0.00832672` result is reproducible on one easy public-practice world, but
+the frozen controller's complete six-world public phase-2 mean is
+`8.21364634`. Neither result is directly comparable to UF's unrecovered
+phase-3 evaluation, and the broad public result does not support a record
+claim. A separate ground-truth UF-port
 practice run scored `0.005811`, but is explicitly non-comparable because it
 uses simulator state rather than the competition localization interface.
 See [`results/README.md`](results/README.md) and the machine-readable
 [`results/practice0-fast-pd-gps.json`](results/practice0-fast-pd-gps.json).
+The campaign conclusion and verification limits are recorded in the
+[`internal audit`](docs/audit-report-practice0-fast-pd-gps.md).
+The benchmark pivot and claim boundary are recorded in
+[`docs/CAMPAIGN.md`](docs/CAMPAIGN.md) and
+[`results/benchmark-selection.json`](results/benchmark-selection.json).
+
+The current BARN screen scored `0.46922280825431545` on 50 canonical public
+worlds, with collisions localized to worlds 228, 282, and 294. Q-21's narrow
+laser shield fixed two of those worlds, but Q-22–Q-25 variants failed to
+generalize; Q-24 scored `0.41717035384632806` with 44/50 successes. This remains
+a local public result, not an official leaderboard re-ranking. The LiCS safety
+branch is closed and the campaign is auditing the official LoRR 2024 archive
+as the strongest transparent replacement benchmark; BallPark is retained as a
+low-cost controller sandbox only. The official LoRR archive publishes the exact
+instance, task-count reference, evaluator lineage, and winner source. A local
+result remains distinct from an official leaderboard result unless organizers
+accept the replay and runtime identity.
 
 ## Environment bootstrap
 
@@ -41,11 +61,10 @@ it is not itself a claim to have reproduced the published `0.11` score.
 
 ## Challenge explainer and sample runs
 
-The visual [VRX 2019 station-keeping challenge guide](docs/vrx-station-keeping-challenge.html)
-includes three deterministic illustrative run previews, the run lifecycle,
-the public scoring discrepancy, the six-run UF arithmetic check, and the
-reproducibility boundary. The previews are teaching media, not official
-phase-3 recordings or benchmark claims.
+The visual [robotics challenge explainer](docs/vrx-station-keeping-challenge.html)
+now explains VRX, BARN, and LoRR, the published references, the LoRR run
+lifecycle, the Q-31 local beat, and the evidence boundary around Q-32–Q-34.
+It is a teaching and research artifact, not an official leaderboard update.
 
 The closest UF MRAC public-source port can also be exercised against the
 public practice world in the pinned image:
@@ -130,7 +149,23 @@ comparable record. The public evidence does not currently pin the complete
 evaluation inputs needed for direct comparison; see
 [`docs/vrx-2019-protocol.md`](docs/vrx-2019-protocol.md).
 
-## Independent verification
+For the selected BARN public-track audit, use the dependency-light scorer once
+the organizer repository has been cloned:
+
+```bash
+PYTHONPATH=src .venv/bin/python scripts/aggregate_barn \
+  --log /path/to/the-barn-challenge/out.txt \
+  --barn-root /path/to/the-barn-challenge
+```
+
+It requires all 50 public worlds and exactly 10 trials per world, and computes
+the organizer's bounded 2024 metric without ROS or Gazebo.
+
+For a strict six-run historical arithmetic check, use
+`scripts/aggregate_2019`. It requires all six runs and computes the task score
+as their arithmetic mean; it will not silently average an incomplete suite.
+
+## Verification
 
 Verification code lives under [`verification/`](verification/) and does not
 implement or alter VRX benchmark or scorer logic. It checks:
@@ -138,11 +173,15 @@ implement or alter VRX benchmark or scorer logic. It checks:
 - exact clean-clone commits and optional rerun commands;
 - protected benchmark/scorer tree equality against a baseline ref;
 - strict result schema, aggregate arithmetic, provenance, and artifact links;
-- disjoint development, independent-verification, and evaluation seed sets;
+- disjoint development, verification, and evaluation seed sets;
 - deterministic SHA-256 artifact manifests.
 
 The checked-in result and artifact files are illustrative and deliberately have
 `claim_status: unaccepted`. They are not a performance claim.
+
+The successful Q-01/Q-02 runs pass the local verifier, but they were produced
+on one host and checkout. They are not represented as independent third-party
+replication.
 
 Run the dependency-free checks from the repository root:
 
@@ -165,6 +204,7 @@ tree, and manifest checks are all recorded as successful.
 ## Sources
 
 - [Official VRX 2019 results](https://github.com/osrf/vrx/wiki/vrx_2019-results)
+- [Official VRX log-download instructions](https://github.com/osrf/vrx/wiki/download_logs)
 - [VRX repository](https://github.com/osrf/vrx)
 - [UF 2019 station-keeping reproduction dossier](docs/uf-2019-station-keeping-reproduction.md)
 

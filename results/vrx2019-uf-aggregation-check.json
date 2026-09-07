@@ -1,0 +1,23 @@
+{
+  "schema_version": "vrx-2019-aggregation-evidence/v1",
+  "protocol_id": "vrx-2019-station-keeping",
+  "status": "confirmed_from_displayed_values",
+  "source": {
+    "kind": "official_results_page",
+    "url": "https://github.com/osrf/vrx/wiki/vrx_2019-results/0305065c335a2511141e9bd03136afe1f85eba69",
+    "wiki_revision": "0305065c335a2511141e9bd03136afe1f85eba69"
+  },
+  "implementation": {
+    "module": "vrx_record_lab.aggregation",
+    "command": "scripts/aggregate_2019 0.02 0.04 0.35 0.04 0.10 0.11"
+  },
+  "run_scores": [0.02, 0.04, 0.35, 0.04, 0.10, 0.11],
+  "trial_count": 6,
+  "operation": "arithmetic_mean",
+  "sum_of_displayed_scores": 0.66,
+  "computed_task_score": 0.11,
+  "reported_task_score": 0.11,
+  "score_direction": "minimize",
+  "precision_note": "This file checks the displayed results table. Exact trial_score.txt values are separately retained in results/vrx2019-uf-phase3-log-evidence.json and average 0.110429677731685.",
+  "comparison_boundary": "This arithmetic check does not make public phase-2 results directly comparable to the unrecovered private phase-3 evaluation."
+}

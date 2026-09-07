@@ -1,0 +1,31 @@
+{
+  "schema_version": "vrx-q01-summary/v1",
+  "status": "completed-local-reruns",
+  "scope": "fresh containers and output directories on one host and checkout; not external or separate-clean-clone replication",
+  "original_score": 0.008326716568191546,
+  "rerun_scores": [
+    0.008340650238951723,
+    0.008183191252996592
+  ],
+  "rerun_mean": 0.008261920745974156,
+  "manifest": "config/experiments/vrx2019-station-keeping-practice0-fast-pd.json",
+  "container_digest": "sha256:9330ee0dc73ed349c30ee111f738cf1fb6af266d96efbe7e9980d40014ee33e0",
+  "successful_result_paths": [
+    "artifacts/q01-practice-rerun-1/result.json",
+    "artifacts/q01-practice-rerun-2-after-smoke/result.json"
+  ],
+  "failed_attempt_paths": [
+    "artifacts/q01-practice-rerun-2/result.json",
+    "artifacts/q01-practice-rerun-2-restored/result.json"
+  ],
+  "verification": {
+    "schema": true,
+    "artifact_sha256": true,
+    "checksums_file": true,
+    "aggregate": true,
+    "manifest_sha256": true,
+    "pinned_identity": true,
+    "completed_trials": true
+  },
+  "claim": "The approximately 0.0083 score is locally reproducible on stationkeeping0 only; it is not a six-world or phase-3 record."
+}

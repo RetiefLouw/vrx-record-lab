@@ -32,7 +32,7 @@
       "output_max": [480.0, 240.0, 349.0]
     }
   },
-  "container": {"image": "vrx-record-lab:2019-amd64", "digest": "sha256:c67d1d45abebe34ec6c5a101cb8bf16320855807c58f6d0775caabec5e26ab98"},
+  "container": {"image": "vrx-record-lab:2019-amd64", "digest": "sha256:9330ee0dc73ed349c30ee111f738cf1fb6af266d96efbe7e9980d40014ee33e0"},
   "task": {
     "name": "station_keeping",
     "parameters": {

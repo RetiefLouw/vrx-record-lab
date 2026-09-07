@@ -24,9 +24,9 @@ PD controller uses GPS position feedback, odometry yaw/velocity, and the stock
 T-thruster mapping. The phase-2 adapter launches
 `vrx_controller_ros/scored_station_keeping.launch` for every world and passes
 the controller parameters and permitted sensor topics from the manifest. The
-world files and upstream scorer remain unchanged. The image digest is left
-`null` until the updated controller image is built and its digest is captured;
-that is an intentional identity gate, not an implicit default.
+world files and upstream scorer remain unchanged. The completed campaign pins
+the image as
+`sha256:9330ee0dc73ed349c30ee111f738cf1fb6af266d96efbe7e9980d40014ee33e0`.
 
 The scorer value is extracted from the final `/vrx/task/info` message's
 `score` field. The collector also retains the task messages and the public
@@ -50,14 +50,14 @@ scripts/bootstrap.sh --build-only
 scripts/run_suite config/experiments/vrx2019-station-keeping-phase2.json \
   --output-dir results/runs/vrx2019-phase2-public
 scripts/verify_result results/runs/vrx2019-phase2-public/result.json \
-  --manifest config/experiments/vrx2019-station-keeping-phase2.json
+  --manifest config/experiments/vrx2019-station-keeping-phase2.json \
+  --write --output results/runs/vrx2019-phase2-public/verification.json
 ```
 
-The image digest remains `null` in the immutable manifest until a built image
-digest is captured. Consequently, the existing verifier can validate schema,
-artifacts, aggregate arithmetic, and manifest provenance, but it correctly
-leaves `pinned_identity` and claim eligibility failed for this local practice
-manifest. No result should be described as a record.
+Q-02 completed all six worlds with scores `0.008393`, `0.122282`, `1.104897`,
+`37.956130`, `4.800464`, and `5.289713`, for a strict arithmetic mean of
+`8.213646343578185`. All seven local verifier gates pass. This remains a
+public phase-2 practice result, not a phase-3 result or record claim.
 
 ## Smoke and shortened trials
 

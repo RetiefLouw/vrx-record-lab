@@ -60,7 +60,8 @@ scripts/run_trial config/experiments/your-run.json --seed 1 \
 scripts/run_suite config/experiments/your-run.json \
   --output-dir results/runs/your-run
 scripts/verify_result results/runs/your-run/result.json \
-  --manifest config/experiments/your-run.json
+  --manifest config/experiments/your-run.json \
+  --write --output results/runs/your-run/verification.json
 ```
 
 `verify_result` fails when an artifact is missing or modified, checksums do not
@@ -68,7 +69,41 @@ match, the aggregate has drifted from the per-trial scores, the manifest hash
 does not match, any benchmark/controller/container revision is unpinned, or
 the suite is incomplete. `--write` may be used to persist the verification
 report after a successful audit; it does not make missing provenance valid.
+`--output` writes the same report as a standalone JSON sidecar. Use both flags
+for retained performance runs so the canonical result and an independently
+readable verifier report cannot silently disagree.
+
+`claim_eligible` in this schema means that the local structural, identity, and
+artifact checks passed. It does not establish historical comparability,
+clean-clone independence, third-party recognition, or record eligibility;
+those remain separate campaign gates. New verifier reports make that explicit
+with `claim_scope: local_result_integrity_only` and
+`record_claim_eligible: false`.
 
 The checked-in upstream manifest deliberately has an empty adapter command and
 null historical revisions. This is an explicit unavailable-state fixture until
 protocol archaeology supplies those values; it is not a benchmark result.
+
+## Historical VRX 2019 aggregation
+
+The reconstructed 2019 station-keeping comparator is stricter than the
+engineering aggregate above. It requires exactly six complete trial records;
+failed, timed-out, invalid, or missing trials cannot be dropped before taking
+the task score. The task score is the unrounded arithmetic mean of those six
+run scores, with lower scores better. The official public log bucket exposes
+UF's exact phase-3 trial scores, but it does not expose enough evaluator and
+generated-world identity to make a public phase-2 result directly comparable
+to phase 3. Six-run validation alone is therefore insufficient.
+
+Use the strict helper/CLI when checking a six-run vector or canonical result:
+
+```sh
+scripts/aggregate_2019 0.02 0.04 0.35 0.04 0.10 0.11
+scripts/aggregate_2019 --result results/runs/vrx2019-phase2-public/result.json
+scripts/aggregate_2019 --result candidate/result.json --reference reference/result.json
+```
+
+The command rejects a vector with the wrong number of runs or a canonical
+result with any incomplete trial. `compare_vrx2019_results` additionally
+reports evaluator/protocol identity mismatches instead of treating two
+six-run results as directly comparable.

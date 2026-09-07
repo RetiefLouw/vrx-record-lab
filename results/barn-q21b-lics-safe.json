@@ -1,0 +1,19 @@
+{
+  "record_type": "barn_q21b_lics_wide_shield_screen",
+  "benchmark": "BARN Challenge public Gazebo screen",
+  "source_commit": "f7bd87cc232b04f6ce9edd10a6a05b84a6c7dfaa",
+  "world_indices": [228, 282, 294, 66],
+  "trials_per_world": 1,
+  "status": "rejected",
+  "container_image": "vrx-record-lab:barn-lics-safe-v2",
+  "container_digest": "sha256:121f7f8add74188a10b25d642e054e2baa8e45200997be5a2127fbe6b29b9393",
+  "candidate": "front-clearance-shield-v2",
+  "results": {
+    "228": {"succeeded": false, "collided": false, "timeout": true, "traversal_time_s": 100.055, "logged_metric": 0.0},
+    "282": {"status": "stopped_after_timeout_behavior_observed"},
+    "294": {"status": "stopped_after_timeout_behavior_observed"},
+    "66": {"status": "stopped_after_timeout_behavior_observed"}
+  },
+  "claim_status": "local_targeted_screen_only",
+  "interpretation": "The wider 1.5 m threshold is too conservative: it prevents progress and does not provide a viable candidate. It is rejected without a suite run."
+}

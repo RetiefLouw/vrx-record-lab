@@ -1,0 +1,26 @@
+{
+  "$schema": "../../schemas/experiment.schema.json",
+  "extends": "vrx2019-station-keeping-phase2.json",
+  "experiment_id": "vrx2019-station-keeping-phase2-hybrid-hold-integral-strong",
+  "benchmark": {
+    "name": "vrx-2019-station-keeping-phase2-public-practice-hybrid-hold-integral-strong",
+    "protocol_revision": "public-phase2-six-world-reconstruction-v1-hybrid-hold-candidate"
+  },
+  "controller": {
+    "name": "hybrid-transit-hold-integral-strong-fast-pd-stock-t-thrusters",
+    "revision": "hybrid-transit-hold-integral-strong-v1-2026-09-04",
+    "parameters": {
+      "guidance_mode": "hybrid",
+      "transit_radius_m": 8.0,
+      "transit_speed_mps": 2.5,
+      "transit_speed_gain": 0.35,
+      "transit_position_clip_m": 4.0,
+      "transit_kp_position": 20.0,
+      "transit_kd_velocity": 180.0,
+      "transit_heading_kp": 250.0,
+      "transit_heading_kd": 600.0,
+      "hold_ki": [4.0, 4.0, 8.0],
+      "hold_integral_limit": [5.0, 5.0, 0.5]
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "queue_id": "Q-28",
+  "benchmark": "League of Robot Runners 2024 Main Round",
+  "instance": "RANDOM-01",
+  "change": "LaCAM2 planning_window 3 -> 4",
+  "actionModel": "MAPF_T",
+  "version": "2024 LoRR",
+  "teamSize": 100,
+  "numTaskFinished": 693,
+  "makespan": 600,
+  "numPlannerErrors": 0,
+  "numScheduleErrors": 0,
+  "numEntryTimeouts": 2,
+  "output_sha256": "c3ebf56cac254f5d28efea1ec3c4fb22bcdfe931ed3be61899a8281b373228d2",
+  "runtime_image_digest": "sha256:49a88662b6449236eb65ea7bbdb785dcc248bab98e394924097cbcb8704746e3",
+  "claim_status": "diagnostic_non_promotion",
+  "decision": "reject_until_held_out_and_timeout_safe",
+  "notes": [
+    "The RANDOM-01 count improved by 3 over Q-27 but remained 3 below the archived 696 reference.",
+    "Two entry timeouts violate the zero-error promotion gate.",
+    "This is a smoke result, not a leaderboard claim or held-out improvement."
+  ]
+}

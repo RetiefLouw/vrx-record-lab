@@ -1,0 +1,20 @@
+{
+  "queue_id": "Q-27",
+  "benchmark": "League of Robot Runners 2024 Main Round",
+  "instance": "RANDOM-01",
+  "actionModel": "MAPF_T",
+  "version": "2024 LoRR",
+  "teamSize": 100,
+  "numTaskFinished": 690,
+  "makespan": 600,
+  "numPlannerErrors": 0,
+  "numScheduleErrors": 0,
+  "numEntryTimeouts": 0,
+  "output_sha256": "17cf2c3c687ed89f1421ee5c8a4befd2e7b27ce9b8455dc44698b94d30252be8",
+  "runtime_image_digest": "sha256:4a49d3b7720b8caf93cc72a00af8eeb8e91178b9d44ab95396df2ec0eeb27309",
+  "start_kit": "v2.0.0 (6425dcd720ecc79b34bc1352a77166265144482b)",
+  "instance_sha256": "c09782a2d79e7779b82457095f8881b9fd5a08a6a6e4c68035a5e56a12445302",
+  "reference_numTaskFinished": 696,
+  "reference_gap": -6,
+  "claim_status": "protocol_replay_successful_winner_not_exactly_reproduced"
+}

@@ -1,0 +1,40 @@
+{
+  "claim_status": "local_public_screen_only",
+  "collision_rate": 0.0,
+  "logged_metric_mismatches": 9,
+  "max_logged_metric_delta": 0.004061607819339785,
+  "mean_trial_score": 0.23287870433096822,
+  "metric_formula": "success * OT / clip(AT, 2*OT, 8*OT)",
+  "overall_score": 0.23287870433096822,
+  "path_source": "BARN public path_files from daffan commit bf5a226f6088ec96bf0d2dbee3253a8ea6119b83",
+  "per_world_score": {
+    "0": 0.22096841271211265,
+    "12": 0.17862028469778227,
+    "18": 0.27374935831102243,
+    "24": 0.19122616891657054,
+    "30": 0.18947365607797872,
+    "36": 0.24959842661643872,
+    "42": 0.31983343929455904,
+    "48": 0.17932037329992154,
+    "54": 0.2803616078193398,
+    "6": 0.24563531556395637
+  },
+  "screen": "Q-13 baseline",
+  "success_rate": 1.0,
+  "timeout_rate": 0.0,
+  "trial_count": 10,
+  "trials_per_world": 1,
+  "world_count": 10,
+  "world_indices": [
+    0,
+    6,
+    12,
+    18,
+    24,
+    30,
+    36,
+    42,
+    48,
+    54
+  ]
+}

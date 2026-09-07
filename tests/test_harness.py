@@ -10,6 +10,7 @@ from vrx_record_lab.manifest import ManifestError, load_manifest
 from vrx_record_lab.runner import TrialError, run_suite
 from vrx_record_lab.stats import aggregate_scores
 from vrx_record_lab.verify import verify_result
+from vrx_record_lab.verify_result import main as verify_result_main
 
 
 REPO = Path(__file__).parents[1]
@@ -79,6 +80,25 @@ class HarnessTests(unittest.TestCase):
             report = verify_result(result_path, manifest_path)
             self.assertFalse(report["verified"])
             self.assertTrue(any(not check["passed"] for check in report["checks"]))
+
+    def test_verifier_can_write_result_and_standalone_report(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            directory = Path(temporary)
+            manifest_path = self.fixture_manifest(directory)
+            _, result_path = run_suite(manifest_path, directory / "run", result_id="verified-result")
+            report_path = directory / "run" / "verification.json"
+
+            exit_code = verify_result_main(
+                [str(result_path), "--manifest", str(manifest_path), "--write", "--output", str(report_path)]
+            )
+
+            self.assertEqual(exit_code, 0)
+            report = json.loads(report_path.read_text(encoding="utf-8"))
+            result = json.loads(result_path.read_text(encoding="utf-8"))
+            self.assertTrue(report["verified"])
+            self.assertEqual(report["claim_scope"], "local_result_integrity_only")
+            self.assertFalse(report["record_claim_eligible"])
+            self.assertEqual(result["verification"], report)
 
     def test_empty_adapter_command_is_refused_without_fabricating_result(self):
         manifest = load_manifest(BASELINE)

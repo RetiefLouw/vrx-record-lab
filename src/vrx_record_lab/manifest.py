@@ -95,6 +95,47 @@ def validate_manifest(manifest: Mapping[str, Any]) -> None:
 
 
 def load_manifest(path: Path) -> dict:
-    manifest = load_json(path)
+    manifest = _load_manifest_with_extends(path.resolve(), seen=())
     validate_manifest(manifest)
     return dict(manifest)
+
+
+def _deep_merge(base: Mapping[str, Any], override: Mapping[str, Any]) -> dict[str, Any]:
+    """Merge an experiment overlay without mutating the base manifest.
+
+    Candidate experiments can inherit the frozen protocol/world identity and
+    override only controller fields.  This keeps every candidate auditable
+    while avoiding copy/paste drift in six-world manifests.
+    """
+
+    result: dict[str, Any] = dict(base)
+    for key, value in override.items():
+        if key == "extends":
+            continue
+        prior = result.get(key)
+        if isinstance(prior, Mapping) and isinstance(value, Mapping):
+            result[key] = _deep_merge(prior, value)
+        else:
+            result[key] = value
+    return result
+
+
+def _load_manifest_with_extends(path: Path, *, seen: tuple[Path, ...]) -> dict:
+    if path in seen:
+        chain = " -> ".join(str(item) for item in seen + (path,))
+        raise ManifestError(f"manifest extends cycle: {chain}")
+    document = load_json(path)
+    if not isinstance(document, Mapping):
+        raise ManifestError("experiment manifest must be a JSON object")
+    parent_name = document.get("extends")
+    if parent_name is None:
+        return dict(document)
+    if not isinstance(parent_name, str) or not parent_name:
+        raise ManifestError("manifest.extends must be a non-empty relative path")
+    parent = Path(parent_name)
+    if parent.is_absolute() or ".." in parent.parts:
+        raise ManifestError("manifest.extends must stay within the experiment directory")
+    parent_path = (path.parent / parent).resolve()
+    if path.parent not in parent_path.parents and parent_path != path.parent:
+        raise ManifestError("manifest.extends must stay within the experiment directory")
+    return _deep_merge(_load_manifest_with_extends(parent_path, seen=seen + (path,)), document)

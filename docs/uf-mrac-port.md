@@ -50,8 +50,9 @@ LQ-RRT path and is not a substitute for the separate vessel mapper.
   the public tag sets `use_external_tgen=True`. Its source geometry constants
   are retained only for the documented virtual mapper and diagnostics.
 - Exact phase-3 worlds, submodule objects, container provenance, scorer binary,
-  and raw UF logs remain unavailable, so no score or record is inferred from
-  this implementation.
+  and UF controller-side traces remain unavailable. Official server-side
+  Gazebo/task logs and exact scores are public, but they are insufficient to
+  infer a score or record from this implementation.
 
 ## Attribution and licensing
 

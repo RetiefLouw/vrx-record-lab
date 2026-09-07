@@ -41,7 +41,7 @@
   },
   "container": {
     "image": "vrx-record-lab:2019-amd64",
-    "digest": null
+    "digest": "sha256:9330ee0dc73ed349c30ee111f738cf1fb6af266d96efbe7e9980d40014ee33e0"
   },
   "task": {
     "name": "station_keeping",

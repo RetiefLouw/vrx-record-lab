@@ -1,0 +1,12 @@
+{
+  "actionModel": "MAPF_T",
+  "version": "2024 LoRR",
+  "AllValid": "Yes",
+  "teamSize": 100,
+  "numTaskFinished": 492,
+  "sumOfCost": 60000,
+  "makespan": 600,
+  "runtime_image_digest": "sha256:627638714b5e1a4c3daccb947a8327b5a32c071da578ea12e4e28d12ed0ac478",
+  "start_kit": "v2.0.0 (6425dcd720ecc79b34bc1352a77166265144482b)",
+  "instance_sha256": "c09782a2d79e7779b82457095f8881b9fd5a08a6a6e4c68035a5e56a12445302"
+}

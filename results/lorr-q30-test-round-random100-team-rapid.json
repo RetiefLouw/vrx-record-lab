@@ -1,0 +1,21 @@
+{
+  "queue_id": "Q-30",
+  "benchmark": "League of Robot Runners 2024 Test Round",
+  "instance": "random_32_32_20_100.json",
+  "actionModel": "MAPF_T",
+  "version": "2024 LoRR",
+  "teamSize": 100,
+  "numTaskFinished": 1320,
+  "makespan": 500,
+  "numPlannerErrors": 0,
+  "numScheduleErrors": 0,
+  "numEntryTimeouts": 1,
+  "reference_numTaskFinished": 1186,
+  "reference_team": "Team_Kitty_Knight",
+  "reference_gap": 134,
+  "output_sha256": "09c3eebca295d941b415ab91095fe4581c1c00c624bed388dac4a7d5c446828",
+  "runtime_image_digest": "sha256:4a49d3b7720b8caf93cc72a00af8eeb8e91178b9d44ab95396df2ec0eeb27309",
+  "start_kit": "v2.0.0 (6425dcd720ecc79b34bc1352a77166265144482b)",
+  "claim_status": "promising_local_beat_pending_zero_error_rerun",
+  "decision": "do_not_promote_until_entry_timeout_is_resolved"
+}

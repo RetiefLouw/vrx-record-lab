@@ -1,6 +1,6 @@
 {
   "schema_version": "campaign-evidence-1.0",
-  "claim_status": "public-practice-task-result-independently-unverified",
+  "claim_status": "public-practice-task-result-locally-reproduced",
   "benchmark": "VRX 2019 station keeping public practice",
   "world": "2019_practice/stationkeeping0.world",
   "seed": 10,
@@ -23,7 +23,8 @@
     "manifest_sha256": "pass",
     "pinned_identity": "pass",
     "completed_trials": "pass",
-    "independent_clean_rerun": "pending"
+    "fresh_same-checkout_reruns": "pass",
+    "separate_clean_clone_or_external_replication": "pending"
   },
   "compute_cost_usd": 0.0
 }

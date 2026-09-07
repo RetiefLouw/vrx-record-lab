@@ -1,0 +1,27 @@
+{
+  "record_type": "barn_q18_lics_stable_readiness_ten_world_screen",
+  "benchmark": "BARN Challenge public Gazebo screen",
+  "source_commit": "f7bd87cc232b04f6ce9edd10a6a05b84a6c7dfaa",
+  "world_indices": [0, 6, 12, 18, 24, 30, 36, 42, 48, 54],
+  "trials_per_world": 1,
+  "status": "completed_above_published_reference_on_public_screen",
+  "container_image": "vrx-record-lab:barn-lics-ready",
+  "container_digest": "sha256:aeeb068d887085e38ecf98ca3713910be9d3943e2d3c2d5edb97a107bcd35bbc",
+  "model_sha256": "dfd39d7c4690eeef54bc45b9462ab7bcbf9d3b7305f994a9ec7888ad2ae7919d",
+  "aggregate": {
+    "overall_score": 0.5,
+    "success_rate": 1.0,
+    "collision_rate": 0.0,
+    "timeout_rate": 0.0,
+    "metric_formula": "success * OT / clip(AT, 2*OT, 8*OT)",
+    "evidence": "results/barn-q18-lics/aggregation.json"
+  },
+  "comparison": {
+    "published_hidden_leader": 0.4762,
+    "margin": 0.0238,
+    "comparison_scope": "ten-world public screen versus 50-private-world published leaderboard",
+    "official_win": false
+  },
+  "claim_status": "local_public_screen_only",
+  "interpretation": "The frozen released LiCS model plus stable planner-readiness guard reaches the metric cap on all ten declared public worlds. This is a strong local demonstration and candidate promotion signal, but it is not a 50-world/10-trial result or an official leaderboard re-ranking."
+}

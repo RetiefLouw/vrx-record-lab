@@ -15,6 +15,7 @@ def main(argv=None) -> int:
     parser.add_argument("result", type=Path)
     parser.add_argument("--manifest", type=Path, default=None)
     parser.add_argument("--write", action="store_true", help="write verification fields back to the result")
+    parser.add_argument("--output", type=Path, default=None, help="write the standalone verification report to this path")
     args = parser.parse_args(argv)
     try:
         report = verify_result(args.result, args.manifest)
@@ -22,6 +23,8 @@ def main(argv=None) -> int:
             result = load_json(args.result)
             result["verification"] = report
             write_json(args.result, result)
+        if args.output is not None:
+            write_json(args.output, report)
     except (OSError, ValueError) as exc:
         print(f"verify_result: {exc}", file=sys.stderr)
         return 2

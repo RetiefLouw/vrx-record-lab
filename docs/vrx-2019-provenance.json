@@ -2,7 +2,7 @@
   "schema_version": "1.0",
   "subject": "VRX 2019 station-keeping protocol",
   "research": {
-    "retrieved_at": "2026-09-03",
+    "retrieved_at": "2026-09-04",
     "repository": "https://github.com/RetiefLouw/vrx-record-lab",
     "branch": "codex/protocol-archaeology"
   },
@@ -53,6 +53,17 @@
         "six_trial_selection",
         "leaderboard_task_ranks",
         "leaderboard_overall_ranks"
+      ]
+    },
+    {
+      "id": "official_phase3_logs",
+      "kind": "official_public_log_bucket",
+      "status": "confirmed",
+      "url": "https://vrx-events.s3.amazonaws.com/?list-type=2&prefix=2019%2Fphase3_vrx_challenge%2Fuf%2Fstationkeeping%2F",
+      "revision": null,
+      "claims": [
+        "uf_exact_stationkeeping_scores",
+        "raw_score_artifacts"
       ]
     },
     {
@@ -312,8 +323,14 @@
       "id": "uf_result_arithmetic",
       "status": "confirmed",
       "claim": "The arithmetic mean of the six displayed UF values is (0.02 + 0.04 + 0.35 + 0.04 + 0.10 + 0.11) / 6 = 0.11.",
-      "precision_note": "This is calculated from values displayed to two decimal places; unrounded source scores are unavailable.",
+      "precision_note": "This is calculated from the displayed table; official trial_score.txt files separately give an exact mean of 0.110429677731685.",
       "evidence": ["official_results"]
+    },
+    {
+      "id": "uf_exact_stationkeeping_scores",
+      "status": "confirmed",
+      "claim": "Official phase-3 trial_score.txt files report 0.020469539545113, 0.037360867340913, 0.35484590924613, 0.041314142274213, 0.095887547367613, and 0.11270006061613; their arithmetic mean is 0.110429677731685.",
+      "evidence": ["official_phase3_logs"]
     },
     {
       "id": "leaderboard_task_ranks",
@@ -329,9 +346,9 @@
     },
     {
       "id": "raw_score_artifacts",
-      "status": "unavailable",
-      "claim": "Raw UF rosbag/log artifacts and unrounded per-run scores were not exposed in the public repository or result page used for this reconstruction.",
-      "evidence": ["official_results", "vrx_docker_phase3"]
+      "status": "confirmed",
+      "claim": "The official public S3 bucket exposes exact trial scores, task-info bags, server-side Gazebo state logs, and runtime logs. Generated world SDFs, image digests, and UF controller-side traces were not found in those per-trial objects.",
+      "evidence": ["official_phase3_logs", "official_results", "vrx_docker_phase3"]
     }
   ],
   "protocol": {
@@ -534,6 +551,8 @@
     "team": "University of Florida",
     "task": "stationkeeping",
     "run_scores": [0.02, 0.04, 0.35, 0.04, 0.1, 0.11],
+    "exact_logged_run_scores": [0.020469539545113, 0.037360867340913, 0.35484590924613, 0.041314142274213, 0.095887547367613, 0.11270006061613],
+    "exact_logged_task_score": 0.110429677731685,
     "reported_task_score": 0.11,
     "published_task_rank": 1,
     "published_overall_total": 25,
@@ -544,7 +563,7 @@
       "n": 6,
       "result": 0.11
     },
-    "precision_note": "The six values are displayed to two decimal places; raw unrounded values and raw score artifacts are unavailable.",
-    "source_ids": ["official_results"]
+    "precision_note": "The results table displays two decimal places; exact values are available from the official public trial_score.txt objects.",
+    "source_ids": ["official_results", "official_phase3_logs"]
   }
 }

@@ -1,0 +1,20 @@
+{
+  "record_type": "barn_q16_lics_readiness_ten_world_screen",
+  "benchmark": "BARN Challenge public Gazebo screen",
+  "source_commit": "f7bd87cc232b04f6ce9edd10a6a05b84a6c7dfaa",
+  "world_indices": [0, 6, 12, 18, 24, 30, 36, 42, 48, 54],
+  "trials_per_world": 1,
+  "status": "completed_below_published_leader",
+  "container_image": "vrx-record-lab:barn-lics-ready",
+  "container_digest": "sha256:4a05c0ddb58cab8d3620298c287653d4dbebdfc35cbdc839ec7534a264f043a4",
+  "aggregate": {
+    "overall_score": 0.45,
+    "success_rate": 0.9,
+    "collision_rate": 0.1,
+    "timeout_rate": 0.0,
+    "metric_formula": "success * OT / clip(AT, 2*OT, 8*OT)",
+    "evidence": "results/barn-q16-lics/aggregation.json"
+  },
+  "claim_status": "local_public_screen_only",
+  "interpretation": "The readiness-fixed LiCS model beats the DWA screen mean (0.23287870433096822) but misses the published 0.4762 reference because world 0 collided. This is not an official re-ranking; repeat only after the nondeterministic startup failure is addressed."
+}

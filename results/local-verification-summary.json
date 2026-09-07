@@ -1,0 +1,42 @@
+{
+  "schema_version": "vrx-local-verification-summary/v1",
+  "generated_at": "2026-09-04",
+  "scope": "Local artifact verification on one host and checkout; not a clean-clone, external, historical-comparability, or record-eligibility attestation.",
+  "claim_scope": "local_result_integrity_only",
+  "record_claim_eligible": false,
+  "checks_passed": [
+    "schema",
+    "artifact_sha256",
+    "checksums_file",
+    "aggregate",
+    "manifest_sha256",
+    "pinned_identity",
+    "completed_trials"
+  ],
+  "runs": [
+    {
+      "name": "q01-rerun-1",
+      "result_path": "artifacts/q01-practice-rerun-1/result.json",
+      "result_sha256_after_verification_write": "9e9219184f7bde5b755a50674ba069291ce3ba96afe66d472108c8beb3f41430",
+      "manifest_path": "config/experiments/vrx2019-station-keeping-practice0-fast-pd.json",
+      "manifest_sha256": "19489b4c1433a7bd3d312a0af5cdab31d0e50b2aa09b4671930372e8e118bfdc",
+      "verified": true
+    },
+    {
+      "name": "q01-rerun-2",
+      "result_path": "artifacts/q01-practice-rerun-2-after-smoke/result.json",
+      "result_sha256_after_verification_write": "b8806b8c2d206abf26a2c255dba102d0ca583faf2504f33230a6fe52ed08900f",
+      "manifest_path": "config/experiments/vrx2019-station-keeping-practice0-fast-pd.json",
+      "manifest_sha256": "19489b4c1433a7bd3d312a0af5cdab31d0e50b2aa09b4671930372e8e118bfdc",
+      "verified": true
+    },
+    {
+      "name": "q02-public-phase2-suite",
+      "result_path": "results/runs/vrx2019-phase2-public/result.json",
+      "result_sha256_after_verification_write": "908109d2c26d5824d55c93fdc85585d379d544db0eb8d01b83205c6f3b5237eb",
+      "manifest_path": "config/experiments/vrx2019-station-keeping-phase2.json",
+      "manifest_sha256": "0b78b7e588b0198f1971b94c084f4e3aa30dcd8730fae70a081102a44848254e",
+      "verified": true
+    }
+  ]
+}

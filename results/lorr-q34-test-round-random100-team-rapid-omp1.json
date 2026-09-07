@@ -1,0 +1,29 @@
+{
+  "queue_id": "Q-34",
+  "benchmark": "League of Robot Runners 2024 Test Round",
+  "instance": "random_32_32_20_100.json",
+  "actionModel": "MAPF_T",
+  "version": "2024 LoRR",
+  "team": "Team_RAPID",
+  "teamSize": 100,
+  "numTaskFinished": 1322,
+  "makespan": 500,
+  "numPlannerErrors": 0,
+  "numScheduleErrors": 0,
+  "numEntryTimeouts": 1,
+  "environment": {"OMP_NUM_THREADS": "1"},
+  "reference_numTaskFinished": 1186,
+  "reference_team": "Team_Kitty_Knight",
+  "reference_gap": 136,
+  "input_sha256": "c09782a2d79e7779b82457095f8881b9fd5a08a6a6e4c68035a5e56a12445302",
+  "output_sha256": "06a349d23414166d2f88e2ed09e0b91d1fd380bd40bf3c527a816268e1ee63cf",
+  "runtime_image_digest": "sha256:4a49d3b7720b8caf93cc72a00af8eeb8e91178b9d44ab95396df2ec0eeb27309",
+  "start_kit": "v2.0.0 (6425dcd720ecc79b34bc1352a77166265144482b)",
+  "source_archive": "MAPF-Competition/Benchmark-Archive Team_RAPID/3635cb44497727271f173582a86a2cea72e9e17e",
+  "claim_status": "runtime_sensitivity_experiment_timeout_gate_failed",
+  "decision": "reject_as_clean_promotion;_close_sampling_loop",
+  "notes": [
+    "The source-documented OMP_NUM_THREADS=1 setting increased the task count but still produced one entry timeout and substantially increased wall time.",
+    "The result supports a runtime-sensitivity explanation for Q-31/Q-33 variation; it is not a clean benchmark claim."
+  ]
+}
