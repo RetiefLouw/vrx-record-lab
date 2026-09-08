@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A plain-English, evidence-led story about reproducing and testing a multi-robot planning result in the League of Robot Runners challenge.">
+  <meta property="og:title" content="Can 100 robots finish more work?">
+  <meta property="og:description" content="A plain-English field note on a reproducible local LoRR replay: 1,325 completed tasks twice, with the limits of the result made explicit.">
+  <title>Can 100 robots finish more work? · LoRR field note</title>
+  <style>
+    :root {
+      --ink: #14202d;
+      --ink-soft: #334155;
+      --muted: #68778a;
+      --paper: #f7f4ed;
+      --paper-deep: #ebe6db;
+      --card: #fffdf8;
+      --line: #d9d4c9;
+      --blue: #155e75;
+      --blue-soft: #dff1f1;
+      --orange: #e56b3f;
+      --orange-soft: #fde5d9;
+      --green: #2f7b59;
+      --green-soft: #e3f2e6;
+      --red: #a84237;
+      --red-soft: #f9e3df;
+      --shadow: 0 18px 50px rgba(20, 32, 45, .09);
+      --max: 1100px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 90% 4%, rgba(229,107,63,.16), transparent 27rem),
+        radial-gradient(circle at 3% 18%, rgba(21,94,117,.11), transparent 30rem),
+        var(--paper);
+      font: 17px/1.62 Georgia, "Times New Roman", serif;
+    }
+    a { color: var(--blue); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+    a:hover { color: var(--orange); }
+    a:focus-visible, summary:focus-visible, button:focus-visible { outline: 3px solid var(--orange); outline-offset: 4px; }
+    .wrap { width: min(var(--max), calc(100% - 42px)); margin: 0 auto; }
+    h1, h2, h3, .sans, nav, .eyebrow, .pill, .metric, .label, .button, figcaption, small { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1, h2, h3 { line-height: 1.08; letter-spacing: -.035em; }
+    h1 { max-width: 860px; margin-bottom: 20px; font-size: clamp(3.1rem, 8vw, 7rem); font-weight: 760; }
+    h2 { margin-bottom: 15px; font-size: clamp(2.25rem, 5vw, 4.4rem); font-weight: 740; }
+    h3 { margin-bottom: 9px; font-size: 1.22rem; font-weight: 740; }
+    .eyebrow { margin-bottom: 18px; color: var(--orange); font-size: .75rem; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+    .lede { max-width: 760px; margin-bottom: 0; color: var(--ink-soft); font-size: clamp(1.16rem, 2.2vw, 1.42rem); }
+    .muted { color: var(--muted); }
+    .small { font-size: .89rem; }
+    header { padding: 74px 0 63px; border-bottom: 1px solid var(--line); }
+    .hero-grid { display: grid; grid-template-columns: minmax(0, 1.24fr) minmax(270px, .76fr); align-items: end; gap: 48px; }
+    .hero-mark { position: relative; min-height: 270px; padding: 27px; overflow: hidden; border: 1px solid var(--ink); background: var(--ink); color: #fffdf8; box-shadow: var(--shadow); }
+    .hero-mark::before, .hero-mark::after { position: absolute; content: ""; border: 1px solid rgba(255,253,248,.24); border-radius: 50%; }
+    .hero-mark::before { width: 270px; height: 270px; right: -75px; top: -60px; }
+    .hero-mark::after { width: 180px; height: 180px; right: -30px; top: -15px; }
+    .hero-mark svg { position: absolute; right: 17px; bottom: 18px; width: 155px; height: 145px; }
+    .hero-mark .tag { position: relative; z-index: 1; display: inline-block; padding: 5px 9px; border: 1px solid rgba(255,253,248,.45); color: #dff1f1; font: 800 .67rem/1.2 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing: .12em; text-transform: uppercase; }
+    .hero-mark strong { position: relative; z-index: 1; display: block; max-width: 210px; margin-top: 25px; color: #fffdf8; font: 760 2.25rem/.99 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing: -.06em; }
+    .hero-mark small { position: relative; z-index: 1; display: block; max-width: 210px; margin-top: 12px; color: #b8cad1; }
+    .status { margin-top: 28px; padding: 17px 19px; border-left: 5px solid var(--green); background: var(--green-soft); color: #194b36; }
+    .status strong { color: var(--green); }
+    nav { position: sticky; top: 0; z-index: 5; border-bottom: 1px solid var(--line); background: rgba(247,244,237,.91); backdrop-filter: blur(12px); }
+    nav .wrap { display: flex; gap: 22px; overflow-x: auto; padding: 12px 0; scrollbar-width: thin; }
+    nav a { flex: 0 0 auto; color: var(--muted); font-size: .85rem; text-decoration: none; }
+    nav a:hover { color: var(--ink); }
+    section { padding: 76px 0; border-bottom: 1px solid var(--line); }
+    .intro { max-width: 700px; margin-bottom: 30px; color: var(--ink-soft); }
+    .grid { display: grid; gap: 18px; }
+    .two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .card { padding: 24px; border: 1px solid var(--line); background: rgba(255,253,248,.82); box-shadow: 0 7px 22px rgba(20,32,45,.035); }
+    .card p:last-child, .card ul:last-child { margin-bottom: 0; }
+    .card p, .card li { color: var(--ink-soft); }
+    .card strong { color: var(--ink); }
+    .pill { display: inline-block; margin-bottom: 14px; padding: 5px 9px; border-radius: 2px; background: var(--blue-soft); color: var(--blue); font-size: .67rem; font-weight: 800; letter-spacing: .11em; text-transform: uppercase; }
+    .pill.orange { background: var(--orange-soft); color: var(--red); }
+    .pill.green { background: var(--green-soft); color: var(--green); }
+    .pill.red { background: var(--red-soft); color: var(--red); }
+    .metric { margin: 0 0 8px; color: var(--blue); font-size: clamp(2.6rem, 5vw, 4.2rem); font-weight: 780; line-height: .9; letter-spacing: -.08em; }
+    .metric.orange { color: var(--orange); }
+    .metric.green { color: var(--green); }
+    .metric-label { color: var(--muted); font: 700 .78rem/1.3 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing: .08em; text-transform: uppercase; }
+    .callout { margin: 26px 0 0; padding: 18px 21px; border-left: 5px solid var(--blue); background: var(--blue-soft); }
+    .callout.warning { border-color: var(--orange); background: var(--orange-soft); }
+    .callout p:last-child { margin-bottom: 0; }
+
+    /* Native SVG story map */
+    figure { margin: 28px 0 0; }
+    .story-figure { padding: 20px 18px 15px; overflow-x: auto; border: 1px solid var(--line); background: var(--card); }
+    .story-figure svg { display: block; width: 100%; min-width: 720px; height: auto; }
+    .figure-title { margin: 0 0 14px; color: var(--ink); font: 750 .94rem/1.2 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    figcaption { margin-top: 13px; color: var(--muted); font-size: .81rem; }
+    .svg-label { fill: #14202d; font: 750 13px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .svg-small { fill: #68778a; font: 500 11px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .svg-white { fill: #fffdf8; font: 750 13px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+
+    /* Comparison bars */
+    .bars { margin-top: 28px; padding: 23px; border: 1px solid var(--line); background: var(--card); }
+    .bar-row { display: grid; grid-template-columns: minmax(116px, 170px) 1fr 62px; align-items: center; gap: 12px; margin-top: 15px; }
+    .bar-row:first-of-type { margin-top: 0; }
+    .bar-who { color: var(--ink-soft); font: 600 .86rem/1.3 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .track { height: 18px; overflow: hidden; background: var(--paper-deep); }
+    .bar { height: 100%; min-width: 4px; }
+    .bar.published { background: #e8ae4e; }
+    .bar.replay { background: var(--blue); }
+    .bar.repeat { background: var(--green); }
+    .bar.held { background: var(--red); }
+    .bar-value { color: var(--ink); font: 750 .86rem -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; text-align: right; }
+    .bar-legend { display: flex; flex-wrap: wrap; gap: 12px 19px; margin-top: 21px; color: var(--muted); font: .79rem -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .bar-legend i { display: inline-block; width: 10px; height: 10px; margin-right: 5px; vertical-align: -1px; }
+    .video-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-top: 28px; }
+    .video-card { overflow: hidden; border: 1px solid var(--line); background: var(--card); box-shadow: 0 7px 22px rgba(20,32,45,.05); }
+    .video-card video { display: block; width: 100%; aspect-ratio: 16 / 9; background: var(--ink); object-fit: cover; }
+    .video-card video:focus-visible { outline: 3px solid var(--orange); outline-offset: -3px; }
+    .video-copy { padding: 20px 21px 21px; }
+    .video-copy h3 { margin-bottom: 7px; }
+    .video-copy p { margin-bottom: 12px; color: var(--ink-soft); }
+    .video-copy p:last-child { margin-bottom: 0; }
+    .video-meta { color: var(--muted); font: 700 .74rem/1.35 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing: .07em; text-transform: uppercase; }
+    .video-disclaimer { padding-top: 13px; border-top: 1px solid var(--line); color: var(--muted) !important; font-size: .86rem; }
+    .video-disclaimer strong { color: var(--red); }
+
+    .quote { margin: 25px 0 0; padding: 24px 27px; border-top: 4px solid var(--orange); background: var(--card); box-shadow: var(--shadow); }
+    .quote p { margin-bottom: 10px; color: var(--ink); font-size: clamp(1.23rem, 2.3vw, 1.62rem); line-height: 1.42; }
+    .quote cite { color: var(--muted); font: 700 .76rem -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing: .09em; text-transform: uppercase; }
+    .checklist { margin: 0; padding: 0; list-style: none; }
+    .checklist li { display: grid; grid-template-columns: 25px 1fr; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--line); }
+    .checklist li:last-child { border-bottom: 0; }
+    .check { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--green-soft); color: var(--green); font: 800 .77rem -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .cross { background: var(--red-soft); color: var(--red); }
+    .ladder { display: grid; grid-template-columns: repeat(4, 1fr); align-items: end; gap: 8px; margin-top: 29px; }
+    .rung { display: flex; min-height: 89px; align-items: center; justify-content: center; padding: 13px 9px; border-top: 4px solid var(--line); color: var(--muted); font: 700 .75rem/1.25 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; text-align: center; }
+    .rung:nth-child(1) { min-height: 67px; border-color: #b6c1ca; }
+    .rung:nth-child(2) { min-height: 91px; border-color: #e8ae4e; }
+    .rung:nth-child(3) { min-height: 116px; border-color: var(--blue); color: var(--blue); background: var(--blue-soft); }
+    .rung:nth-child(4) { min-height: 143px; border-color: var(--green); background: repeating-linear-gradient(-45deg, rgba(47,123,89,.04), rgba(47,123,89,.04) 8px, transparent 8px, transparent 16px); }
+    .post { padding: 30px 31px; border: 1px solid var(--line); background: var(--card); box-shadow: var(--shadow); }
+    .post p { white-space: pre-line; color: var(--ink-soft); }
+    .post-label { margin-bottom: 17px; color: var(--orange); font: 800 .73rem -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing: .14em; text-transform: uppercase; }
+    details { border-top: 1px solid var(--line); }
+    details:last-of-type { border-bottom: 1px solid var(--line); }
+    summary { cursor: pointer; padding: 15px 0; color: var(--ink); font: 750 .96rem -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    details p { color: var(--ink-soft); }
+    footer { padding: 37px 0 66px; color: var(--muted); font-size: .88rem; }
+    footer p:last-child { margin-bottom: 0; }
+    .footer-links { display: flex; flex-wrap: wrap; gap: 10px 20px; margin-bottom: 17px; font: 700 .82rem -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    @media (max-width: 840px) {
+      .hero-grid, .two { grid-template-columns: 1fr; }
+      .three { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .hero-grid { gap: 29px; }
+    }
+    @media (max-width: 600px) {
+      .wrap { width: min(var(--max), calc(100% - 28px)); }
+      header { padding: 51px 0 46px; }
+      section { padding: 56px 0; }
+      .three { grid-template-columns: 1fr; }
+      .video-grid { grid-template-columns: 1fr; }
+      .card, .bars, .post { padding: 19px; }
+      .bar-row { grid-template-columns: 102px 1fr 53px; gap: 8px; }
+      .bar-who, .bar-value { font-size: .77rem; }
+      .ladder { grid-template-columns: repeat(2, 1fr); align-items: stretch; }
+      .rung:nth-child(n) { min-height: 89px; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  </style>
+</head>
+<body>
+  <header id="top">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="eyebrow">A VRX Record Lab field note · prepared locally, not posted</p>
+        <h1>Can 100 robots finish more work?</h1>
+        <p class="lede">We replayed a published multi-robot result, made the run repeatable, and then tested whether the apparent advantage survived a different scenario.</p>
+        <div class="status"><strong>The short version:</strong> the exact public test instance reached <strong>1,325 completed tasks</strong> twice, versus a published reference of <strong>1,186</strong>. That is a strong local replay result—but it is not an official leaderboard change.</div>
+      </div>
+      <aside class="hero-mark" aria-label="Headline result">
+        <span class="tag">The result</span>
+        <strong>+139<br>tasks</strong>
+        <small>on one public test instance, repeated with matching output hashes</small>
+        <svg viewBox="0 0 180 160" role="img" aria-label="Abstract diagram of coordinated robots">
+          <g fill="none" stroke="#42d1c1" stroke-width="2" opacity=".8">
+            <path d="M14 122H163M20 95h126M39 67h113M71 39h75"/>
+            <path d="M35 128L78 87 116 109 152 54"/>
+          </g>
+          <g fill="#fffdf8" stroke="#42d1c1" stroke-width="2">
+            <circle cx="35" cy="128" r="8"/><circle cx="78" cy="87" r="8"/><circle cx="116" cy="109" r="8"/><circle cx="152" cy="54" r="8"/>
+          </g>
+        </svg>
+      </aside>
+    </div>
+  </header>
+
+  <nav aria-label="Page sections">
+    <div class="wrap">
+      <a href="#challenge">The challenge</a>
+      <a href="#result">The result</a>
+      <a href="#proof">Why it matters</a>
+      <a href="#visuals">Watch the replay</a>
+      <a href="#limits">The honest limit</a>
+      <a href="#post">LinkedIn draft</a>
+      <a href="#sources">Evidence</a>
+    </div>
+  </nav>
+
+  <main>
+    <section id="challenge">
+      <div class="wrap">
+        <p class="eyebrow">01 · The challenge</p>
+        <h2>A city-sized puzzle for a team of robots.</h2>
+        <p class="intro">The League of Robot Runners (LoRR) is a benchmark for coordinating many agents on a grid. Imagine 100 delivery robots sharing narrow streets. New jobs appear during the run. Every robot needs a legal next move, and the team has a fixed amount of time to complete as many jobs as possible.</p>
+        <div class="grid three">
+          <article class="card"><span class="pill">The objective</span><h3>Finish more jobs</h3><p>The score is simple: <strong>how many tasks were completed</strong> before the clock stopped. A higher count is better.</p></article>
+          <article class="card"><span class="pill orange">The pressure</span><h3>Move together</h3><p>Robots can block one another. Assigning a job is not enough—the routes must remain collision-free as the whole team moves.</p></article>
+          <article class="card"><span class="pill green">The constraint</span><h3>Think on time</h3><p>The planner gets a small computation budget. A late answer is itself a failure, so speed and quality have to coexist.</p></article>
+        </div>
+        <figure class="story-figure">
+          <p class="figure-title">How one run feels, in plain English</p>
+          <svg viewBox="0 0 920 190" role="img" aria-labelledby="flow-title flow-desc">
+            <title id="flow-title">Four steps in a LoRR run</title>
+            <desc id="flow-desc">Jobs appear, a scheduler assigns them, a planner finds paths, and robots execute those paths until the final task count is recorded.</desc>
+            <path d="M150 93H770" stroke="#d9d4c9" stroke-width="4" stroke-dasharray="7 8"/>
+            <g>
+              <circle cx="115" cy="93" r="35" fill="#dff1f1" stroke="#155e75" stroke-width="2"/><text x="115" y="98" text-anchor="middle" class="svg-label">1</text>
+              <text x="115" y="153" text-anchor="middle" class="svg-label">Reveal</text><text x="115" y="171" text-anchor="middle" class="svg-small">new jobs appear</text>
+            </g>
+            <g>
+              <circle cx="345" cy="93" r="35" fill="#fde5d9" stroke="#e56b3f" stroke-width="2"/><text x="345" y="98" text-anchor="middle" class="svg-label">2</text>
+              <text x="345" y="153" text-anchor="middle" class="svg-label">Assign</text><text x="345" y="171" text-anchor="middle" class="svg-small">choose a robot</text>
+            </g>
+            <g>
+              <circle cx="575" cy="93" r="35" fill="#e3f2e6" stroke="#2f7b59" stroke-width="2"/><text x="575" y="98" text-anchor="middle" class="svg-label">3</text>
+              <text x="575" y="153" text-anchor="middle" class="svg-label">Plan</text><text x="575" y="171" text-anchor="middle" class="svg-small">avoid conflicts</text>
+            </g>
+            <g>
+              <circle cx="805" cy="93" r="35" fill="#14202d" stroke="#14202d" stroke-width="2"/><text x="805" y="98" text-anchor="middle" class="svg-white">4</text>
+              <text x="805" y="153" text-anchor="middle" class="svg-label">Execute</text><text x="805" y="171" text-anchor="middle" class="svg-small">count finished jobs</text>
+            </g>
+          </svg>
+          <figcaption>One mistake can ripple through the team: a blocked route delays a robot, which delays an assignment, which costs completed work.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section id="result">
+      <div class="wrap">
+        <p class="eyebrow">02 · What was achieved</p>
+        <h2>The headline result is real—and carefully scoped.</h2>
+        <p class="intro">We used the public 2024 Test Round instance, the tagged v2.0.0 evaluator, and the archived Team RAPID implementation. The only number being compared is the completed-task count for that declared scenario.</p>
+        <div class="grid three">
+          <article class="card"><p class="metric green">1,325</p><p class="metric-label">Q-35 completed tasks</p><p class="small muted">100 agents · 500 ticks · zero recorded planner, schedule, or entry-timeout errors.</p></article>
+          <article class="card"><p class="metric green">1,325</p><p class="metric-label">Q-36 completed tasks</p><p class="small muted">A fresh repeat under the same declared runtime condition.</p></article>
+          <article class="card"><p class="metric orange">+139</p><p class="metric-label">above the published reference</p><p class="small muted">1,325 compared with the archive’s 1,186 tasks: a local margin of about 11.7%.</p></article>
+        </div>
+        <div class="bars" aria-label="Task count comparison chart">
+          <p class="figure-title">Completed tasks · exact public Test Round input</p>
+          <div class="bar-row"><span class="bar-who">Published reference<br><small>Kitty Knight</small></span><span class="track"><span class="bar published" style="width:89.51%"></span></span><span class="bar-value">1,186</span></div>
+          <div class="bar-row"><span class="bar-who">Archived source replay<br><small>Q-30 reference</small></span><span class="track"><span class="bar replay" style="width:90.49%"></span></span><span class="bar-value">1,199</span></div>
+          <div class="bar-row"><span class="bar-who">Pinned replay<br><small>Q-35 / Q-36</small></span><span class="track"><span class="bar repeat" style="width:100%"></span></span><span class="bar-value">1,325</span></div>
+          <div class="bar-legend"><span><i style="background:#e8ae4e"></i>published archive</span><span><i style="background:#155e75"></i>archived source replay</span><span><i style="background:#2f7b59"></i>repeatable local result</span></div>
+        </div>
+        <div class="callout"><strong>Why this is interesting:</strong> the result is not just a single lucky screenshot. The public input, evaluator version, source lineage, runtime image, binary, configuration, and output files were recorded so another person can inspect the same claim.</div>
+      </div>
+    </section>
+
+    <section id="visuals">
+      <div class="wrap">
+        <p class="eyebrow">02a · Watch the evidence</p>
+        <h2>Two runs, shown in motion.</h2>
+        <p class="intro">These short clips make the run history easier to understand at a glance: the earlier clean result, then the stronger pinned-runtime repeat. They are designed as visual companions to the run ledgers.</p>
+        <div class="video-grid">
+          <article class="video-card">
+            <video controls preload="metadata" playsinline poster="assets/lorr-runs/lorr-q35-pinned-clean-beat.png" aria-label="Illustrative visualization of the Q-35 pinned clean LoRR replay">
+              <source src="assets/lorr-runs/lorr-q35-pinned-clean-beat.mp4" type="video/mp4">
+              Your browser does not support this video. <a href="assets/lorr-runs/lorr-q35-pinned-clean-beat.mp4">Download the Q-35 visualization</a>.
+            </video>
+            <div class="video-copy">
+              <p class="video-meta">Q-35 · current pinned replay</p>
+              <h3>1,325 tasks, cleanly completed</h3>
+              <p>On the exact public Test Round input, the pinned run completed 1,325 tasks with zero recorded planner, schedule, or entry-timeout errors.</p>
+              <p class="video-disclaimer"><strong>Illustrative only:</strong> this is a ledger-derived visualization, not raw simulator footage. <a href="../results/lorr-q35-test-round-random100-team-rapid-cpuset1.json">Open the Q-35 ledger</a>.</p>
+            </div>
+          </article>
+          <article class="video-card">
+            <video controls preload="metadata" playsinline poster="assets/lorr-runs/lorr-q31-previous-clean-beat.png" aria-label="Illustrative visualization of the Q-31 previous clean LoRR replay">
+              <source src="assets/lorr-runs/lorr-q31-previous-clean-beat.mp4" type="video/mp4">
+              Your browser does not support this video. <a href="assets/lorr-runs/lorr-q31-previous-clean-beat.mp4">Download the Q-31 visualization</a>.
+            </video>
+            <div class="video-copy">
+              <p class="video-meta">Q-31 · previous clean replay</p>
+              <h3>1,318 tasks, the earlier baseline</h3>
+              <p>This earlier clean replay established the first local margin over the archive reference before the later pinned-runtime repeat reached 1,325.</p>
+              <p class="video-disclaimer"><strong>Illustrative only:</strong> this is a ledger-derived visualization, not raw simulator footage. <a href="../results/lorr-q31-test-round-random100-team-rapid.json">Open the Q-31 ledger</a>.</p>
+            </div>
+          </article>
+        </div>
+        <div class="callout"><strong>How to read the clips:</strong> the animation is a human-friendly rendering of recorded task counts and run milestones. The JSON ledgers remain the source of truth for the numbers, hashes, and error counters.</div>
+      </div>
+    </section>
+
+    <section id="proof">
+      <div class="wrap">
+        <p class="eyebrow">03 · Why the repeat matters</p>
+        <h2>Reproducibility is part of the result.</h2>
+        <p class="intro">A benchmark number is only useful if we know what produced it. Q-35 and Q-36 repeated the run with a pinned execution condition: one OpenMP thread and one container CPU. Both runs finished cleanly and produced the same compact output hash.</p>
+        <div class="grid two">
+          <article class="card">
+            <span class="pill green">What was held constant</span>
+            <ul class="checklist">
+              <li><span class="check">✓</span><span>Exact public Test Round input</span></li>
+              <li><span class="check">✓</span><span>LoRR Start-Kit <strong>v2.0.0</strong> evaluator</span></li>
+              <li><span class="check">✓</span><span>Same archived Team RAPID source identity</span></li>
+              <li><span class="check">✓</span><span>Same image, binary, and configuration hashes</span></li>
+              <li><span class="check">✓</span><span>Fresh output path for the independent repeat</span></li>
+            </ul>
+          </article>
+          <article class="card">
+            <span class="pill orange">What the hash tells us</span>
+            <p>The two compact result files have the same SHA-256 digest:</p>
+            <p class="sans" style="overflow-wrap:anywhere; padding:12px; background:var(--paper-deep); color:var(--blue); font-size:.79rem; font-weight:700;">39525159…6ca88a5b</p>
+            <p class="small muted">That supports deterministic replay under this pinned local condition. It does not, by itself, prove that every computer, compiler, or organizer runtime will produce the same count.</p>
+          </article>
+        </div>
+        <figure class="story-figure">
+          <p class="figure-title">The evidence ladder</p>
+          <div class="ladder" role="img" aria-label="Evidence ladder from a run record to an official general win">
+            <div class="rung">1 · A run exists</div>
+            <div class="rung">2 · The protocol matches</div>
+            <div class="rung">3 · Local instance beat<br><strong>Q-35 + Q-36</strong></div>
+            <div class="rung">4 · General or official win<br><span class="muted">not reached</span></div>
+          </div>
+          <figcaption>The work currently reaches rung 3: a clean, repeated local comparison on one public instance. The fourth rung needs broad held-out evidence and organizer acceptance.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section id="limits">
+      <div class="wrap">
+        <p class="eyebrow">04 · The honest limit</p>
+        <h2>A good result also tells us where it stops working.</h2>
+        <p class="intro">To test whether the apparent advantage generalized, we ran the same frozen stack on a different public Main Round scenario with 200 agents and 600 ticks. It completed cleanly—but finished fewer tasks than that scenario’s published reference.</p>
+        <div class="grid two">
+          <article class="card"><p class="metric orange">1,181</p><p class="metric-label">Q-37 held-out tasks</p><p class="small muted">Zero planner, schedule, or entry-timeout errors under the pinned runtime.</p></article>
+          <article class="card"><p class="metric">−79</p><p class="metric-label">versus the held-out reference</p><p class="small muted">The published RANDOM-02 reference is 1,260 tasks. The test therefore does not support a broad “we improved the algorithm everywhere” claim.</p></article>
+        </div>
+        <div class="bars" aria-label="Held-out task count comparison chart">
+          <p class="figure-title">Held-out check · Main Round RANDOM-02</p>
+          <div class="bar-row"><span class="bar-who">Published reference<br><small>Kitty Knight</small></span><span class="track"><span class="bar published" style="width:100%"></span></span><span class="bar-value">1,260</span></div>
+          <div class="bar-row"><span class="bar-who">Pinned replay<br><small>Q-37</small></span><span class="track"><span class="bar held" style="width:93.73%"></span></span><span class="bar-value">1,181</span></div>
+          <div class="bar-legend"><span><i style="background:#e8ae4e"></i>published archive</span><span><i style="background:#a84237"></i>held-out local replay</span></div>
+        </div>
+        <div class="callout warning"><strong>What we can say:</strong> “We reproduced a 1,325-task local replay twice on the exact public Test Round instance, 139 above the published reference, with zero recorded errors.”<br><br><strong>What we cannot say yet:</strong> “We won LoRR,” “we beat the winner generally,” or “we set an official record.”</div>
+      </div>
+    </section>
+
+    <section id="next">
+      <div class="wrap">
+        <p class="eyebrow">05 · What comes next</p>
+        <h2>Turn a replay advantage into an algorithmic one.</h2>
+        <p class="intro">The next experiment should change the planner—not keep rerunning the same historical code. The most promising path is to make scheduling aware of crowd density, reuse routes that are still safe, and spend more planning effort where the grid is most congested.</p>
+        <div class="grid three">
+          <article class="card"><span class="pill">1 · Diagnose</span><h3>Measure the bottleneck</h3><p>Compare task delay, route conflicts, planner time, and idle agents on the Test Round and RANDOM-02.</p></article>
+          <article class="card"><span class="pill orange">2 · Change one thing</span><h3>Try density-aware planning</h3><p>Prioritize assignments and re-planning around crowded corridors while preserving deterministic tie-breaking and a hard deadline.</p></article>
+          <article class="card"><span class="pill green">3 · Earn the claim</span><h3>Validate on held-out worlds</h3><p>Require a clean improvement on more than one public instance, then package the exact run for organizer-side review.</p></article>
+        </div>
+        <div class="quote"><p>“The most valuable discovery was not just a higher number. It was learning exactly which part of the result we could reproduce—and where the evidence stopped.”</p><cite>Working principle · VRX Record Lab</cite></div>
+      </div>
+    </section>
+
+    <section id="post">
+      <div class="wrap">
+        <p class="eyebrow">06 · Prepared post copy</p>
+        <h2>A version made for a general audience.</h2>
+        <p class="intro">This draft is ready to adapt for LinkedIn. It has not been posted.</p>
+        <article class="post">
+          <p class="post-label">LinkedIn draft · no technical background required</p>
+          <p>What happens when you ask 100 robots to share a city-sized grid and finish as many jobs as possible before the clock runs out?
+
+We tested that problem in the League of Robot Runners challenge. The important part was not only getting a bigger number—it was making the result checkable.
+
+On the exact public test scenario, our local replay completed 1,325 tasks. The published reference was 1,186. We repeated the run from a fresh output location and got the same 1,325 tasks again, with no recorded planner, scheduling, or entry-timeout errors.
+
+That is a +139 local replay margin. It is encouraging evidence, not an official leaderboard change.
+
+We also tested a different public scenario. The same frozen setup completed 1,181 tasks against a published reference of 1,260. That result matters just as much: it tells us the first advantage is tied to one instance and should not yet be described as a general algorithmic win.
+
+The next step is to change the planner itself—starting with density-aware scheduling and route reuse—and test the change across held-out scenarios.
+
+The broader lesson is simple: a credible AI or robotics result needs three things—performance, reproducibility, and an honest account of its limits.</p>
+          <p class="small muted sans">Prepared locally as a summary post. Sources and machine-readable run records are linked below.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="sources">
+      <div class="wrap">
+        <p class="eyebrow">07 · Follow the evidence</p>
+        <h2>Open the work behind the story.</h2>
+        <p class="intro">The plain-English summary is only the front door. These files contain the protocol details, exact counts, hashes, and decisions behind each claim.</p>
+        <div class="grid two">
+          <article class="card">
+            <span class="pill green">Primary run records</span>
+            <ul>
+              <li><a href="../results/lorr-q35-test-round-random100-team-rapid-cpuset1.json">Q-35 pinned local replay</a> · 1,325 tasks</li>
+              <li><a href="../results/lorr-q36-test-round-random100-team-rapid-cpuset1-repeat.json">Q-36 independent repeat</a> · same output hash</li>
+              <li><a href="../results/lorr-q37-random02-team-rapid-cpuset1.json">Q-37 held-out check</a> · 1,181 tasks</li>
+              <li><a href="../results/lorr-q30-test-round-random100-kitty.json">Archived reference replay</a> · 1,199 local / 1,186 published</li>
+            </ul>
+          </article>
+          <article class="card">
+            <span class="pill">Context and method</span>
+            <ul>
+              <li><a href="lorr-challenge-explainer.html">Technical LoRR explainer</a></li>
+              <li><a href="lorr-improvement-plan.md">Improvement and validation plan</a></li>
+              <li><a href="CAMPAIGN.md">Campaign decision ledger</a></li>
+              <li><a href="lorr-2024-replay.md">Protocol replay audit</a></li>
+              <li><a href="https://github.com/MAPF-Competition/Benchmark-Archive">Official LoRR Benchmark Archive</a></li>
+              <li><a href="https://github.com/MAPF-Competition/Start-Kit/releases/tag/v2.0.0">LoRR Start-Kit v2.0.0</a></li>
+            </ul>
+          </article>
+        </div>
+        <div class="callout"><strong>Source note:</strong> 1,186 and 1,260 are published archive references. 1,325 and 1,181 are local replay measurements. The two claims must remain distinct until an organizer independently accepts the result.</div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="footer-links"><a href="#top">Back to top</a><a href="lorr-challenge-explainer.html">Technical explainer</a><a href="CAMPAIGN.md">Campaign ledger</a></div>
+      <p>LoRR 2024 field note · prepared locally on 2026-09-07 · no external post was made.</p>
+      <p>This page presents a verified local replay comparison, not an organizer-certified leaderboard change.</p>
+    </div>
+  </footer>
+</body>
+</html>

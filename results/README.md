@@ -103,15 +103,24 @@ but also shows that the competition count is not bit-for-bit deterministic
 across runtimes. Team RAPID first reached 1320 tasks (+134) with zero
 planner/schedule errors, but one entry timeout made Q-30 diagnostic only.
 Q-31 repeated the same image, input, and storage protocol and completed at 1318
-tasks (+132) with zero planner, schedule, or entry-timeout errors. See
+tasks (+132) with zero planner, schedule, or entry-timeout errors. Under the
+declared `OMP_NUM_THREADS=1` and Docker CPU-pinned runtime, Q-35 and its fresh
+Q-36 repeat each completed 1325 tasks (+139) with zero planner, schedule, or
+entry-timeout errors and byte-identical compact outputs. See
 [`lorr-q30-test-round-random100-kitty.json`](lorr-q30-test-round-random100-kitty.json)
 [`lorr-q30-test-round-random100-team-rapid.json`](lorr-q30-test-round-random100-team-rapid.json)
-and [`lorr-q31-test-round-random100-team-rapid.json`](lorr-q31-test-round-random100-team-rapid.json).
+[`lorr-q31-test-round-random100-team-rapid.json`](lorr-q31-test-round-random100-team-rapid.json),
+[`lorr-q35-test-round-random100-team-rapid-cpuset1.json`](lorr-q35-test-round-random100-team-rapid-cpuset1.json),
+and [`lorr-q36-test-round-random100-team-rapid-cpuset1-repeat.json`](lorr-q36-test-round-random100-team-rapid-cpuset1-repeat.json).
 The first detached Q-31 launch hit a local Docker host stall before producing
 an output file; it is retained as an infrastructure diagnostic, not a failed
 score. Q-32 failed the held-out generalization gate, and Q-34 failed to
-stabilize the timeout behavior; further work now requires a declared planner
-change rather than blind reruns.
+stabilize the timeout behavior. The clean pinned Q-37 held-out replay reached
+1181 tasks versus the 1260-task RANDOM-02 archive reference, so the Q-35/Q-36
+margin remains an instance-scoped local replay result pending a planner change
+and broader validation. The dedicated [LoRR explainer](../docs/lorr-challenge-explainer.html)
+and [campaign plan](../docs/lorr-improvement-plan.md) collect the visual and
+methodological evidence.
 
 The upstream LiCS-KI artifact audit is retained in
 [`barn-lics-upstream-public-check.json`](barn-lics-upstream-public-check.json).

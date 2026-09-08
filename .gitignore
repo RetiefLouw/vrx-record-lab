@@ -20,6 +20,14 @@ secrets/
 !docs/assets/sample-runs/
 !docs/assets/sample-runs/*.mp4
 
+# Keep the small, explicitly reviewed LoRR replay evidence package visible.
+# Raw simulator output remains excluded by the results/runs rule above.
+!docs/assets/lorr-runs/
+!docs/assets/lorr-runs/*.mp4
+!docs/assets/lorr-runs/*.png
+!docs/assets/lorr-runs/*.json
+!docs/assets/lorr-runs/*.md
+
 # Keep the tiny verifier fixture visible; real run artifacts remain ignored.
 !verification/examples/
 !verification/examples/artifacts/

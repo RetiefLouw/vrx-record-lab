@@ -1,0 +1,32 @@
+{
+  "purpose": "offline illustrative replay visualisations",
+  "generated_on": "2026-09-07",
+  "raw_simulator_footage_available": false,
+  "evidence_boundary": "Animations use verified endpoint values from the linked ledgers; the fleet dots and interpolated curve are explanatory artwork, not recorded trajectories.",
+  "videos": [
+    {
+      "queue_id": "Q-35",
+      "role": "current_clean_local_best",
+      "source_ledger": "../../../results/lorr-q35-test-round-random100-team-rapid-cpuset1.json",
+      "video": "lorr-q35-pinned-clean-beat.mp4",
+      "poster": "lorr-q35-pinned-clean-beat.png",
+      "verified_tasks": 1325,
+      "archive_reference_tasks": 1186,
+      "errors": {"planner": 0, "schedule": 0, "entry_timeouts": 0},
+      "sha256": "95fda70f23fafe5b630f7b1263fdb6484ad0601fc3230fab1a21dc3616a87e4b",
+      "format": {"codec": "h264", "width": 1280, "height": 720, "fps": 24, "duration_seconds": 12, "pixel_format": "yuv420p"}
+    },
+    {
+      "queue_id": "Q-31",
+      "role": "previous_clean_local_beat",
+      "source_ledger": "../../../results/lorr-q31-test-round-random100-team-rapid.json",
+      "video": "lorr-q31-previous-clean-beat.mp4",
+      "poster": "lorr-q31-previous-clean-beat.png",
+      "verified_tasks": 1318,
+      "archive_reference_tasks": 1186,
+      "errors": {"planner": 0, "schedule": 0, "entry_timeouts": 0},
+      "sha256": "6abb016edb69c5add637e5db3b8fbf77563924f38bf87f3e2e6388b6d6620c4c",
+      "format": {"codec": "h264", "width": 1280, "height": 720, "fps": 24, "duration_seconds": 12, "pixel_format": "yuv420p"}
+    }
+  ]
+}

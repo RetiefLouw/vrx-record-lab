@@ -13,7 +13,7 @@ result has passed a separate clean-clone or external replication.
 
 - Primary target: LoRR 2024 Test Round task-count reference (published Team Kitty Knight `1186`)
 - Secondary targets: BARN 2024 public-suite navigation and VRX 2019 station keeping
-- Status: archived Kitty Knight source replayed cleanly at `1199/1186`; Team RAPID Q-31 completed `1318/1186` with zero errors; Q-32–Q-34 expose the generalization/runtime-sensitivity boundary
+- Status: archived Kitty Knight source replayed cleanly at `1199/1186`; pinned Team RAPID Q-35/Q-36 repeats completed `1325/1186` with zero errors; held-out Q-37 exposes the generalization boundary
 - Compute policy: OrbStack first; Vast.ai only through a bounded campaign
 - Claim policy: independently reproduced task-level record unless recognized
   by the benchmark maintainers
@@ -62,9 +62,12 @@ it is not itself a claim to have reproduced the published `0.11` score.
 ## Challenge explainer and sample runs
 
 The visual [robotics challenge explainer](docs/vrx-station-keeping-challenge.html)
-now explains VRX, BARN, and LoRR, the published references, the LoRR run
-lifecycle, the Q-31 local beat, and the evidence boundary around Q-32–Q-34.
-It is a teaching and research artifact, not an official leaderboard update.
+explains VRX, BARN, and LoRR and the limits of the historical comparisons. The
+dedicated [LoRR challenge explainer](docs/lorr-challenge-explainer.html) covers
+the archive, run lifecycle, Q-35/Q-36 replay evidence, Q-37 held-out result,
+and the evidence boundary. The [plain-English field note](docs/lorr-linkedin-summary.html)
+is prepared for local sharing and is not posted. These pages are teaching and
+research artifacts, not official leaderboard updates.
 
 The closest UF MRAC public-source port can also be exercised against the
 public practice world in the pinned image:
